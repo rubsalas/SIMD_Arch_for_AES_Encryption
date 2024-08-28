@@ -2,7 +2,7 @@
 MUX 2:1 parametrizable para N bits
 Date: 27/08/24
 */
-module mux_2NtoN # (parameter N = 24) (
+module mux_2NtoN # (parameter N = 32) (
 		input  logic [N-1:0] 	 I0,
 		input  logic [N-1:0] 	 I1,
 		input  logic         	rst,

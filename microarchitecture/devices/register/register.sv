@@ -4,7 +4,7 @@ N bits register_v2 module
 @ Negedge: D has been overwritten if en = 1, Q is D (overwriteen or not)
 Date: 27/08/24
 */
-module register # (parameter N = 24) (
+module register # (parameter N = 32) (
 		input  logic  	     clk,
 		input  logic  	     rst,
 		input  logic		  en, // WriteEn

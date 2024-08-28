@@ -3,7 +3,7 @@ Single Adder Module
 Date: 27/08/24
 */
 module single_adder
- # (parameter N = 24)(
+ # (parameter N = 32)(
 
         input  logic [N-1:0] A,
         input  logic [N-1:0] B,

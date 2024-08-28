@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY register
+set_global_assignment -name TOP_LEVEL_ENTITY fetch
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 22.1STD.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:23:26  AUGUST 27, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.0 Lite Edition"
@@ -61,6 +61,8 @@ set_global_assignment -name SYSTEMVERILOG_FILE devices/muxes/test_benches/mux8Nt
 set_global_assignment -name SYSTEMVERILOG_FILE devices/single_adder/single_adder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE devices/register/register.sv
 set_global_assignment -name SYSTEMVERILOG_FILE devices/register/test_benches/register_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE processor/pipeline_registers/register_FD.sv
+set_global_assignment -name SYSTEMVERILOG_FILE processor/fetch/fetch.sv
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top

@@ -7,7 +7,7 @@ module register_tb;
 	timeunit 1ps;
   	timeprecision 1ps;
 
-  	parameter N = 24;
+  	parameter N = 32;
 
 	logic	      clk;
 	logic	      rst;
@@ -28,7 +28,7 @@ module register_tb;
 
 		clk = 1;
 		rst = 0;
-		RegIn = 24'b0;
+		RegIn = 32'b0;
 		WriteEn = 0;
         
         
@@ -54,7 +54,7 @@ module register_tb;
 
         #200
 
-        RegIn = 24'h11111;
+        RegIn = 32'h11111;
 
         #200
 
@@ -74,7 +74,7 @@ module register_tb;
 
         #200
 
-        RegIn = 24'hAAAAA;
+        RegIn = 32'hAAAAA;
         WriteEn = 1;
 
         #200
@@ -96,25 +96,25 @@ module register_tb;
         #200
 
         rst = 0;
-        RegIn = 24'h44444;
+        RegIn = 32'h44444;
         WriteEn = 1;
 
         #200
 
-        RegIn = 24'h77777;
+        RegIn = 32'h77777;
 
         #200
 
-        RegIn = 24'h22222;
+        RegIn = 32'h22222;
 
         #200
 
-        RegIn = 24'hEEEEE;
+        RegIn = 32'hEEEEE;
         WriteEn = 0;
 
         #200
 
-        RegIn = 24'h00000;
+        RegIn = 32'h00000;
 
         #100;
 
