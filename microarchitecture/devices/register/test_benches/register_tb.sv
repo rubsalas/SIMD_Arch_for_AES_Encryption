@@ -34,10 +34,10 @@ module register_tb;
         
         
         $monitor("Register Signals:\n",
+				 "rst = %b\n", rst,
                  "RegIn = %b (%h)\n", RegIn, RegIn,
                  "WriteEn = %b\n", WriteEn,
-                 "RegOut = %b (%h)\n\n\n", RegOut, RegOut,
-				 "reset = %b\n", rst);
+                 "RegOut = %b (%h)\n\n\n", RegOut, RegOut);
     end
 
     always begin

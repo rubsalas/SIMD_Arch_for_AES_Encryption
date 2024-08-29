@@ -1,6 +1,7 @@
 /*
 Register for Fetch and Decode pipeline datapath.
 Date: 27/08/24
+Test bench ran: 29/08/24
 */
 module register_FD # (parameter N = 32) (
 		input  logic 		 clk,

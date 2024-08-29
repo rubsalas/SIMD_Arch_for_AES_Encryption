@@ -3,7 +3,7 @@ N bits register_v2 module
 @ Posedge: D waits to be written, Q is last cycles input
 @ Negedge: D has been overwritten if en = 1, Q is D (overwriteen or not)
 Date: 27/08/24
-Test bench ran: 28/08/24 
+Test bench ran: 28/08/24
 */
 module register # (parameter N = 32) (
 		input  logic  	     clk,
