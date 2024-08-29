@@ -1,6 +1,7 @@
 /*
-Testbench for register_v2 module
+Testbench for register module
 Date: 27/08/24
+Approved
 */
 module register_tb;
 
@@ -17,10 +18,10 @@ module register_tb;
 
 	/* Register unit under testing */
 	register # (.N(N)) uut (.clk(clk),
-							   .rst(rst),
-							   .en(WriteEn),
-							   .D(RegIn),
-							   .Q(RegOut));
+							.rst(rst),
+							.en(WriteEn),
+							.D(RegIn),
+							.Q(RegOut));
 	
     // Initialize inputs
     initial begin
@@ -35,7 +36,8 @@ module register_tb;
         $monitor("Register Signals:\n",
                  "RegIn = %b (%h)\n", RegIn, RegIn,
                  "WriteEn = %b\n", WriteEn,
-                 "RegOut = %b (%h)\n\n\n", RegOut, RegOut);
+                 "RegOut = %b (%h)\n\n\n", RegOut, RegOut,
+				 "reset = %b\n", rst);
     end
 
     always begin

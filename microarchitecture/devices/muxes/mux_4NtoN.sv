@@ -1,6 +1,7 @@
 /*
 MUX 4:1 parametrizable para N bits
 Date: 27/08/24
+Test bench ran: 28/08/24
 */
 module mux_4NtoN # (parameter N = 32) (
 		input  logic [N-1:0] I0,

@@ -1,6 +1,7 @@
 /*
 Single Adder Module
 Date: 27/08/24
+Test bench ran: 28/08/24 
 */
 module single_adder
  # (parameter N = 32)(

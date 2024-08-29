@@ -1,6 +1,7 @@
 /*
 Test Bench para MUX 2:1 parametrizable para N bits
 Date: 27/08/24
+Approved
 */
 module mux2NtoN_tb;
 
