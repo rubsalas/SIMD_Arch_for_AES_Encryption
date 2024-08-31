@@ -44,7 +44,7 @@ module register_file # (parameter N = 32) (
 		else begin
 			/* As this is only scalar values, checks A1 value */
 			if (A1[4] == 1'b0) begin
-				RD1 = (A1 == 0) ? 32'b0 : reg_array[A1]; // if reg == $zero -> return 0
+				RD1 = (A1 == 0) ? 32'b0 : reg_array[A1[3:0]]; // if reg == $zero -> return 0
 			end
 			else begin
 				RD1 = 32'b11111111111111111111111111111111;
@@ -52,7 +52,7 @@ module register_file # (parameter N = 32) (
 
 			/* As this is only scalar values, checks A2 value */
 			if (A2[4] == 1'b0) begin
-				RD2 = (A2 == 0) ? 32'b0 : reg_array[A2]; // if reg == $zero -> return 0
+				RD2 = (A2 == 0) ? 32'b0 : reg_array[A2[3:0]]; // if reg == $zero -> return 0
 			end
 			else begin
 				RD2 = 32'b11111111111111111111111111111111;
@@ -64,8 +64,10 @@ module register_file # (parameter N = 32) (
 			end  
 		end
 
-		assign reg_array[15] = R15; /* Writes PCPlus8 on reg 15 always */
+		reg_array[15] = R15; /* Writes PCPlus8 on reg 15 always */
 		
 	end
+
+	
 
 endmodule
