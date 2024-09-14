@@ -1,6 +1,6 @@
 /*
 Extend Module v3
-Makes Zero Extention with updated instruction bitstream
+Makes Sign and Zero Extention with updated instruction bitstream
 Date: 29/08/24
 Test bench ran: 30/08/24
 */
@@ -15,12 +15,13 @@ module extend # (parameter N = 32) (
         casex (ImmSrc)
 
             /* Sign extension copying value of bit 15 */
+            /* Zero Extention 16 bits */
             /* Immediate on I Instructions */
             2'b00 : begin
                 ExtImm = {{16{A[15]}}, A[15:0]};
             end 
 
-            /* Zero Extention 5 bits */
+            /* Zero Extention 6 bits */
             /* Address on J Instructions */
             2'b01 : begin
                 ExtImm = {6'b0, A[25:0]};

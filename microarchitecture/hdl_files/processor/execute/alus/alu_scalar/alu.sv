@@ -9,7 +9,7 @@ module alu # (parameter N = 32) (
 		input  [2:0]   ALUControl, // ALU Control (3-bit)
 
 		output [N-1:0]	   result, // ALU Result (32-bit)
-		output [3:0]		flags
+		output [3:0]		flags  // N Z C V
 	);
 
 	logic [N-1:0] add, sub, mult, sll, srl;
