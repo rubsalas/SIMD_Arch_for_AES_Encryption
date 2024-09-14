@@ -1,5 +1,5 @@
 /*
-Condition Logic testbench 
+Conditional Logic testbench 
 Date: 13/09/24
 NY Approved
 */  

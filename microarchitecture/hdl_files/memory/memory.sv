@@ -1,8 +1,12 @@
-
+/*
+Full Memory module
+Date: 13/09/24
+Test bench ran: XX/09/24
+*/
 module memory # (parameter N = 32) (
 		input  logic clk,
 
-		input  logic [N-1:0] pc_address,	// from PC to A in instruction memory
+		input  logic [N-1:0] pc_address,			// from PC to A in instruction memory
 		input  logic [N-1:0] data_address_scalar,	// from ALUResult to A in data memory
 	//	input  logic [N-1:0] data_address_vector,	// NYI: not yet implemented
 
@@ -29,16 +33,16 @@ module memory # (parameter N = 32) (
 
 	
 	/* Instruction memory */
-	instruction_memory_v2 #(.N(N)) inst_memory (.address(in_address),
-								  	   			.instruction(instruction));
+	instruction_memory #(.N(N)) inst_memory (.address(in_address),
+								  	   		 .instruction(instruction));
 
 
 	/* Scalar data mamory */
 	data_memory ram_scalar_memory (.address(sd_address),
-								  .clock(clk),
-								  .data(write_data_scalar),
-								  .wren(MemWrite_scalar),
-								  .q(read_data_scalar));
+								   .clock(clk),
+								   .data(write_data_scalar),
+								   .wren(MemWrite_scalar),
+								   .q(read_data_scalar));
 
 
 	/* Vector Data Memory */ /*
