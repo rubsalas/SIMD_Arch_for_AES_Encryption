@@ -14,10 +14,10 @@ module extend # (parameter N = 32) (
 	always @(*)
         casex (ImmSrc)
 
-            /* Zero Extention 13 bits */
+            /* Sign extension copying value of bit 15 */
             /* Immediate on I Instructions */
             2'b00 : begin
-                ExtImm = {16'b0, A[15:0]};
+                ExtImm = {{16{A[15]}}, A[15:0]};
             end 
 
             /* Zero Extention 5 bits */
