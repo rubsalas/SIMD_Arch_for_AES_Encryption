@@ -1,7 +1,7 @@
 /*
 Condition Checker Module
 Date: 13/09/24
-NY Approved
+Test bench ran: XX/09/24
 */
 module condition_checker(
 		input logic [2:0] Opcode,
