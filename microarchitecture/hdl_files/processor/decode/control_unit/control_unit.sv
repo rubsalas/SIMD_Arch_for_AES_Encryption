@@ -3,21 +3,24 @@ Control Unit v2 module
 Date: 07/04/2024
 */
 module control_unit(		
-		input  logic [2:0] Opcode,
+		input  logic [5:0] Opcode,
 		input  logic [2:0] Func,
-		input  logic [3:0] Rd,
+		input  logic [4:0] Rd,
 
 		output logic PCSrc,
 		output logic RegWrite,
+        output logic RegWriteV,
 		output logic MemtoReg,
 		output logic MemWrite,
 		output logic [2:0] ALUControl,
 		output logic ALUSel, // added
 		output logic Branch,
 		output logic ALUSrc,
+        output logic MemSrc,
 		output logic [1:0] FlagWrite,
 		output logic [1:0] ImmSrc,
 		output logic [1:0] RegSrc,
+        output logic [1:0] MemData,
 		output logic Stuck /* A added */
 	);
 
@@ -31,20 +34,22 @@ module control_unit(
 
     /* Main Decoder */
     main_decoder_v2 main_deco (.Opcode(Opcode),
-                            .S(S),
                             .Func(Func),
                             .Branch(Branch),
                             .RegSrc(RegSrc),
                             .RegW(RegWrite),
+                            .RegWV(RegWriteV),
+                            .ALUOp(wAluOp),
                             .MemW(MemWrite),
+                            .MemSrc(MemSrc),
                             .MemtoReg(MemtoReg),
                             .ALUSrc(ALUSrc),
                             .ImmSrc(ImmSrc),
-                            .ALUOp(wAluOp));
+                            .MemData(MemData)
+                            );
 
     /* ALU Decoder */
     alu_decoder_v2 alu_deco (.Opcode(Opcode),
-                             .S(S),
                              .Func(Func),
                              .ALUOp(wAluOp),
                              .ALUSel(ALUSel),
