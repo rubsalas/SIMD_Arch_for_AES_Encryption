@@ -31,37 +31,36 @@ module alu_decoder(
                         /* add */
                         3'b000 : begin
                             ALUControl = 3'b000;
-                            ALUSel = 1'b0;
                         end
 
                         /* sub */
                         3'b001 : begin
                             ALUControl = 3'b001;
-                            ALUSel = 1'b0;
                         end
 
                         /* mul */
                         3'b010 : begin
                             ALUControl = 3'b010;
-                            ALUSel = 1'b0;
                         end
 
                         /* sll */
                         3'b011 : begin
                             ALUControl = 3'b011;
-                            ALUSel = 1'b0;
                         end
 
                         /* slr */
-                        3'b100 : begin
+                        3'b111 : begin
                             ALUControl = 3'b111;
-                            ALUSel = 1'b0;
+                        end
+
+                        /* xor */
+                        3'b101 : begin
+                            ALUControl = 3'b101;
                         end
 
                         /* default */
                         default : begin 
                             ALUControl = 3'bxxx;
-                            ALUSel = 1'bx;
                         end
                     
                     endcase
@@ -74,37 +73,31 @@ module alu_decoder(
                         /* addv */
                         3'b000 : begin
                             ALUControl = 3'b000;
-                            ALUSel = 1'b0;
                         end
 
                         /* subv */
                         3'b001 : begin
                             ALUControl = 3'b001;
-                            ALUSel = 1'b0;
                         end
 
                         /* mulv */
                         3'b010 : begin
                             ALUControl = 3'b010;
-                            ALUSel = 1'b0;
                         end
 
                         /* unimplemented */
-                        3'b011 : begin
-                            ALUControl = 3'bxxx;
-                            ALUSel = 1'bx;
+                        3'b101 : begin
+                            ALUControl = 3'b101;
                         end
 
                         /* unimplemented */
                         3'b111 : begin
                             ALUControl = 3'bxxx;
-                            ALUSel = 1'bx;
                         end
 
                         /* default */
                         default : begin 
                             ALUControl = 3'bxxx;
-                            ALUSel = 1'bx;
                         end
                     
                     endcase
@@ -115,27 +108,23 @@ module alu_decoder(
 
                     /* addi */
                     ALUControl = 3'b000;
-                    ALUSel = 1'b0;
                 end
 
                 6'b001001: begin
 
                     /* subi */
                         ALUControl = 3'b001;
-                        ALUSel = 1'b0;
                 end
 
                 6'b001010: begin
 
                     /* muli */
                         ALUControl = 3'b010;
-                        ALUSel = 1'b0;
                 end
 
                 /* Scalar datapath */ /* Branches */
                 6'b000100: begin
                     ALUControl = 3'b001; // Branches use substraction for flag generation
-                    ALUSel = 1'b0;
                 end
 
                 /* ... */
@@ -143,7 +132,6 @@ module alu_decoder(
                 /* default */
                 default : begin 
                     ALUControl = 3'b000; // add
-                    ALUSel = 1'b0; // no fp alu
                 end
             
             endcase
@@ -151,7 +139,6 @@ module alu_decoder(
         end
         else begin
             ALUControl = 3'b000; // add
-            ALUSel = 1'b0; // no fp alu
         end
 
 endmodule
