@@ -12,8 +12,7 @@ module conditional_unit (
 		input  logic BranchE,
 
 		input  logic [1:0] FlagWriteE,
-		input  logic [2:0] Opcode,
-		input  logic [1:0] S,
+		input  logic [5:0] Opcode,
 		input  logic [3:0] FlagsE,
 		input  logic [3:0] ALUFlags,
 	
@@ -27,10 +26,9 @@ module conditional_unit (
 	logic [1:0] FlagWrite;
 	logic [3:0] Flags;
 	logic CondExE;
-
+	
 	/* Checks conditions based on flags */
 	condition_checker cond_checker (.Opcode(Opcode),
-									.S(S),
 									.Flags(FlagsE),
 									.CondEx(CondExE));
 
