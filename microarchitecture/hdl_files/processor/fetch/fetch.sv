@@ -11,12 +11,8 @@ module fetch # (parameter N = 32) (
 		input  logic 			   PCSrcW, // mux_PCfromResult control
 		input  logic 		 BranchTakenE, // mux_PCfromALU control
 		input  logic 			   StallF, // register enable
-		input  logic 			   StallD, // register_FD clear
-		input  logic 			   FlushD, // register_FD clear
-		input  logic [N-1:0]  	   InstrF, /* Input from Memory */ // L = InstrF / RG = instruction
 
 		output logic [N-1:0] 		  PCF, /* Output to Memory */ // L = PCF / RG = pc_address
-		output logic [N-1:0] 	   InstrD,
 		output logic [N-1:0] 	 PCPlus8D
 	);
 
@@ -55,14 +51,5 @@ module fetch # (parameter N = 32) (
 	
 	/* PCPlus8D goes into Register File in next stage */
 	assign PCPlus8D = PCPlus4F;
-	
-	
-	/* Pipeline Register Fetch-Decode Stages */
-	register_FD # (.N(N)) reg_FD (.clk(clk),
-								  .rst(rst),
-								  .en(!StallD), /* Neg enable */
-								  .clr(FlushD),
-								  .InstrF(InstrF),
-								  .InstrD(InstrD));
 
 endmodule

@@ -6,7 +6,7 @@ Test bench ran: XX/09/24
 module memory # (parameter N = 32, parameter V = 256) (
 		input  logic clk,
 		/* Instruction inputs */
-		input  logic [N-1:0] pc_address,	// from PC to A in instruction memory
+		input  logic [N-1:0] pc_address,	// PCF (Q from pc register) to A
 		/* Data inputs */
 		input  logic [N-1:0] address_data,	// MemAddress (Ao from data_aligner) to A
 		input  logic [31:0] byteena_data,	// Control Signal: Byteena from data_aligner
@@ -15,7 +15,7 @@ module memory # (parameter N = 32, parameter V = 256) (
 		input  logic wren_data,				// Control Signal: Wren from data_aligner 
 
 		/* Instruction outputs */
-		output logic [N-1:0] instruction,	// to Instruction after instruction memory
+		output logic [N-1:0] instruction,	// InstrF (to InstF from register_FD) from RD
 		/* Data ouputs */
 		output logic [V-1:0] read_data,		// MemReadData (to RDi from data memory) from RD
 	);
