@@ -1,6 +1,6 @@
 /*
 Data Memory (IP Module) testbench 
-Date: 13/09/24
+Date: 17/09/24
 Approved
 */
 // synopsys translate_off
@@ -8,120 +8,131 @@ Approved
 // synopsys translate_on
 module data_memory_tb;
 
-    // Testbench signals
-    reg [13:0] address;
-    reg clock;
-    reg [7:0] data;
-    reg wren;
-    wire [7:0] q;
-    integer i;
+    // Señales del testbench
+    logic [13:0] address;        // Dirección de memoria
+    logic [31:0] byteena;        // Byte enable
+    logic clock;                 // Reloj
+    logic [255:0] data_in;       // Datos de entrada (para escritura)
+    logic rden;                  // Habilitar lectura
+    logic wren;                  // Habilitar escritura
+    logic [255:0] data_out;      // Datos de salida (para lectura)
 
-    // Instantiate the data_memory module
+    // Instanciación del módulo data_memory
     data_memory uut (
         .address(address),
+        .byteena(byteena),
         .clock(clock),
-        .data(data),
+        .data(data_in),
+        .rden(rden),
         .wren(wren),
-        .q(q)
+        .q(data_out)
     );
 
-    // Clock generation
+    // Generación del reloj
     always #10 clock = ~clock;
-
-    // Procedure to print the memory addresses from 0x0000 to 0x0020
-    task print_memory_contents;
-        begin
-            $display("Memory content (addresses 0x0000 to 0x0020):");
-            for (i = 0; i < 32; i = i + 1) begin
-                address = i;
-                #20; // Wait for the address to settle
-                $display("Address %h: %h", address, q);
-            end
-        end
-    endtask
 
     // Test sequence
     initial begin
-        // Initialize signals
+        // Inicialización de señales
         clock = 0;
+        address = 14'b0;
+        byteena = 32'h0;
+        data_in = 256'h0;
+        rden = 0;
         wren = 0;
-        data = 8'b00000000;
-        address = 14'b00000000000000;
 
-        $display("Starting memory tests...\n");
-
-        // Wait for reset (if any) to pass
+        // Prueba 0: Lectura
+        $display("Test 0.1: Lectura en direccion 0x0000 con byteena = 32'hFFFFFFFF");
+        address = 14'h0000;                // Dirección alineada
+        byteena = 32'hFFFF_FFFF;           // Habilitar todos los bytes
         #20;
-
-        // Test 1: Write and Read Test
-        $display("Test 1: Write and read back");
-        address = 14'h0001;
-        data = 8'hA5;
-        wren = 1;
+        rden = 1;                          // Leer la dirección
         #20;
-        $display("Wrote %h to address %h with write enable = %b", data, address, wren);
-        wren = 0;  // Disable write, now read
+        $display("Direccion: 0x%h, Dato leido: 0x%h", address, data_out);
+        rden = 0;
+
+        // Prueba 0: Lectura
+        $display("Test 0.2: Lectura en direccion 0x0000 con byteena = 32'h0000FFFF");
+        address = 14'h0000;                // Dirección alineada
+        byteena = 32'h0000_FFFF;           // Habilitar todos los bytes
         #20;
-        $display("Read %h from address %h with write enable = %b", q, address, wren);
-        if (q == 8'hA5) 
-            $display("Test 1 Passed: Read data matches written data at address %h", address);
-        else 
-            $display("Test 1 Failed: Expected A5, got %h at address %h", q, address);
-
-        // Print first 32 memory locations
-        print_memory_contents();
-
-        // Test 2: Write to a different address and read back
-        $display("Test 2: Write to different address and read back");
-        address = 14'h0002;
-        data = 8'h3C;
-        wren = 1;
+        rden = 1;                          // Leer la dirección
         #20;
-        $display("Wrote %h to address %h with write enable = %b", data, address, wren);
-        wren = 0;
+        $display("Direccion: 0x%h, Dato leido: 0x%h", address, data_out);
+        rden = 0;
+
+        // Prueba 0.3: Lectura
+        $display("Test 0.3: Lectura en direccion 0x0000 con byteena = 32'h0F0F_0F0F");
+        address = 14'h0000;                // Dirección alineada
+        byteena = 32'h0F0F_0F0F;           // Habilitar todos los bytes
         #20;
-        $display("Read %h from address %h with write enable = %b", q, address, wren);
-        if (q == 8'h3C)
-            $display("Test 2 Passed: Read data matches written data at address %h", address);
-        else
-            $display("Test 2 Failed: Expected 3C, got %h at address %h", q, address);
-
-        // Print first 32 memory locations
-        print_memory_contents();
-
-        // Test 3: Check previous address still holds its value
-        $display("Test 3: Check previous write at address 0001");
-        address = 14'h0001;
+        rden = 1;                          // Leer la dirección
         #20;
-        $display("Read %h from address %h with write enable = %b", q, address, wren);
-        if (q == 8'hA5)
-            $display("Test 3 Passed: Previous write retained at address %h", address);
-        else
-            $display("Test 3 Failed: Expected A5, got %h at address %h", q, address);
+        $display("Direccion: 0x%h, Dato leido: 0x%h", address, data_out);
+        rden = 0;
 
-        // Print first 32 memory locations
-        print_memory_contents();
-
-        // Test 4: Write and immediately read back
-        $display("Test 4: Immediate read after write");
-        address = 14'h0003;
-        data = 8'h7E;
-        wren = 1;
+        // Prueba 1: Escritura alineada completa
+        $display("Test 1: Escritura completa alineada en direccion 0x0000");
+        address = 14'h0000;                // Dirección alineada
+        data_in = 256'h1111111111111111_2222222222222222_3333333333333333_4444444444444444;
+        byteena = 32'hFFFFFFFF;            // Habilitar todos los bytes
+        wren = 1;                          // Habilitar escritura
         #20;
-        $display("Wrote %h to address %h with write enable = %b", data, address, wren);
-        wren = 0;
+        wren = 0;                          // Deshabilitar escritura
+        rden = 1;                          // Leer la dirección
         #20;
-        $display("Read %h from address %h with write enable = %b", q, address, wren);
-        if (q == 8'h7E)
-            $display("Test 4 Passed: Immediate read matches written data at address %h", address);
-        else
-            $display("Test 4 Failed: Expected 7E, got %h at address %h", q, address);
+        $display("Direccion: 0x%h, Dato escrito: 0x%h", address, data_out);
+        rden = 0;
 
-        // Print first 32 memory locations
-        print_memory_contents();
+        // Prueba 2: Escritura parcial no alineada (segundos 16 bytes)
+        $display("Test 2: Escritura parcial en bytes 16..31 en direccion 0x0010");
+        address = 14'h0010;                // Dirección no alineada
+        data_in = 256'h0000000000000000_0000000000000000_5555555555555555_6666666666666666;
+        byteena = 32'hFFFF0000;            // Habilitar solo los últimos 16 bytes
+        wren = 1;                          // Habilitar escritura
+        #20;
+        wren = 0;                          // Deshabilitar escritura
+        rden = 1;                          // Leer la dirección
+        #20;
+        $display("Direccion: 0x%h, Dato escrito: 0x%h", address, data_out);
+        rden = 0;
 
-        // End simulation
-        $display("Memory tests completed.");
+        // Prueba 3: Escritura parcial alineada (primeros 16 bytes)
+        $display("Test 3: Escritura parcial en bytes 0..15 en direccion 0x0000");
+        address = 14'h0000;                // Dirección alineada
+        data_in = 256'h7777777777777777_8888888888888888_0000000000000000_0000000000000000;
+        byteena = 32'h0000FFFF;            // Habilitar solo los primeros 16 bytes
+        wren = 1;                          // Habilitar escritura
+        #20;
+        wren = 0;                          // Deshabilitar escritura
+        rden = 1;                          // Leer la dirección
+        #20;
+        $display("Direccion: 0x%h, Dato escrito: 0x%h", address, data_out);
+        rden = 0;
+
+        // Prueba 4: Escritura y lectura de datos no alineados (bytes intermedios)
+        $display("Test 4: Escritura no alineada en direccion 0x0018");
+        address = 14'h0018;                // Dirección no alineada
+        data_in = 256'h0000000000000000_0000000000000000_9999999999999999_AAAAAAAAAAAAAAAA;
+        byteena = 32'h00FFFF00;            // Habilitar solo los bytes intermedios
+        wren = 1;                          // Habilitar escritura
+        #20;
+        wren = 0;                          // Deshabilitar escritura
+        rden = 1;                          // Leer la dirección
+        #20;
+        $display("Direccion: 0x%h, Dato escrito: 0x%h", address, data_out);
+        rden = 0;
+
+        // Prueba 5: Lectura de un bloque no modificado
+        $display("Test 5: Lectura de bloque no modificado en direccion 0x0020");
+        address = 14'h0020;                // Dirección no alineada
+        byteena = 32'hFFFFFFFF;            // Leer todos los bytes
+        rden = 1;                          // Habilitar lectura
+        #20;
+        $display("Direccion: 0x%h, Dato leido: 0x%h", address, data_out);
+        rden = 0;
+
+        $display("Todas las pruebas completadas con exito.");
         #100;
         $finish;
     end

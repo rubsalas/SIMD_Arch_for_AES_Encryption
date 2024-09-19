@@ -34,40 +34,50 @@
 //https://fpgasoftware.intel.com/eula.
 
 /*
-Data Memory module
-Date: 13/09/24
-Test bench ran: 13/09/24
+RAM Memory IP
+byteena solo funciona para la escritura
+la lectura salida es completa de los 256 btis en esa direccion
+Date: 17/09/24
+Test bench ran: 17/09/24
 */
 // synopsys translate_off
 `timescale 1 ps / 1 ps
 // synopsys translate_on
 module data_memory (
 	address,
+	byteena,
 	clock,
 	data,
+	rden,
 	wren,
 	q);
 
-	input	[13:0]  address;
-	input	  clock;
-	input	[7:0]  data;
-	input	  wren;
-	output	[7:0]  q;
+	input	[13:0]  address;	// {A}
+	input	[31:0]  byteena;	// {byteena}
+	input	  clock;			// {CLK}
+	input	[255:0]  data;		// {WD}
+	input	  rden;				// {rden}
+	input	  wren;				// {wren}
+	output	[255:0]  q;			// {RD}
 `ifndef ALTERA_RESERVED_QIS
 // synopsys translate_off
 `endif
+	tri1	[31:0]  byteena;
 	tri1	  clock;
+	tri1	  rden;
 `ifndef ALTERA_RESERVED_QIS
 // synopsys translate_on
 `endif
 
-	wire [7:0] sub_wire0;
-	wire [7:0] q = sub_wire0[7:0];
+	wire [255:0] sub_wire0;
+	wire [255:0] q = sub_wire0[255:0];
 
 	altsyncram	altsyncram_component (
 				.address_a (address),
+				.byteena_a (byteena),
 				.clock0 (clock),
 				.data_a (data),
+				.rden_a (rden),
 				.wren_a (wren),
 				.q_a (sub_wire0),
 				.aclr0 (1'b0),
@@ -75,7 +85,6 @@ module data_memory (
 				.address_b (1'b1),
 				.addressstall_a (1'b0),
 				.addressstall_b (1'b0),
-				.byteena_a (1'b1),
 				.byteena_b (1'b1),
 				.clock1 (1'b1),
 				.clocken0 (1'b1),
@@ -85,10 +94,10 @@ module data_memory (
 				.data_b (1'b1),
 				.eccstatus (),
 				.q_b (),
-				.rden_a (1'b1),
 				.rden_b (1'b1),
 				.wren_b (1'b0));
 	defparam
+		altsyncram_component.byte_size = 8,
 		altsyncram_component.clock_enable_input_a = "BYPASS",
 		altsyncram_component.clock_enable_output_a = "BYPASS",
 		altsyncram_component.init_file = "data.mif",
@@ -102,8 +111,8 @@ module data_memory (
 		altsyncram_component.power_up_uninitialized = "FALSE",
 		altsyncram_component.read_during_write_mode_port_a = "NEW_DATA_NO_NBE_READ",
 		altsyncram_component.widthad_a = 14,
-		altsyncram_component.width_a = 8,
-		altsyncram_component.width_byteena_a = 1;
+		altsyncram_component.width_a = 256,
+		altsyncram_component.width_byteena_a = 32;
 
 
 endmodule
@@ -116,7 +125,7 @@ endmodule
 // Retrieval info: PRIVATE: AclrByte NUMERIC "0"
 // Retrieval info: PRIVATE: AclrData NUMERIC "0"
 // Retrieval info: PRIVATE: AclrOutput NUMERIC "0"
-// Retrieval info: PRIVATE: BYTE_ENABLE NUMERIC "0"
+// Retrieval info: PRIVATE: BYTE_ENABLE NUMERIC "1"
 // Retrieval info: PRIVATE: BYTE_SIZE NUMERIC "8"
 // Retrieval info: PRIVATE: BlankMemory NUMERIC "0"
 // Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_A NUMERIC "0"
@@ -142,9 +151,10 @@ endmodule
 // Retrieval info: PRIVATE: UseDQRAM NUMERIC "1"
 // Retrieval info: PRIVATE: WRCONTROL_ACLR_A NUMERIC "0"
 // Retrieval info: PRIVATE: WidthAddr NUMERIC "14"
-// Retrieval info: PRIVATE: WidthData NUMERIC "8"
-// Retrieval info: PRIVATE: rden NUMERIC "0"
+// Retrieval info: PRIVATE: WidthData NUMERIC "256"
+// Retrieval info: PRIVATE: rden NUMERIC "1"
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
+// Retrieval info: CONSTANT: BYTE_SIZE NUMERIC "8"
 // Retrieval info: CONSTANT: CLOCK_ENABLE_INPUT_A STRING "BYPASS"
 // Retrieval info: CONSTANT: CLOCK_ENABLE_OUTPUT_A STRING "BYPASS"
 // Retrieval info: CONSTANT: INIT_FILE STRING "./hdl_files/memory/data_memory/data.mif"
@@ -158,18 +168,22 @@ endmodule
 // Retrieval info: CONSTANT: POWER_UP_UNINITIALIZED STRING "FALSE"
 // Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_PORT_A STRING "NEW_DATA_NO_NBE_READ"
 // Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "14"
-// Retrieval info: CONSTANT: WIDTH_A NUMERIC "8"
-// Retrieval info: CONSTANT: WIDTH_BYTEENA_A NUMERIC "1"
+// Retrieval info: CONSTANT: WIDTH_A NUMERIC "256"
+// Retrieval info: CONSTANT: WIDTH_BYTEENA_A NUMERIC "32"
 // Retrieval info: USED_PORT: address 0 0 14 0 INPUT NODEFVAL "address[13..0]"
+// Retrieval info: USED_PORT: byteena 0 0 32 0 INPUT VCC "byteena[31..0]"
 // Retrieval info: USED_PORT: clock 0 0 0 0 INPUT VCC "clock"
-// Retrieval info: USED_PORT: data 0 0 8 0 INPUT NODEFVAL "data[7..0]"
-// Retrieval info: USED_PORT: q 0 0 8 0 OUTPUT NODEFVAL "q[7..0]"
+// Retrieval info: USED_PORT: data 0 0 256 0 INPUT NODEFVAL "data[255..0]"
+// Retrieval info: USED_PORT: q 0 0 256 0 OUTPUT NODEFVAL "q[255..0]"
+// Retrieval info: USED_PORT: rden 0 0 0 0 INPUT VCC "rden"
 // Retrieval info: USED_PORT: wren 0 0 0 0 INPUT NODEFVAL "wren"
 // Retrieval info: CONNECT: @address_a 0 0 14 0 address 0 0 14 0
+// Retrieval info: CONNECT: @byteena_a 0 0 32 0 byteena 0 0 32 0
 // Retrieval info: CONNECT: @clock0 0 0 0 0 clock 0 0 0 0
-// Retrieval info: CONNECT: @data_a 0 0 8 0 data 0 0 8 0
+// Retrieval info: CONNECT: @data_a 0 0 256 0 data 0 0 256 0
+// Retrieval info: CONNECT: @rden_a 0 0 0 0 rden 0 0 0 0
 // Retrieval info: CONNECT: @wren_a 0 0 0 0 wren 0 0 0 0
-// Retrieval info: CONNECT: q 0 0 8 0 @q_a 0 0 8 0
+// Retrieval info: CONNECT: q 0 0 256 0 @q_a 0 0 256 0
 // Retrieval info: GEN_FILE: TYPE_NORMAL data_memory.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL data_memory.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL data_memory.cmp FALSE
