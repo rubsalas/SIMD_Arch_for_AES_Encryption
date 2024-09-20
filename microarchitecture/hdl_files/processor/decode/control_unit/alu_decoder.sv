@@ -5,6 +5,7 @@ Digital Design and Computer Architecture ARM Editon
 by Sarah L. Harries & David Money Harries.
 
 Date: 14/09/24
+Test bench ran: XX/09/24
 */
 module alu_decoder(
         input  logic [5:0]     Opcode,
@@ -12,7 +13,6 @@ module alu_decoder(
         input  logic            ALUOp,
 
         output logic [2:0] ALUControl,
-        output logic           ALUSel,
         output logic [1:0]  FlagWrite
     );
 

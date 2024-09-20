@@ -6,6 +6,7 @@ de Sarah L. Harries & David Money Harries.
 
 PCS = [ (Rd == 15) & RegW ] | Branch
 Date: 14/09/24
+Test bench ran: XX/09/24
 */
 module pc_logic(
     input  logic [4:0] Rd,

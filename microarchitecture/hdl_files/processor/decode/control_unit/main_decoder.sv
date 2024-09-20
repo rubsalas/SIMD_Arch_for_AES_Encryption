@@ -5,22 +5,23 @@ Digital Design and Computer Architecture ARM Editon
 by Sarah L. Harries & David Money Harries.
 
 Date: 09/04/24
+Test bench ran: XX/09/24
 */
 module main_decoder(
-        input  logic [5:0]   Opcode,
-        input  logic [2:0]     Func,
+        input  logic [5:0]   Opcode,        //
+        input  logic [2:0]     Func,        //
 
-        output logic         Branch, //
-        output logic [1:0]   RegSrc, //
-        output logic         RegW,   //
-        output logic         RegWV,  //
-        output logic         ALUOp,  //
-        output logic         MemW,   //
-        output logic         MemSrc,  //
-        output logic         MemtoReg, //
-        output logic         ALUSrc, //
-        output logic [1:0]   ImmSrc, //
-        output logic [1:0]   MemData //
+        output logic         Branch,        //
+        output logic [1:0]   RegSrc,        //
+        output logic         RegW,          //
+        output logic         RegWV,         //
+        output logic         ALUOp,         //
+        output logic         MemW,          //
+        output logic         MemSrc,        //
+        output logic         MemtoReg,      //
+        output logic         ALUSrc,        //
+        output logic [1:0]   ImmSrc,        //
+        output logic [1:0]   MemData        //
     );
 
     always @ (*)

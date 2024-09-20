@@ -1,33 +1,34 @@
 /*
-Control Unit v2 module 
-Date: 07/04/2024
+Control Unit v3 module
+Date: 19/09/2024
+Test bench ran: XX/09/24
 */
 module control_unit(		
 		input  logic [5:0] Opcode,
 		input  logic [2:0] Func,
 		input  logic [4:0] Rd,
 
-		output logic PCSrc,
-		output logic RegWrite,
-        output logic RegWriteV,
+		output logic PCSrc,                 // allround Fetch
+		output logic RegWrite,              // allround Decode
+        output logic RegWriteV,             // allround Decode
 
-		output logic MemtoReg,
-		output logic MemWrite,
-		output logic [2:0] ALUControl,
+		output logic MemtoReg,              // Writeback
 
-		output logic ALUSel, // added
-		output logic Branch,
-		output logic ALUSrc,
+		output logic MemWrite,              // Memory
+        output logic MemSrc,                // Memory
+        output logic MemData,               // Memory
+        output logic VecData,               // Memory
 
-        output logic MemSrc,
-		output logic [1:0] FlagWrite,
-		output logic [1:0] ImmSrc,
+		output logic [2:0] ALUControl,      // Execute
+		output logic Branch,                // Execute
+		output logic ALUSrc,                // Execute
+		output logic [1:0] FlagWrite,       // Execute
 
-		output logic [1:0] RegSrc,
-        output logic [1:0] MemData
+		output logic [1:0] RegSrc,          // Decode
+		output logic [1:0] ImmSrc           // Decode
 	);
 
-    wire wAluOp;
+    logic wAluOp;
 
     /* PC Logic */
     pc_logic pc_l (.Rd(Rd),
@@ -54,7 +55,6 @@ module control_unit(
     alu_decoder alu_deco (.Opcode(Opcode),
                             .Func(Func),
                             .ALUOp(wAluOp),
-                            .ALUSel(ALUSel),
                             .ALUControl(ALUControl),
                             .FlagWrite(FlagWrite));	
 
