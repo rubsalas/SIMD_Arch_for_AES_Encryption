@@ -18,9 +18,9 @@ module conditional_unit (
 	
 		output logic [3:0] ALUFlagsD,
 		output logic BranchTakenE,
-		output logic PCSrcM,
-		output logic RegWriteM,
-		output logic MemWriteM
+		output logic PCSrcECU,
+		output logic RegWriteECU,
+		output logic MemWriteECU
 	);
 
 	logic [1:0] FlagWrite;
@@ -34,8 +34,8 @@ module conditional_unit (
 
 	/* Control signals based con condition */
 	assign BranchTakenE = BranchE & CondExE;
-	assign PCSrcM = PCSrcE & CondExE;
-	assign RegWriteM = RegWriteE & CondExE;
+	assign PCSrcECU = PCSrcE & CondExE; //PCSrcECU antes era PCSrcM
+ 	assign RegWriteM = RegWriteE & CondExE;
 	assign MemWriteM = MemWriteE & CondExE;
 
 	/* FlagWrite condition */
