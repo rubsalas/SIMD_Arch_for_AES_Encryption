@@ -113,13 +113,13 @@ module alu_decoder(
                 6'b001001: begin
 
                     /* subi */
-                        ALUControl = 3'b001;
+                    ALUControl = 3'b001;
                 end
 
                 6'b001010: begin
 
                     /* muli */
-                        ALUControl = 3'b010;
+                    ALUControl = 3'b010;
                 end
 
                 /* Scalar datapath */ /* Branches */

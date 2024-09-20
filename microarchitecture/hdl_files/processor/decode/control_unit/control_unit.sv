@@ -10,18 +10,21 @@ module control_unit(
 		output logic PCSrc,
 		output logic RegWrite,
         output logic RegWriteV,
+
 		output logic MemtoReg,
 		output logic MemWrite,
 		output logic [2:0] ALUControl,
+
 		output logic ALUSel, // added
 		output logic Branch,
 		output logic ALUSrc,
+
         output logic MemSrc,
 		output logic [1:0] FlagWrite,
 		output logic [1:0] ImmSrc,
+
 		output logic [1:0] RegSrc,
-        output logic [1:0] MemData,
-		output logic Stuck /* A added */
+        output logic [1:0] MemData
 	);
 
     wire wAluOp;
@@ -33,7 +36,7 @@ module control_unit(
                    .PCS(PCSrc));
 
     /* Main Decoder */
-    main_decoder_v2 main_deco (.Opcode(Opcode),
+    main_decoder main_deco (.Opcode(Opcode),
                             .Func(Func),
                             .Branch(Branch),
                             .RegSrc(RegSrc),
@@ -45,21 +48,14 @@ module control_unit(
                             .MemtoReg(MemtoReg),
                             .ALUSrc(ALUSrc),
                             .ImmSrc(ImmSrc),
-                            .MemData(MemData)
-                            );
+                            .MemData(MemData));
 
     /* ALU Decoder */
-    alu_decoder_v2 alu_deco (.Opcode(Opcode),
-                             .Func(Func),
-                             .ALUOp(wAluOp),
-                             .ALUSel(ALUSel),
-                             .ALUControl(ALUControl),
-						     .FlagWrite(FlagWrite));
-
-	// *
-	assign FlagWrite = 2'b11;
-	// ** Revisar cuando se revise de donde vendrá el Stuck
-	assign Stuck = 1'b0;
-	
+    alu_decoder alu_deco (.Opcode(Opcode),
+                            .Func(Func),
+                            .ALUOp(wAluOp),
+                            .ALUSel(ALUSel),
+                            .ALUControl(ALUControl),
+                            .FlagWrite(FlagWrite));	
 
 endmodule

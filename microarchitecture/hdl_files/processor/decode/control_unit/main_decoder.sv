@@ -26,7 +26,7 @@ module main_decoder(
     always @ (*)
         casex (Opcode)
 
-            /* Scalar datapath */ /* Scalar Arithmetic Operations */
+            /* Scalar Arithmetic Operations */
 			6'b000000: begin
                 /* sll => 011 & slr => 111 */
                 if (Func[1:0] == 2'b11) begin
