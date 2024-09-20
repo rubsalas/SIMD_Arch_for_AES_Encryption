@@ -18,7 +18,7 @@ module pc_logic(
 
     always_comb begin 
     
-        if (((Rd == 0'b01111) & RegW) | Branch)
+        if (((Rd == 5'b01111) & RegW) | Branch)
             PCS = 1;
         else 
             PCS = 0;

@@ -14,19 +14,16 @@ module fetch_tb;
 	logic PCSrcW;
 	logic BranchTakenE;
 	logic StallF;
-	logic StallD;
-	logic FlushD;
+
 	logic [N-1:0] InstrF;
 
 	logic [N-1:0] PCF;
 	logic [N-1:0] InstrD;
-	logic [N-1:0] PCPlus8D;
+	logic [N-1:0] PCPlus4F;
 
 	/* internal signals */
-	logic [N-1:0] PCPlus4F;
 	logic [N-1:0] PCJump;
 	logic [N-1:0] NPC;
-	// logic [N-1:0] InstF;
 
 	/* Fetch unit under testing */
 	fetch # (.N(N)) uut (.clk(clk),
@@ -36,13 +33,9 @@ module fetch_tb;
 						 .PCSrcW(PCSrcW),
 						 .BranchTakenE(BranchTakenE),
 						 .StallF(StallF),
-						 .StallD(StallD),
-						 .FlushD(FlushD),
-						 .InstrF(InstrF),
 
 						 .PCF(PCF),
-						 .InstrD(InstrD),
-						 .PCPlus8D(PCPlus8D));
+						 .PCPlus4F(PCPlus4F));
 
 	/* Instruction_memory unit instance for fetch unit */
 	instruction_memory # (.N(N)) inst_mem_ut (.address(PCF),
@@ -58,8 +51,6 @@ module fetch_tb;
 		PCSrcW = 1'b0;
 		BranchTakenE = 1'b0; // source mux_PCfromALU
 		StallF = 1'b0; // enable pc register
-		StallD = 1'b0; // enable pipeline register
-		FlushD = 1'b0; // clear pipeline register
         
         
         $monitor("Fetch Signals:\n",
@@ -79,7 +70,6 @@ module fetch_tb;
 
     always begin
 		#50 clk = !clk;
-		//PCPlus4F = uut.PCPlus4F;
 		//PCJump = uut.PCJump;
 		//NPC = uut.NPC;
     end
@@ -101,8 +91,6 @@ module fetch_tb;
 		PCSrcW = 1'b0; // PC+4
 		BranchTakenE = 1'b0; // no branch
 		StallF = 1'b0;
-		StallD = 1'b0;
-		FlushD = 1'b0;
 
         #100;
 

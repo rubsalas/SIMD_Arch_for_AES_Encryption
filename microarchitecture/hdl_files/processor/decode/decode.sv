@@ -6,7 +6,7 @@ Test bench ran: XX/09/24
 module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic 		 clk,
 		input  logic 		 rst,
-		/* Control signals for register files */
+		/* instruction */
 		input  logic [N-1:0] InstrD, 		// instruction for decoding [y]
 		/* inputs for register file */
 		input  logic 		 RegWriteW,		// RegWriteW (from register_MW at writeback) to sRF [y]
@@ -17,16 +17,7 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic 		 RegWriteVW,	// RegWriteVW (from register_MW at writeback) to vRF [y]
 		input  logic [V-1:0] ResultVW,		// ResultVW (from writeback) to vRF [y]
 
-		/* outputs for hazard unit */
-		output logic [R-1:0] RA1DH,			// from mux [y]
-		output logic [R-1:0] RA2DH,			// from mux [y]
-		/* data outputs for register_DE */
-		output logic [N-1:0] RD1D,			// from sRF [y]
-		output logic [N-1:0] RD2D,			// from sRF [y]
-		output logic [V-1:0] VRD1D,			// from vRF [y]
-		output logic [V-1:0] VRD2D,			// from vRF [y]
-		output logic [R-1:0] WA3D, 			// from Instr (rd) [y]
-		output logic [N-1:0] ExtImmD,		// from extend [y]
+
 		/* control signal outputs for register_DE */
 		output logic PCSrcD,               	// to allround Fetch from CU [y]
 		output logic RegWriteD,             // to allround Decode from CU [y]
@@ -42,7 +33,20 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic [2:0] ALUControlD,     // to Execute from CU [y]
 		output logic BranchD,               // to Execute from CU [y]
 		output logic ALUSrcD,               // to Execute from CU [y]
-		output logic [1:0] FlagWriteD       // to Execute from CU [y]
+		output logic [1:0] FlagWriteD,       // to Execute from CU [y]
+
+		/* outputs for hazard unit and register_DE*/
+		output logic [R-1:0] RA1DH,			// from mux [y]
+		output logic [R-1:0] RA2DH,			// from mux [y]
+
+		/* data outputs for register_DE */
+		output logic [N-1:0] RD1D,			// from sRF [y]
+		output logic [N-1:0] RD2D,			// from sRF [y]
+		output logic [V-1:0] VRD1D,			// from vRF [y]
+		output logic [V-1:0] VRD2D,			// from vRF [y]
+
+		output logic [R-1:0] WA3D, 			// from Instr (rd) [y]
+		output logic [N-1:0] ExtImmD		// from extend [y]
 	);
 
 	/* Instruction */
@@ -67,12 +71,12 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 	assign inst_addr = InstrD[25:0];			// to extend [y]
 
 	/* $pc's address */
-	logic [4:0] reg15_address;
+	logic [R-1:0] reg15_address;
 	assign reg15_address = 5'b01111;			// to mux [y]
 
 	/* Scalar Register File wires */
-	logic [4:0] RA1D;		// [y] mux to sRF [y], vRF [y], output to RA1H (HU) [y]
-	logic [4:0] RA2D;		// [y] mux to sRF [y], vRF [y], output to RA2H (HU) [y]
+	logic [R-1:0] RA1D;		// [y] mux to sRF [y], vRF [y], output to RA1H (HU) [y]
+	logic [R-1:0] RA2D;		// [y] mux to sRF [y], vRF [y], output to RA2H (HU) [y]
 
 	/* Internal Control Signals from CU */
 	logic [1:0] RegSrcD; 	// [y] CU to mux0 [y], to mux1 [y]
@@ -104,7 +108,7 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 							.ImmSrc(ImmSrcD));
 
 	/* RA1D (A1 from Register File) Mux */
-	mux_2NtoN # (.N(5)) mux_ra1d (.I0(inst_rs),
+	mux_2NtoN # (.N(R)) mux_ra1d (.I0(inst_rs),
 								  .I1(reg15_address),
 								  .rst(rst),
 								  .S(RegSrcD[0]),
@@ -115,7 +119,7 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 	assign RA1DH = RA1D;
 
 	/* RA2D (A2 from Register File) Mux */
-	mux_2NtoN # (.N(5)) mux_ra2d (.I0(inst_rt),
+	mux_2NtoN # (.N(R)) mux_ra2d (.I0(inst_rt),
 								  .I1(inst_rd),
 								  .rst(rst),
 								  .S(RegSrcD[1]),

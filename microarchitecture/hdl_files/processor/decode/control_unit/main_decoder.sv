@@ -9,7 +9,7 @@ Test bench ran: XX/09/24
 */
 module main_decoder(
         input  logic [5:0]   Opcode,        // Added
-        input  logic [2:0]     Func,        // Added
+        input  logic [2:0]   Func,          // Added
 
         output logic         RegW,          // Added 
         output logic         RegWV,         // Added
@@ -26,8 +26,7 @@ module main_decoder(
         output logic         ALUOp,         // Added
 
         output logic [1:0]   RegSrc,        // Added
-        output logic [1:0]   ImmSrc,        // Added
-        
+        output logic [1:0]   ImmSrc         // Added
     );
 
     always @ (*)
@@ -103,7 +102,7 @@ module main_decoder(
 			/* Scalar memory access */
 			6'b0110xx: begin
 				/* str */
-                if (opcode[1:0] == 2'b00) begin
+                if (Opcode[1:0] == 2'b00) begin
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
                     MemtoReg = 1'bx;
@@ -118,7 +117,7 @@ module main_decoder(
                     ImmSrc   = 2'b00;
                 end
                 /* ldr */
-                else if (opcode[1:0] == 2'b01) begin
+                else if (Opcode[1:0] == 2'b01) begin
                     RegW     = 1'b1;
                     RegWV    = 1'b0;
                     MemtoReg = 1'b1;
@@ -152,7 +151,7 @@ module main_decoder(
 			/* Vector Memory access */
 			6'b1110xx: begin
 				/* strv */
-                if (opcode[1:0] == 2'b00) begin
+                if (Opcode[1:0] == 2'b00) begin
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
                     MemtoReg = 1'bx;
@@ -167,7 +166,7 @@ module main_decoder(
                     ImmSrc   = 2'b00;
                 end
                 /* ldrv */
-                else if (opcode[1:0] == 2'b01) begin
+                else if (Opcode[1:0] == 2'b01) begin
                     RegW     = 1'b0;
                     RegWV    = 1'b1;
                     MemtoReg = 1'b1;
@@ -201,7 +200,7 @@ module main_decoder(
 			/* Scalar datapath */ /* Branches */
 			6'b0011xx: begin
 				/* beq */
-                if (opcode[1:0] == 2'b00) begin
+                if (Opcode[1:0] == 2'b00) begin
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
                     MemtoReg = 1'bx;
@@ -216,7 +215,7 @@ module main_decoder(
                     ImmSrc   = 2'b00;
                 end
                 /* bgt */
-                else if (opcode[1:0] == 2'b01) begin
+                else if (Opcode[1:0] == 2'b01) begin
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
                     MemtoReg = 1'bx;
@@ -250,7 +249,7 @@ module main_decoder(
             /* Branch J */
 			6'b0001xx: begin
 				/* b */
-                if (opcode[1:0] == 2'b00) begin
+                if (Opcode[1:0] == 2'b00) begin
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
                     MemtoReg = 1'b0;
@@ -269,7 +268,7 @@ module main_decoder(
 			/* Default */
             /* Datapath management  */
 			3'b111: begin
-				RegW     = 1'bx;
+				    RegW     = 1'bx;
                     RegWV    = 1'bx;
                     MemtoReg = 1'bx;
                     MemW     = 1'bx;

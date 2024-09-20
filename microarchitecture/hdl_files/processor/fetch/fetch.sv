@@ -13,11 +13,10 @@ module fetch # (parameter N = 32) (
 		input  logic 			   StallF, // register enable
 
 		output logic [N-1:0] 		  PCF, /* Output to Memory */ // L = PCF / RG = pc_address
-		output logic [N-1:0] 	 PCPlus8D
+		output logic [N-1:0] 	 PCPlus4F
 	);
 
 	/* wiring */
-	logic [N-1:0] PCPlus4F;
 	logic [N-1:0] PCJump;
 	logic [N-1:0] NPC; // L = PC' / RG = next_pc_address
 	
@@ -48,8 +47,5 @@ module fetch # (parameter N = 32) (
 	single_adder # (.N(N)) pc_plus_4_adder (.A(PCF),
 									  		.B(32'h4),	// instruction memory's address convention
 									  		.Y(PCPlus4F));
-	
-	/* PCPlus8D goes into Register File in next stage */
-	assign PCPlus8D = PCPlus4F;
 
 endmodule
