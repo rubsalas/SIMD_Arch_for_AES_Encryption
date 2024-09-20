@@ -49,7 +49,8 @@ module control_unit(
                             .MemtoReg(MemtoReg),
                             .ALUSrc(ALUSrc),
                             .ImmSrc(ImmSrc),
-                            .MemData(MemData));
+                            .MemData(MemData),
+                            .VecData(VecData));
 
     /* ALU Decoder */
     alu_decoder alu_deco (.Opcode(Opcode),

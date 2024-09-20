@@ -8,20 +8,26 @@ Date: 09/04/24
 Test bench ran: XX/09/24
 */
 module main_decoder(
-        input  logic [5:0]   Opcode,        //
-        input  logic [2:0]     Func,        //
+        input  logic [5:0]   Opcode,        // Added
+        input  logic [2:0]     Func,        // Added
 
-        output logic         Branch,        //
-        output logic [1:0]   RegSrc,        //
-        output logic         RegW,          //
-        output logic         RegWV,         //
-        output logic         ALUOp,         //
-        output logic         MemW,          //
-        output logic         MemSrc,        //
-        output logic         MemtoReg,      //
-        output logic         ALUSrc,        //
-        output logic [1:0]   ImmSrc,        //
-        output logic [1:0]   MemData        //
+        output logic         RegW,          // Added 
+        output logic         RegWV,         // Added
+
+        output logic         MemtoReg,      // Added
+
+        output logic         MemW,          // Added
+        output logic         MemSrc,        // Added
+        output logic         MemData,       // Added
+        output logic         VecData,       // Added
+
+        output logic         Branch,        // Added
+        output logic         ALUSrc,        // Added
+        output logic         ALUOp,         // Added
+
+        output logic [1:0]   RegSrc,        // Added
+        output logic [1:0]   ImmSrc,        // Added
+        
     );
 
     always @ (*)
@@ -31,154 +37,164 @@ module main_decoder(
 			6'b000000: begin
                 /* sll => 011 & slr => 111 */
                 if (Func[1:0] == 2'b11) begin
-                    Branch   = 1'b0;
-                    RegSrc   = 2'b00; // 2'b0x;
                     RegW     = 1'b1;
                     RegWV    = 1'b0;
-                    ALUOp    = 1'b1;
-                    MemW     = 1'b0;
-                    MemSrc    = 1'bx;
                     MemtoReg = 1'b0;
+                    MemW     = 1'b0;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'b0;
+                    ALUOp    = 1'b1;
                     ALUSrc   = 1'b1;
+                    RegSrc   = 2'b00; // 2'b0x;
                     ImmSrc   = 2'b11;
-                    MemData  = 2'bxx;
                 end
 
                 /* everything else doesn't need to extend the immediate */
                 else begin
-                    Branch   = 1'b0;
-                    RegSrc   = 2'b00; // 2'b0x;
                     RegW     = 1'b1;
-                    RegWV    = 1'bx;
-                    ALUOp    = 1'b1;
-                    MemW     = 1'b0;
-                    MemSrc    = 1'b0;
+                    RegWV    = 1'b0;
                     MemtoReg = 1'b0;
+                    MemW     = 1'b0;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'b0;
+                    ALUOp    = 1'b1;
                     ALUSrc   = 1'b0;
+                    RegSrc   = 2'b00; // 2'b0x;
                     ImmSrc   = 2'bxx;
-                    MemData  = 2'bxx;
                 end
 			end
 			
-			/* Vectorial datapath */ /* Vector Arithmetic Operations */
+			/* Vector Arithmetic Operations */
 			6'b100000: begin
-				Branch   = 1'b0;
-                RegSrc   = 2'b00; // 2'b0x;
-                RegW     = 1'b0;
+				RegW     = 1'b0;
                 RegWV    = 1'b1;
-                ALUOp    = 1'b1;
-                MemW     = 1'b0;
-                MemSrc    = 1'bx;
                 MemtoReg = 1'b1;
-                ALUSrc   = 1'bx;
-                ImmSrc   = 2'bxx;
-                MemData  = 2'bxx;
-			end
-
-			/* Scalar datapath */ /* Scalar Immediate Arithmetic Operations */
-			6'b0010xx: begin
-				Branch   = 1'b0;
-                RegSrc   = 2'b0x; // 2'b0x;
-                RegW     = 1'b1;
-                RegWV    = 1'b0;
-                ALUOp    = 1'b1;
                 MemW     = 1'b0;
-                MemSrc    = 1'bx;
-                MemtoReg = 1'b0;
-                ALUSrc   = 1'b1;
-                ImmSrc   = 2'b00;
-                MemData  = 2'bxx;
+                MemSrc   = 1'bx;
+                MemData  = 1'bx;
+                VecData  = 1'bx;
+                Branch   = 1'b0;
+                ALUOp    = 1'b1;
+                ALUSrc   = 1'bx;
+                RegSrc   = 2'b00; // 2'b0x;
+                ImmSrc   = 2'bxx;
 			end
 
-			/* Scalar datapath */ /* Scalar memory access */
+			/* Scalar Immediate Arithmetic Operations */
+			6'b0010xx: begin
+				RegW     = 1'b1;
+                RegWV    = 1'b0;
+                MemtoReg = 1'b0;
+                MemW     = 1'b0;
+                MemSrc   = 1'bx;
+                MemData  = 1'bx;
+                VecData  = 1'bx;
+                Branch   = 1'b0;
+                ALUOp    = 1'b1;
+                ALUSrc   = 1'b1;
+                RegSrc   = 2'b0x; // 2'b0x;
+                ImmSrc   = 2'b00;
+			end
+
+			/* Scalar memory access */
 			6'b0110xx: begin
 				/* str */
                 if (opcode[1:0] == 2'b00) begin
-                    Branch   = 1'b0;
-                    RegSrc   = 2'b01; // 2'b0x;
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
-                    ALUOp    = 1'b0;
-                    MemW     = 1'b1; // Writes on memory
-                    MemSrc    = 1'b0;
                     MemtoReg = 1'bx;
+                    MemW     = 1'b1;
+                    MemSrc   = 1'b0;
+                    MemData  = 1'b0;
+                    VecData  = 1'bx;
+                    Branch   = 1'b0;
+                    ALUOp    = 1'b0;
                     ALUSrc   = 1'b1;
+                    RegSrc   = 2'b01; // 2'b0x;
                     ImmSrc   = 2'b00;
-                    MemData  = 2'b0x;
                 end
                 /* ldr */
                 else if (opcode[1:0] == 2'b01) begin
-                    Branch   = 1'b0;
-                    RegSrc   = 2'b0x; // 2'b0x;
                     RegW     = 1'b1;
                     RegWV    = 1'b0;
-                    ALUOp    = 1'b0;
-                    MemW     = 1'b0; // Writes on memory
-                    MemSrc    = 1'b0;
                     MemtoReg = 1'b1;
+                    MemW     = 1'b0;
+                    MemSrc   = 1'b0;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'b0;
+                    ALUOp    = 1'b0;
                     ALUSrc   = 1'b1;
+                    RegSrc   = 2'b0x; // 2'b0x;
                     ImmSrc   = 2'b00;
-                    MemData  = 2'bxx;
                 end
                 /* unimplemented */
                 else begin
-                    Branch   = 1'bx;
-                    RegSrc   = 2'bxx; // 2'b0x;
                     RegW     = 1'bx;
                     RegWV    = 1'bx;
-                    ALUOp    = 1'bx;
-                    MemW     = 1'bx; // Writes on memory
-                    MemSrc    = 1'bx;
                     MemtoReg = 1'bx;
+                    MemW     = 1'bx;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'bx;
+                    ALUOp    = 1'bx;
                     ALUSrc   = 1'bx;
+                    RegSrc   = 2'bxx; // 2'b0x;
                     ImmSrc   = 2'bxx;
-                    MemData  = 2'bxx;
                 end
 			end
 
-			/* Vectorial datapath */ /* Vector Memory access */
+			/* Vector Memory access */
 			6'b1110xx: begin
 				/* strv */
                 if (opcode[1:0] == 2'b00) begin
-                    Branch   = 1'b0;
-                    RegSrc   = 2'b01; // 2'b0x;
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
-                    ALUOp    = 1'b0;
-                    MemW     = 1'b1; // Writes on memory
-                    MemSrc    = 1'b1;
                     MemtoReg = 1'bx;
+                    MemW     = 1'b1;
+                    MemSrc   = 1'b1;
+                    MemData  = 1'b0;
+                    VecData  = 1'bx;
+                    Branch   = 1'b0;
+                    ALUOp    = 1'b0;
                     ALUSrc   = 1'b1;
+                    RegSrc   = 2'b01; // 2'b0x;
                     ImmSrc   = 2'b00;
-                    MemData  = 2'b0x;
                 end
                 /* ldrv */
                 else if (opcode[1:0] == 2'b01) begin
-                    Branch   = 1'b0;
-                    RegSrc   = 2'b0x; // 2'b0x;
                     RegW     = 1'b0;
-                    RegWV     = 1'b1;
-                    ALUOp    = 1'b0;
-                    MemW     = 1'b0; // Writes on memory
-                    MemSrc     = 1'b1;
+                    RegWV    = 1'b1;
                     MemtoReg = 1'b1;
+                    MemW     = 1'b0;
+                    MemSrc   = 1'b1;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'b0;
+                    ALUOp    = 1'b0;
                     ALUSrc   = 1'b1;
+                    RegSrc   = 2'b0x; // 2'b0x;
                     ImmSrc   = 2'b00;
-                    MemData  = 2'bxx;
                 end
                 /* unimplemented */
                 else begin
-                    Branch   = 1'bx;
-                    RegSrc   = 2'bxx; // 2'b0x;
                     RegW     = 1'bx;
                     RegWV    = 1'bx;
-                    ALUOp    = 1'bx;
-                    MemW     = 1'bx; // Writes on memory
-                    MemSrc    = 1'bx;
                     MemtoReg = 1'bx;
+                    MemW     = 1'bx;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'bx;
+                    ALUOp    = 1'bx;
                     ALUSrc   = 1'bx;
+                    RegSrc   = 2'bxx; // 2'b0x;
                     ImmSrc   = 2'bxx;
-                    MemData  = 2'bxx;
                 end
 			end
 
@@ -186,80 +202,85 @@ module main_decoder(
 			6'b0011xx: begin
 				/* beq */
                 if (opcode[1:0] == 2'b00) begin
-                    Branch   = 1'b1;
-                    RegSrc   = 2'b01; // 2'b0x;
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
-                    ALUOp    = 1'b1;
-                    MemW     = 1'b0; // Writes on memory
-                    MemSrc    = 1'bx;
                     MemtoReg = 1'bx;
+                    MemW     = 1'b0;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'b1;
+                    ALUOp    = 1'b1;
                     ALUSrc   = 1'b0;
+                    RegSrc   = 2'b01; // 2'b0x;
                     ImmSrc   = 2'b00;
-                    MemData  = 2'bxx;
                 end
                 /* bgt */
                 else if (opcode[1:0] == 2'b01) begin
-                    Branch   = 1'b1;
-                    RegSrc   = 2'b01; // 2'b0x;
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
-                    ALUOp    = 1'b1;
-                    MemW     = 1'b0; // Writes on memory
-                    MemSrc    = 1'bx;
                     MemtoReg = 1'bx;
+                    MemW     = 1'b0;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'b1;
+                    ALUOp    = 1'b1;
                     ALUSrc   = 1'b0;
+                    RegSrc   = 2'b01; // 2'b0x;
                     ImmSrc   = 2'b00;
-                    MemData  = 2'bxx;
                 end
                 /* unimplemented */
                 else begin
-                    Branch   = 1'bx;
-                    RegSrc   = 2'bxx; // 2'b0x;
                     RegW     = 1'bx;
                     RegWV    = 1'bx;
-                    ALUOp    = 1'bx;
-                    MemW     = 1'bx; // Writes on memory
-                    MemSrc    = 1'bx;
                     MemtoReg = 1'bx;
+                    MemW     = 1'bx;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'bx;
+                    ALUOp    = 1'bx;
                     ALUSrc   = 1'bx;
+                    RegSrc   = 2'bxx; // 2'b0x;
                     ImmSrc   = 2'bxx;
-                    MemData  = 2'bxx;
                 end
 			end
 
-            /* Scalar datapath */ /* Branch J */
+            /* Branch J */
 			6'b0001xx: begin
 				/* b */
                 if (opcode[1:0] == 2'b00) begin
-                    Branch   = 1'b1;
-                    RegSrc   = 2'b00; // 2'b0x;
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
-                    ALUOp    = 1'b0;
-                    MemW     = 1'b0; // Writes on memory
-                    MemSrc    = 1'bx;
                     MemtoReg = 1'b0;
+                    MemW     = 1'b0;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'b1;
+                    ALUOp    = 1'b0;
                     ALUSrc   = 1'b0;
+                    RegSrc   = 2'b00; // 2'b0x;
                     ImmSrc   = 2'bxx;
-                    MemData  = 2'bxx;
                 end
             end
 
 			/* Default */
             /* Datapath management  */
 			3'b111: begin
-				Branch   = 1'bx;
-                RegSrc   = 2'bxx; // 2'b0x;
-                RegW     = 1'bx;
-                RegWV    = 1'bx;
-                ALUOp    = 1'bx;
-                MemW     = 1'bx; // Writes on memory
-                MemSrc    = 1'bx;
-                MemtoReg = 1'bx;
-                ALUSrc   = 1'bx;
-                ImmSrc   = 2'bxx;
-                MemData  = 2'bxx;
+				RegW     = 1'bx;
+                    RegWV    = 1'bx;
+                    MemtoReg = 1'bx;
+                    MemW     = 1'bx;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'bx;
+                    ALUOp    = 1'bx;
+                    ALUSrc   = 1'bx;
+                    RegSrc   = 2'bxx; // 2'b0x;
+                    ImmSrc   = 2'bxx;
 			end
     
         endcase
