@@ -22,8 +22,8 @@ module main_decoder(
         output logic         VecData,       // Added
 
         output logic         Branch,        // Added
-        output logic         ALUSrc,        // Added
         output logic         ALUOp,         // Added
+        output logic         ALUSrc,        // Added
 
         output logic [1:0]   RegSrc,        // Added
         output logic [1:0]   ImmSrc         // Added

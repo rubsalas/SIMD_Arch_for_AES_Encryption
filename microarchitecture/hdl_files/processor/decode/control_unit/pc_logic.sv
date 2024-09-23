@@ -8,8 +8,8 @@ PCS = [ (Rd == 15) & RegW ] | Branch
 Date: 14/09/24
 Test bench ran: XX/09/24
 */
-module pc_logic(
-    input  logic [4:0] Rd,
+module pc_logic # (parameter R = 5) (
+    input  logic [R-1:0] Rd,
     input  logic Branch,
     input  logic RegW,
 

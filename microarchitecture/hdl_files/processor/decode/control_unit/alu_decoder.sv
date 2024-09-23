@@ -12,19 +12,15 @@ module alu_decoder(
         input  logic [2:0]       Func,
         input  logic            ALUOp,
 
-        output logic [2:0] ALUControl,
-        output logic [1:0]  FlagWrite
+        output logic [2:0] ALUControl
     );
-
-    /* All 1's so that flags are always writen if conditions are met */
-    assign FlagWrite = 2'b11;
 
     always @ (*)
         if (ALUOp) begin
 
             casex (Opcode)
 
-                /* Scalar datapath */ /* Scalar Arithmetic Operations */
+                /* Scalar Arithmetic Operations */
                 6'b000000: begin
                     casex (Func)
 
@@ -66,7 +62,7 @@ module alu_decoder(
                     endcase
                 end
                 
-                /* Vectorial datapath */ /* Vector Arithmetic Operations */
+                /* Vector Arithmetic Operations */
                 6'b100000: begin
                     casex (Func)
 
@@ -85,14 +81,9 @@ module alu_decoder(
                             ALUControl = 3'b010;
                         end
 
-                        /* unimplemented */
+                        /* xorv */
                         3'b101 : begin
                             ALUControl = 3'b101;
-                        end
-
-                        /* unimplemented */
-                        3'b111 : begin
-                            ALUControl = 3'bxxx;
                         end
 
                         /* default */
@@ -103,31 +94,37 @@ module alu_decoder(
                     endcase
                 end
 
-                /* Scalar datapath */ /* Scalar Immediate Arithmetic Operations */
-                6'b001000: begin
+                /* Scalar Immediate Arithmetic Operations */
+                6'b0010xx: begin
+                    casex (Opcode[1:0]) // InstrSel
 
-                    /* addi */
-                    ALUControl = 3'b000;
+                        /* addi */
+                        2'b00 : begin
+                            ALUControl = 3'b000;
+                        end
+
+                        /* subi */
+                        2'b01 : begin
+                            ALUControl = 3'b001;
+                        end
+
+                        /* muli */
+                        2'b10 : begin
+                            ALUControl = 3'b010;
+                        end
+
+                        /* default */
+                        default : begin 
+                            ALUControl = 3'bxxx;
+                        end
+                    
+                    endcase
                 end
 
-                6'b001001: begin
-
-                    /* subi */
-                    ALUControl = 3'b001;
-                end
-
-                6'b001010: begin
-
-                    /* muli */
-                    ALUControl = 3'b010;
-                end
-
-                /* Scalar datapath */ /* Branches */
+                /* Branches */
                 6'b000100: begin
                     ALUControl = 3'b001; // Branches use substraction for flag generation
                 end
-
-                /* ... */
 
                 /* default */
                 default : begin 
@@ -137,6 +134,7 @@ module alu_decoder(
             endcase
             
         end
+        /* load & store needs to add imm to address */
         else begin
             ALUControl = 3'b000; // add
         end

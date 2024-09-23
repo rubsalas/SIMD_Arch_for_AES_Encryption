@@ -33,7 +33,7 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic [2:0] ALUControlD,     // to Execute from CU [y]
 		output logic BranchD,               // to Execute from CU [y]
 		output logic ALUSrcD,               // to Execute from CU [y]
-		output logic [1:0] FlagWriteD,       // to Execute from CU [y]
+		output logic [1:0] FlagWriteD,      // to Execute from CU [y]
 
 		/* outputs for hazard unit and register_DE*/
 		output logic [R-1:0] RA1DH,			// from mux [y]

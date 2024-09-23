@@ -3,8 +3,7 @@ Data aligner module
 Date: 17/09/2024
 Test bench ran: 19/09/24
 */
-module data_aligner
-(
+module data_aligner # (parameter N = 32, parameter V = 256) (
 	input  logic clk, reset,
 	input  logic memtoRegM, // CS para hacer Lectura desde Memoria, sirve para Escalar y Vectorial
 	input  logic memWriteM, // CS para hacer Escritura en la Memoria
@@ -32,10 +31,10 @@ module data_aligner
 	logic [1:0] count;
 	logic ready;
 	logic aligned;
-	logic [31:0] shamt; 	 // Cantidad de bytes que se deben desplazar para alinear
-	logic [31:0] prev_shamt;
+	logic [N-1:0] shamt; 	 // Cantidad de bytes que se deben desplazar para alinear
+	logic [N-1:0] prev_shamt;
 
-	logic [255:0] wr_data_part1, wr_data_part2, 
+	logic [V-1:0] wr_data_part1, wr_data_part2, 
 				  rd_data_part1, rd_data_part2,
 				  rd_data_scalar;
 
