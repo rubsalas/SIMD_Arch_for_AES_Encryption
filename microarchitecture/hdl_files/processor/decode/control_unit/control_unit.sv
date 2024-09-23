@@ -9,6 +9,7 @@ module control_unit # (parameter R = 5) (
 		input  logic [R-1:0] Rd,
 
 		output logic PCSrc,                 // allround Fetch
+
 		output logic RegWrite,              // allround Decode
         output logic RegWriteV,             // allround Decode
 
@@ -17,13 +18,14 @@ module control_unit # (parameter R = 5) (
 		output logic MemWrite,              // Memory
         output logic MemSrc,                // Memory
         output logic MemData,               // Memory
+        output logic MemDataV,              // Memory
         output logic VecData,               // Memory
 
-        output logic [1:0] InstrSel         // Execute (CdU) AGREGAR A DATAPATH
+        output logic [1:0] InstrSel,        // Execute (CdU) AGREGAR A DATAPATH
 		output logic [2:0] ALUControl,      // Execute
 		output logic Branch,                // Execute
 		output logic ALUSrc,                // Execute
-		// output logic [1:0] FlagWrite,       // Execute   ELIMINAR DEL DATAPATH
+		// output logic [1:0] FlagWrite,    // Execute   ELIMINAR DEL DATAPATH
 
 		output logic [1:0] RegSrc,          // Decode
 		output logic [1:0] ImmSrc           // Decode
@@ -31,10 +33,10 @@ module control_unit # (parameter R = 5) (
 
     logic wAluOp;
 
-    assign InstrSelE = Opcode[1:0];
+    assign InstrSel = Opcode[1:0];
 
     /* PC Logic */
-    pc_logic pc_l #(.R(R)) (.Rd(Rd),
+    pc_logic #(.R(R)) pc_l  (.Rd(Rd),
                             .Branch(Branch),
                             .RegW(RegWrite),
                             .PCS(PCSrc));
@@ -42,18 +44,19 @@ module control_unit # (parameter R = 5) (
     /* Main Decoder */
     main_decoder main_deco (.Opcode(Opcode),
                             .Func(Func),
-                            .Branch(Branch),
-                            .RegSrc(RegSrc),
                             .RegW(RegWrite),
                             .RegWV(RegWriteV),
-                            .ALUOp(wAluOp),
+                            .MemtoReg(MemtoReg),
                             .MemW(MemWrite),
                             .MemSrc(MemSrc),
-                            .MemtoReg(MemtoReg),
-                            .ALUSrc(ALUSrc),
-                            .ImmSrc(ImmSrc),
                             .MemData(MemData),
-                            .VecData(VecData));
+                            .MemDataV(MemDataV),
+                            .VecData(VecData),
+                            .Branch(Branch),
+                            .ALUOp(wAluOp),
+                            .ALUSrc(ALUSrc),
+                            .RegSrc(RegSrc),
+                            .ImmSrc(ImmSrc));
 
     /* ALU Decoder */
     alu_decoder alu_deco (.Opcode(Opcode),

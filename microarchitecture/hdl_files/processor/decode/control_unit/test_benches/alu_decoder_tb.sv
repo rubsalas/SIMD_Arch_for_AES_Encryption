@@ -1,3 +1,8 @@
+/*
+Alu Decoder testbench 
+Date: 20/03/24
+*/
+
 module alu_decoder_tb;
 
     // Testbench signals
@@ -5,22 +10,17 @@ module alu_decoder_tb;
     reg [2:0] Func;
     reg ALUOp;
     wire [2:0] ALUControl;
-    wire ALUSel;
-    wire [1:0] FlagWrite;
 
-    // Instantiate the ALU decoder module
+    // Instantiate the alu_decoder module
     alu_decoder uut (
         .Opcode(Opcode),
         .Func(Func),
         .ALUOp(ALUOp),
-        .ALUControl(ALUControl),
-        .ALUSel(ALUSel),
-        .FlagWrite(FlagWrite)
+        .ALUControl(ALUControl)
     );
 
     // Test sequence
     initial begin
-        // Initialize signals
         $display("Starting ALU Decoder tests...\n");
 
         // Test 1: Scalar Add (Opcode: 000000, Func: 000, ALUOp: 1)
@@ -68,23 +68,32 @@ module alu_decoder_tb;
         if (ALUControl == 3'b000) $display("Test 5 Passed");
         else $display("Test 5 Failed");
 
-        // Test 6: Branch Subtract (Opcode: 000100, ALUOp: 1)
+        // Test 6: Immediate Multiply (Opcode: 001010, ALUOp: 1)
+        Opcode = 6'b001010;
+        Func = 3'bxxx; // Doesn't matter for immediate
+        ALUOp = 1;
+        #10;
+        $display("Test 6: Immediate Multiply | Opcode=%b, ALUControl=%b", Opcode, ALUControl);
+        if (ALUControl == 3'b010) $display("Test 6 Passed");
+        else $display("Test 6 Failed");
+
+        // Test 7: Branch (Opcode: 000100, ALUOp: 1)
         Opcode = 6'b000100;
         Func = 3'bxxx; // Doesn't matter for branch
         ALUOp = 1;
         #10;
-        $display("Test 6: Branch Subtract | Opcode=%b, ALUControl=%b", Opcode, ALUControl);
-        if (ALUControl == 3'b001) $display("Test 6 Passed");
-        else $display("Test 6 Failed");
+        $display("Test 7: Branch | Opcode=%b, ALUControl=%b", Opcode, ALUControl);
+        if (ALUControl == 3'b001) $display("Test 7 Passed");
+        else $display("Test 7 Failed");
 
-        // Test 7: ALUOp = 0 (default add)
+        // Test 8: ALUOp = 0 (Default Add)
         Opcode = 6'b000000;
-        Func = 3'bxxx; // Doesn't matter
+        Func = 3'bxxx; // Doesn't matter when ALUOp is 0
         ALUOp = 0;
         #10;
-        $display("Test 7: Default Add when ALUOp=0 | ALUControl=%b", ALUControl);
-        if (ALUControl == 3'b000) $display("Test 7 Passed");
-        else $display("Test 7 Failed");
+        $display("Test 8: Default Add when ALUOp=0 | ALUControl=%b", ALUControl);
+        if (ALUControl == 3'b000) $display("Test 8 Passed");
+        else $display("Test 8 Failed");
 
         $display("\nALU Decoder tests completed.");
         $finish;

@@ -19,6 +19,7 @@ module main_decoder(
         output logic         MemW,          // Added
         output logic         MemSrc,        // Added
         output logic         MemData,       // Added
+        output logic         MemDataV,       // Added
         output logic         VecData,       // Added
 
         output logic         Branch,        // Added
@@ -42,11 +43,12 @@ module main_decoder(
                     MemW     = 1'b0;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'b0;
                     ALUOp    = 1'b1;
                     ALUSrc   = 1'b1;
-                    RegSrc   = 2'b00; // 2'b0x;
+                    RegSrc   = 2'b0x; // 2'b0x;
                     ImmSrc   = 2'b11;
                 end
 
@@ -58,6 +60,7 @@ module main_decoder(
                     MemW     = 1'b0;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV  = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'b0;
                     ALUOp    = 1'b1;
@@ -75,6 +78,7 @@ module main_decoder(
                 MemW     = 1'b0;
                 MemSrc   = 1'bx;
                 MemData  = 1'bx;
+                MemDataV = 1'bx;
                 VecData  = 1'bx;
                 Branch   = 1'b0;
                 ALUOp    = 1'b1;
@@ -91,6 +95,7 @@ module main_decoder(
                 MemW     = 1'b0;
                 MemSrc   = 1'bx;
                 MemData  = 1'bx;
+                MemDataV = 1'bx;
                 VecData  = 1'bx;
                 Branch   = 1'b0;
                 ALUOp    = 1'b1;
@@ -109,6 +114,7 @@ module main_decoder(
                     MemW     = 1'b1;
                     MemSrc   = 1'b0;
                     MemData  = 1'b0;
+                    MemDataV  = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'b0;
                     ALUOp    = 1'b0;
@@ -124,6 +130,7 @@ module main_decoder(
                     MemW     = 1'b0;
                     MemSrc   = 1'b0;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'b0;
                     ALUOp    = 1'b0;
@@ -139,6 +146,7 @@ module main_decoder(
                     MemW     = 1'bx;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'bx;
                     ALUOp    = 1'bx;
@@ -157,7 +165,8 @@ module main_decoder(
                     MemtoReg = 1'bx;
                     MemW     = 1'b1;
                     MemSrc   = 1'b1;
-                    MemData  = 1'b0;
+                    MemData  = 1'bx;
+                    MemDataV = 1'b0;
                     VecData  = 1'bx;
                     Branch   = 1'b0;
                     ALUOp    = 1'b0;
@@ -173,7 +182,8 @@ module main_decoder(
                     MemW     = 1'b0;
                     MemSrc   = 1'b1;
                     MemData  = 1'bx;
-                    VecData  = 1'bx;
+                    MemDataV = 1'bx;
+                    VecData  = 1'b1;
                     Branch   = 1'b0;
                     ALUOp    = 1'b0;
                     ALUSrc   = 1'b1;
@@ -188,6 +198,7 @@ module main_decoder(
                     MemW     = 1'bx;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'bx;
                     ALUOp    = 1'bx;
@@ -207,6 +218,7 @@ module main_decoder(
                     MemW     = 1'b0;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'b1;
                     ALUOp    = 1'b1;
@@ -237,6 +249,7 @@ module main_decoder(
                     MemW     = 1'bx;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'bx;
                     ALUOp    = 1'bx;
@@ -252,16 +265,17 @@ module main_decoder(
                 if (Opcode[1:0] == 2'b00) begin
                     RegW     = 1'b0;
                     RegWV    = 1'b0;
-                    MemtoReg = 1'b0;
+                    MemtoReg = 1'bx;
                     MemW     = 1'b0;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'b1;
                     ALUOp    = 1'b0;
-                    ALUSrc   = 1'b0;
-                    RegSrc   = 2'b00; // 2'b0x;
-                    ImmSrc   = 2'bxx;
+                    ALUSrc   = 1'bx;
+                    RegSrc   = 2'bxx; // 2'b0x;
+                    ImmSrc   = 2'b01;
                 end
             end
 
@@ -274,6 +288,7 @@ module main_decoder(
                     MemW     = 1'bx;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'bx;
                     ALUOp    = 1'bx;
