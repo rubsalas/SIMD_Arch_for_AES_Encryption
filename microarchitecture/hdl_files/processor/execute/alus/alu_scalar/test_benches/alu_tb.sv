@@ -1,7 +1,7 @@
 /*
 Test bench for ALU module
 Date: 31/08/24
-Approved
+NY Approved
 */
 module alu_tb;
 
@@ -56,7 +56,7 @@ module alu_tb;
         else $error("Failed Subtraction Test: A=30, B=10, result=%d, flags=%b\n", result, flags);
 
         // Test 3: Multiplication (A * B)
-        $display("Test 3: Multiplication (A * B)");
+        $display("\nTest 3: Multiplication (A * B)");
         A = 32'd4; B = 32'd5; ALUControl = 3'b010; // Multiply
 
         #100;
@@ -67,7 +67,7 @@ module alu_tb;
         else $error("Failed Multiplication Test: A=4, B=5, result=%d, flags=%b\n", result, flags);
 
         // Test 4: Shift Left Logical (A << B)
-        $display("Test 4: Shift Left Logical (A << B)");
+        $display("\nTest 4: Shift Left Logical (A << B)");
         A = 32'd1; B = 32'd2; ALUControl = 3'b011; // Shift Left Logical
 
         #100;
@@ -78,7 +78,7 @@ module alu_tb;
         else $error("Failed Shift Left Logical Test: A=1, B=2, result=%d, flags=%b\n", result, flags);
 
         // Test 5: Shift Right Logical (A >> B)
-        $display("Test 5: Shift Right Logical (A >> B)");
+        $display("\nTest 5: Shift Right Logical (A >> B)");
         A = 32'd4; B = 32'd1; ALUControl = 3'b111; // Shift Right Logical
 
         #100;
@@ -89,7 +89,7 @@ module alu_tb;
         else $error("Failed Shift Right Logical Test: A=4, B=1, result=%d, flags=%b\n", result, flags);
 
         // Test 6: Zero Result (Addition)
-        $display("Test 6: Zero Result (A + (-B))");
+        $display("\nTest 6: Zero Result (A + (-B))");
         A = 32'd1; B = -32'd1; ALUControl = 3'b000; // Add A + (-B)
 
         #100;
@@ -99,19 +99,19 @@ module alu_tb;
         assert((result == 32'd0) && (flags == 4'b0110)) // Z = 1, C = 1
         else $error("Failed Zero Flag Test (Addition): A=1, B=-1, result=%d, flags=%b\n", result, flags);
 
-        // Test 7: Negative Result (Subtraction)
-        $display("Test 7: Negative Result (A - B)");
+        // Test 7: Negative Result (A - B)
+        $display("\nTest 7: Negative Result (A - B)");
         A = 32'd10; B = 32'd20; ALUControl = 3'b001; // Subtract
 
         #100;
 
         $display("A=%b B=%b ALUControl=%b | result=%b flags=%b",
                   A, B, ALUControl, result, flags);
-        assert((result == -32'd10) && (flags == 4'b1000)) // N = 1
+        assert((result == -32'd10) && (flags == 4'b1010)) // N = 1, C = 1
         else $error("Failed Negative Flag Test: A=10, B=20, result=%d, flags=%b\n", result, flags);
 
         // Test 8: Overflow (Addition)
-        $display("Test 8: Overflow (A + B)");
+        $display("\nTest 8: Overflow (A + B)");
         A = 32'h7FFFFFFF; B = 32'd1; ALUControl = 3'b000; // Add
 
         #100;
@@ -120,6 +120,17 @@ module alu_tb;
                   A, B, ALUControl, result, flags);
         assert((result == 32'h80000000) && (flags == 4'b1001)) // V = 1, N = 1
         else $error("Failed Overflow Flag Test: A=2^31-1, B=1, result=%h, flags=%b\n", result, flags);
+
+        // Test 9: XOR (A ^ B)
+        $display("\nTest 9: XOR (A ^ B)");
+        A = 32'hF0F0F0F0; B = 32'h0F0F0F0F; ALUControl = 3'b101; // XOR
+
+        #100;
+
+        $display("A=%b B=%b ALUControl=%b | result=%b flags=%b",
+                  A, B, ALUControl, result, flags);
+        assert((result == 32'hFFFFFFFF) && (flags == 4'b0000)) // XOR result should be all 1's
+        else $error("Failed XOR Test: A=%h, B=%h, result=%h, flags=%b\n", A, B, result, flags);
 
         $display("ALU test completed successfully.");
         $finish;

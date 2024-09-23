@@ -1,29 +1,27 @@
 /*
-ALU module
+ALU v2 module
 Date: 30/08/24
 Test bench ran: 31/08/24
 */
 module alu # (parameter N = 32) (
-		input  [N-1:0] 			A, // Input A (32-bit)
-		input  [N-1:0] 			B, // Input B (32-bit)
+		input  [N-1:0] 			A, // Input A
+		input  [N-1:0] 			B, // Input B
 		input  [2:0]   ALUControl, // ALU Control (3-bit)
 
-		output [N-1:0]	   result, // ALU Result (32-bit)
+		output [N-1:0]	   result, // ALU Result
 		output [3:0]		flags  // N Z C V
 	);
 
-	logic [N-1:0] add, sub, mult, sll, srl;
+	logic [N-1:0] add, sub, mult, sll, srl, x_or;
 	logic C_add, C_sub, C_mult;
 	logic Z_add, Z_sub, Z_mult;
 	logic V_add, V_sub, V_mult;
 	logic N_add, N_sub, N_mult;
-	logic gt_sub;
 
-	logic			   c_flag; // Carry Out
-	logic 			   z_flag; // Zero Flag
-	logic 			   v_flag; // Overflow Flag
-	logic 			   n_flag; // Negative Flag
-	logic 			  gt_flag; // Greater than Flag
+	logic			    c_flag; // Carry Out
+	logic 			    z_flag; // Zero Flag
+	logic 			    v_flag; // Overflow Flag
+	logic 			    n_flag; // Negative Flag
 
 
 	/* add */
@@ -45,15 +43,15 @@ module alu # (parameter N = 32) (
 								.Z_flag(Z_sub),
 								.C_flag(C_sub),
 								.V_flag(V_sub));
-
-	// Greater-than flag
-	assign gt_sub = ~N_sub & ~V_sub & ~Z_sub;
 	
 	/* shift left logical */
 	assign sll = A << B;
 
 	/* shift right logical */
 	assign srl = A >> B;
+
+	/* logical x_or */
+	assign x_or = A ^ B;
 
 	/* multiplication */
 	multiplier # (.N(N)) mul (.A(A),
@@ -70,9 +68,9 @@ module alu # (parameter N = 32) (
 								  .I1(sub),
 								  .I2(mult),
 								  .I3(sll), // 011
-								  .I4(32'hffffffff),
-								  .I5(32'hffffffff),
-								  .I6(32'hffffffff),
+								  .I4(32'h0),
+								  .I5(x_or),
+								  .I6(32'h0),
 								  .I7(srl), // 111
 								  .en(1'b1),
 								  .rst(1'b0),
@@ -134,20 +132,6 @@ module alu # (parameter N = 32) (
 								  .rst(1'b0),
 								  .S(ALUControl),
 								  .O(n_flag));
-
-	//mux7to1 #(1) mux_gt(0, 0, gt_sub, 0, 0, 0, 0, ALUControl, gt_flag);
-	mux_8NtoN # (.N(1)) m8NtoN_GT (.I0(1'b0),
-								   .I1(gt_sub),
-								   .I2(1'b0),
-								   .I3(1'b0),
-								   .I4(1'b0),
-								   .I5(1'b0),
-								   .I6(1'b0),
-								   .I7(1'b0),
-								   .en(1'b1),
-								   .rst(1'b0),
-								   .S(ALUControl),
-								   .O(gt_flag));
 
 	/* All flags are in a single 4 bit bus */
 	assign flags = {n_flag, z_flag, c_flag, v_flag};

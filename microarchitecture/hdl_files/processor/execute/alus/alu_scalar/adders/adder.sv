@@ -33,9 +33,8 @@ module adder # (parameter N = 32) (
 
     assign N_flag = R[N-1];
     assign Z_flag = (R == {N{1'b0}}) ? 1'b1 : 1'b0;  // Asegura que Z_flag se active solo cuando R es completamente cero
-    assign C_flag = (C_in) ? ~C_ins[N] : C_ins[N];
+    assign C_flag = (C_in == 1'b1) ? ~C_ins[N] : C_ins[N];
     assign V_flag = (~C_in && (A[N-1] == B[N-1]) && (R[N-1] != A[N-1])) ||
                     (C_in && (A[N-1] != B[N-1]) && (R[N-1] == A[N-1]));
 
 endmodule
-
