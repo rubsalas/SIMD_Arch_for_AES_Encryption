@@ -25,7 +25,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
     /* Decode stage's wiring */
     logic [N-1:0] wInstrD;          // [y] sdata from rFD to D [y]
-    //
+
     logic wPCSrcD;                  // [y] cs f to rDE [y], to HU [y]
     logic wRegWriteD;               // [y] cs f to rDE [y]
     logic wRegWriteVD;              // [y] cs f to rDE [y]
@@ -56,8 +56,40 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
     /* Execute stage's wiring */
+    logic wPCSrcE;                  // [y] cs from rDE to E [y] 
+    logic wRegWriteE;               // [y] cs from rDE to E [y] 
+    logic wRegWriteVEi;             // [y] cs from rDE to E [y]
+
+    logic wMemtoRegEi;              // [y] cs from rDE to E [y]
+
+    logic wMemWriteE;               // [y] cs from rDE to E [y]
+    logic wMemSrcEi;                // [y] cs from rDE to E [y]
+    logic wMemDataEi;               // [y] cs from rDE to E [y]
+    logic wMemDataVEi;              // [y] cs from rDE to E [y]
+    logic wVecDataEi;               // [y] cs from rDE to E [y]
+
+    logic [1:0] wInstrSelE;         // [y] cs from rDE to E [y]
+    logic [2:0] wALUControlE;       // [y] cs from rDE to E [y]
+    logic wBranchE;                 // [y] cs from rDE to E [y]
+    logic wALUSrcE;                 // [y] cs from rDE to E [y]
+
+    logic [R-1:0] wRA1Ei;           // [y] raddr from rDE to E [y]
+    logic [R-1:0] wRA2Ei;           // [y] raddr from rDE to E [y]
+
+    logic [N-1:0] wRD1E;            // [y] sdata from rDE to E [y]
+    logic [N-1:0] wRD2E;            // [y] sdata from rDE to E [y]
+
+    logic [V-1:0] wVRD1E;           // [y] vdata from rDE to E [y]
+    logic [V-1:0] wVRD2E;           // [y] vdata from rDE to E [y]
+
+    logic [R-1:0] wWA3Ei;           // [y] raddr from rDE to E [y]    
+    logic [N-1:0] wExtImmEi;        // [y] sdata from rDE to E [y]
+
+
+    // module's
     logic [N-1:0] wExtImmE;         // [n] sdata to F [y]
     logic wBranchTakenE;            // [n] cs to F [y]
+
 
     /* Memory stage's wiring */
 
@@ -70,7 +102,8 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     // Data
     logic [N-1:0] wResultW;         // [n] sdata to F [y]
     logic [V-1:0] wResultVW;        // [n] vdata to F [y]
-    logic [R-1:0] WA3W;             // [n] raddr to D [y]
+    logic [R-1:0] wWA3W;            // [n] raddr to D [y]
+
 
     /* Hazard Unit's wiring */
     logic wStallF;                  // [y] cs to F [y]
@@ -121,7 +154,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         // inputs for register file
         .RegWriteW(wRegWriteW),
         .PCPlus8D(wPCPlus4F),
-        .WA3W(WA3W),
+        .WA3W(wWA3W),
         .ResultW(wResultW),
         // inputs for vector register file
         .RegWriteVW(wRegWriteVW),
@@ -192,38 +225,107 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .WA3D(wWA3D),
         .ExtImmD(wExtImmD),
 
+        /* outputs */
+        .PCSrcE(wPCSrcE),
+        .RegWriteE(wRegWriteE),
+        .RegWriteVE(wRegWriteVEi),
 
-        .PCSrcE(),
-        .RegWriteE(),
-        .RegWriteVE(),
+        .MemtoRegE(wMemtoRegEi),
 
-        .MemtoRegE(),
+        .MemWriteE(wMemWriteE),
+        .MemSrcE(wMemSrcEi),
+        .MemDataE(wMemDataEi),
+        .MemDataVE(wMemDataVEi),
+        .VecDataE(wVecDataEi),
 
-        .MemWriteE(),
-        .MemSrcE(),
-        .MemDataE(),
-        .MemDataVE(),
-        .VecDataE(),
+        .InstrSelE(wInstrSelE),
+        .ALUControlE(wALUControlE),
+        .BranchE(wBranchE),
+        .ALUSrcE(wALUSrcE),
 
-        .InstrSelE(),
-        .ALUControlE(),
-        .BranchE(),
-        .ALUSrcE(),
+        .RA1E(wRA1Ei),
+        .RA2E(wRA2Ei),
 
-        .RA1E(),
-        .RA2E(),
+        .RD1E(wRD1E),
+        .RD2E(wRD2E),
+        .VRD1E(wVRD1E),
+        .VRD2E(wVRD2E),
 
-        .RD1E(),
-        .RD2E(),
-        .VRD1E(),
-        .VRD2E(),
-
-        .WA3E(),
-        .ExtImmE()
+        .WA3E(wWA3Ei),
+        .ExtImmE(wExtImmEi)
     );
 
 
     /* Execute stage */
+    execute #(.N(N), .V(V), .R(R)) uut (
+        .clk(clk),
+        .rst(rst),
+
+        .RD1E(wRD1E),
+        .RD2E(wRD2E),
+        .ExtImmEi(wExtImmEi),
+        .VRD1E(wVRD1E),
+        .VRD2E(wVRD2E),
+
+        .WA3Ei(wWA3Ei),
+
+        .PCSrcE(wPCSrcE),
+        .RegWriteE(wRegWriteE),
+        .RegWriteVEi(wRegWriteVEi),
+
+        .MemtoRegEi(wMemtoRegEi),
+
+        .MemWriteE(wMemWriteE),
+        .MemSrcEi(wMemSrcEi),
+        .MemDataEi(wMemDataEi),
+        .MemDataVEi(wMemDataVEi),
+        .VecDataEi(wVecDataEi),
+
+        .InstrSelE(wInstrSelE),
+        .ALUControlE(wALUControlE),
+        .BranchE(wBranchE),
+        .ALUSrcE(wALUSrcE),
+
+        .ResultW(),
+        .ResultVW(),
+        .ALUResultM(),
+        .ALUResultVM(),
+
+        .ForwardAE(),
+        .ForwardBE(),
+        .ForwardAVE(),
+        .ForwardBVE(),
+
+        .RA1Ei(wRA1Ei),
+        .RA2Ei(wRA2Ei),
+
+        /* outputs */
+        .WriteDataE(),
+        .ALUResultE(),
+
+        .WriteDataVE(),
+        .ALUResultVE(),
+
+        .WA3Eo(),
+
+        .ExtImmEo(),
+
+        .BranchTakenE(),
+        .PCSrcECU(),
+        .RegWriteECU(),
+        .MemWriteECU(),
+
+        .RegWriteVEo(),
+        .MemtoRegEo(),
+
+        .MemSrcEo(),
+        .MemDataEo(),
+        .MemDataVEo(),
+        .VecDataEo(),
+
+        .RA1Eo(),
+        .RA2Eo()
+    );
 
 
     /* Pipeline Register between Execute-Memory */

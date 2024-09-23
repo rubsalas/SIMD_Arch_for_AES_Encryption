@@ -47,6 +47,10 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic ForwardAVE,			// to mux_SrcAVE [y]
 		input  logic ForwardBVE,			// to mux_SrcBVE [y]
 
+		/* inputs for hazard unit */
+		input  logic [R-1:0] RA1Ei,			// RA1D (from register_file) to RA1Eo (to HU) [y]
+		input  logic [R-1:0] RA2Ei,			// RA2D (from register_file) to RA2Eo (to HU) [y]
+
 		/* outputs */
 		output logic [N-1:0] WriteDataE,	// from mux_WriteDataE [y], to mux_SrcBE [y]
 		output logic [N-1:0] ALUResultE,	// from ALU [y]
@@ -71,7 +75,11 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic MemSrcEo,				// from MemSrcEi [y]
 		output logic MemDataEo,				// from MemDataEi [y]
 		output logic MemDataVEo,			// from MemDataVEi [y]
-		output logic VecDataEo				// from VecDataEi [y]
+		output logic VecDataEo,				// from VecDataEi [y]
+
+		/* outputs for hazard unit */
+		output logic [R-1:0] RA1Eo,			// from RA1Ei [y]
+		output logic [R-1:0] RA2Eo			// from RA2Ei [y]
 	);
 
 
@@ -169,6 +177,12 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 	/* ExtImmE forwarding output for Fetch */
 	/* Used for sending the branch address in 'b' instruction */
 	assign ExtImmEo = ExtImmEi;
+
+	/* RA1E forwarding output for hazard unit */
+	assign RA1Eo = RA1Ei;
+
+	/* RA2E forwarding output for hazard unit */
+	assign RA2Eo = RA2Ei;
 
 
 	/* ********************************** conditional_unit ***************************** */
