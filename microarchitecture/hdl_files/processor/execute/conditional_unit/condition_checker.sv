@@ -1,7 +1,7 @@
 /*
 Condition Checker v2 Module
 Date: 13/09/24
-Test bench ran: XX/09/24
+Test bench ran: 23/09/24
 */
 module condition_checker(
 		input logic Branch,
@@ -16,6 +16,7 @@ module condition_checker(
     logic Z_flag;
     // logic C_flag;
     logic V_flag;
+
 	assign N_flag = Flags[3];
     assign Z_flag = Flags[2];
     // assign C_flag = Flags[1];
@@ -35,6 +36,8 @@ module condition_checker(
 
                 /* b -> unconditional */
                 2'b11:    CondEx = 1;
+
+                default:  CondEx = 0;
             endcase
         end
 		else begin

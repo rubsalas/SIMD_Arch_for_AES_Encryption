@@ -18,12 +18,13 @@ module register_DE # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic MemWriteD,
 		input  logic MemSrcD,
 		input  logic MemDataD,
+		input  logic MemDataVD,
 		input  logic VecDataD,
 		
+		input  logic [1:0] InstrSelD,
 		input  logic [2:0] ALUControlD,
 		input  logic BranchD,
 		input  logic ALUSrcD,
-		input  logic [1:0] FlagWriteD,
 		
 		input  logic [R-1:0] RA1D,		// RA1DH
 		input  logic [R-1:0] RA2D,		// RA2DH
@@ -46,12 +47,13 @@ module register_DE # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic MemWriteE,
 		output logic MemSrcE,
 		output logic MemDataE,
+		output logic MemDataVE,
 		output logic VecDataE,
 
+		output logic [1:0] InstrSelE,
 		output logic [2:0] ALUControlE, 
 		output logic BranchE,
 		output logic ALUSrcE,
-		output logic [1:0] FlagWriteE,
 
 		output logic [R-1:0] RA1E,
 		output logic [R-1:0] RA2E,
@@ -78,12 +80,13 @@ module register_DE # (parameter N = 32, parameter V = 256, parameter R = 5) (
 			MemWriteE <= 1'b0;
 			MemSrcE <= 1'b0;
 			MemDataE <= 1'b0;
+			MemDataVE <= 1'b0;
 			VecDataE <= 1'b0;
 			
+			InstrSelE <= 2'b0;
 			ALUControlE <= 3'b0;
 			BranchE <= 1'b0;
 			ALUSrcE <= 1'b0;
-			FlagWriteE <= 2'b0;
 
 			RA1E <= 5'b0;
 			RA2E <= 5'b0;
@@ -107,12 +110,13 @@ module register_DE # (parameter N = 32, parameter V = 256, parameter R = 5) (
 			MemWriteE <= MemWriteD;
 			MemSrcE <= MemSrcD;
 			MemDataE <= MemDataD;
+			MemDataVE <= MemDataVD;
 			VecDataE <= VecDataD;
 			
+			InstrSelE <= InstrSelD;
 			ALUControlE <= ALUControlD;
 			BranchE <= BranchD;
 			ALUSrcE <= ALUSrcD;
-			FlagWriteE <= FlagWriteD;
 
 			RA1E <= RA1D;
 			RA2E <= RA2D;

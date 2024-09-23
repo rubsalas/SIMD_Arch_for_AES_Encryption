@@ -28,12 +28,13 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic MemWriteD,             // to Memory from CU [y]
         output logic MemSrcD,               // to Memory from CU [y]
         output logic MemDataD,              // to Memory from CU [y]
+        output logic MemDataVD,             // to Memory from CU [y]
         output logic VecDataD,              // to Memory from CU [y]
 
+		output logic [1:0] InstrSelD,      	// to Execute from CU [y]
 		output logic [2:0] ALUControlD,     // to Execute from CU [y]
 		output logic BranchD,               // to Execute from CU [y]
 		output logic ALUSrcD,               // to Execute from CU [y]
-		output logic [1:0] FlagWriteD,      // to Execute from CU [y]
 
 		/* outputs for hazard unit and register_DE*/
 		output logic [R-1:0] RA1DH,			// from mux [y]
@@ -89,6 +90,7 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 							.Rd(inst_rd),
 
 							.PCSrc(PCSrcD),
+
 							.RegWrite(RegWriteD),
 							.RegWriteV(RegWriteVD),
 
@@ -97,12 +99,13 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 							.MemWrite(MemWriteD),
 							.MemSrc(MemSrcD),
 							.MemData(MemDataD),
+							.MemDataV(MemDataVD),
 							.VecData(VecDataD),
 
+							.InstrSel(InstrSelD),
 							.ALUControl(ALUControlD),
 							.Branch(BranchD),
 							.ALUSrc(ALUSrcD),
-							.FlagWrite(FlagWriteD),
 
 							.RegSrc(RegSrcD),
 							.ImmSrc(ImmSrcD));

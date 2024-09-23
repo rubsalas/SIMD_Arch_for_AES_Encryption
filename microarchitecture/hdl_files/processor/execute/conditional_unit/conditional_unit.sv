@@ -1,7 +1,7 @@
 /*
 Conditional Unit v2 module 
 Date: 08/04/2024
-Test bench ran: XX/09/24
+Test bench ran: 23/09/24
 */
 module conditional_unit (
 		input  logic PCSrcE,

@@ -35,12 +35,13 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     logic wMemWriteD;               // [y] cs f to rDE [y]
     logic wMemSrcD;                 // [y] cs f to rDE [y]
     logic wMemDataD;                // [y] cs f to rDE [y]
+    logic wMemDataVD;               // [y] cs f to rDE [y]
     logic wVecDataD;                // [y] cs f to rDE [y]
 
+    logic [1:0] wInstrSelD;         // [y] cs f to rDE [n]
     logic [2:0] wALUControlD;       // [y] cs f to rDE [y]
     logic wBranchD;                 // [y] cs f to rDE [y]
     logic wALUSrcD;                 // [y] cs f to rDE [y]
-    logic [1:0] wFlagWriteD;        // [y] cs f to rDE [y]
 
     logic [R-1:0] wRA1D;            // [y] raddr f to rDE [y], to HU [y]
     logic [R-1:0] wRA2D;            // [y] raddr f to rDE [y], to HU [y]
@@ -136,12 +137,13 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .MemWriteD(wMemWriteD),
         .MemSrcD(wMemSrcD),
         .MemDataD(wMemDataD),
+        .MemDataVD(wMemDataVD),
         .VecDataD(wVecDataD),
 
+        .InstrSelD(wInstrSelD),
         .ALUControlD(wALUControlD),
         .BranchD(wBranchD),
         .ALUSrcD(wALUSrcD),
-        .FlagWriteD(wFlagWriteD),
         // outputs for hazard unit and register_DE
         .RA1DH(wRA1D),
         .RA2DH(wRA2D),
@@ -171,12 +173,13 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .MemWriteD(wMemWriteD),
         .MemSrcD(wMemSrcD),
         .MemDataD(wMemDataD),
+        .MemDataVD(wMemDataVD),
         .VecDataD(wVecDataD),
 
+        .InstrSelD(wInstrSelD),
         .ALUControlD(wALUControlD),
         .BranchD(wBranchD),
         .ALUSrcD(wALUSrcD),
-        .FlagWriteD(wFlagWriteD),
 
         .RA1D(wRA1D),              // RA1DH
         .RA2D(wRA2D),              // RA2DH
@@ -199,12 +202,13 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .MemWriteE(),
         .MemSrcE(),
         .MemDataE(),
+        .MemDataVE(),
         .VecDataE(),
 
+        .InstrSelE(),
         .ALUControlE(),
         .BranchE(),
         .ALUSrcE(),
-        .FlagWriteE(),
 
         .RA1E(),
         .RA2E(),

@@ -17,7 +17,7 @@ module alu_vector # (parameter N = 32, parameter V = 256) (
 
 	logic [N-1:0] result00,result01,result02,result03,result04,result05,result06,result07;
 				  
-	logic [4:0] flags00,flags01,flags02,flags03,flags04,flags05,flags06,flags07;
+	logic [3:0] flags00,flags01,flags02,flags03,flags04,flags05,flags06,flags07;
 
 	assign A00 = A[31:0];
 	assign A01 = A[63:32];

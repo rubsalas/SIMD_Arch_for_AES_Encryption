@@ -26,6 +26,8 @@ module control_unit_tb;
     wire [1:0] RegSrc;
     wire [1:0] ImmSrc;
 
+    wire ALUOp;
+
     // Instantiate the control_unit module
     control_unit uut (
         .Opcode(Opcode),
@@ -47,6 +49,8 @@ module control_unit_tb;
         .RegSrc(RegSrc),
         .ImmSrc(ImmSrc)
     );
+
+    assign ALUOp = uut.wAluOp;
 
     // Test sequence
     initial begin

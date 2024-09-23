@@ -281,7 +281,7 @@ module main_decoder(
 
 			/* Default */
             /* Datapath management  */
-			3'b111: begin
+			default: begin
 				    RegW     = 1'bx;
                     RegWV    = 1'bx;
                     MemtoReg = 1'bx;

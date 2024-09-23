@@ -1,113 +1,119 @@
+/*
+Test bench for conditional_unit module.
+Date: 23/09/24
+Approved
+*/
 module conditional_unit_tb;
 
-    // Testbench signals
-    reg clk;
-    reg rst;
-    reg PCSrcE;
-    reg RegWriteE;
-    reg MemWriteE;
-    reg BranchE;
-    reg [1:0] FlagWriteE;
-    reg [5:0] Opcode;
-    reg [3:0] FlagsE;
-    reg [3:0] ALUFlags;
+    // Entradas
+    logic PCSrcE;
+    logic RegWriteE;
+    logic MemWriteE;
 
-    wire [3:0] ALUFlagsD;
-    wire BranchTakenE;
-    wire PCSrcM;
-    wire RegWriteM;
-    wire MemWriteM;
+    logic BranchE;
 
-    // Instantiate the conditional_unit module
+    logic [1:0] InstrSelE;
+    logic [3:0] ALUFlags;
+
+    // Salidas
+    logic BranchTakenE;
+    logic PCSrcECU;
+    logic RegWriteECU;
+    logic MemWriteECU;
+
+    // Instancia del módulo conditional_unit
     conditional_unit uut (
-        .clk(clk),
-        .rst(rst),
         .PCSrcE(PCSrcE),
         .RegWriteE(RegWriteE),
         .MemWriteE(MemWriteE),
-        .BranchE(BranchE),
-        .FlagWriteE(FlagWriteE),
-        .Opcode(Opcode),
-        .FlagsE(FlagsE),
-        .ALUFlags(ALUFlags),
-        .ALUFlagsD(ALUFlagsD),
-        .BranchTakenE(BranchTakenE),
-        .PCSrcM(PCSrcM),
-        .RegWriteM(RegWriteM),
-        .MemWriteM(MemWriteM)
-    );
 
-    // Clock generation
-    always #5 clk = ~clk;
+        .BranchE(BranchE),
+
+        .InstrSelE(InstrSelE),
+        .ALUFlags(ALUFlags),
+
+        .BranchTakenE(BranchTakenE),
+        .PCSrcECU(PCSrcECU),
+        .RegWriteECU(RegWriteECU),
+        .MemWriteECU(MemWriteECU)
+    );
 
     // Test sequence
     initial begin
-        $display("Starting Conditional Unit tests...\n");
+        $display("\nComenzando pruebas del modulo conditional_unit...");
 
-        // Initialize signals
-        clk = 0;
-        rst = 1;
-        PCSrcE = 0;
-        RegWriteE = 0;
-        MemWriteE = 0;
-        BranchE = 0;
-        FlagWriteE = 2'b00;
-        Opcode = 6'b000000;
-        FlagsE = 4'b0000;
-        ALUFlags = 4'b0000;
-
-        // Deassert reset
-        #10;
-        rst = 0;
-
-        // Test 1: Branch is taken (Opcode: 001100, BranchE = 1, Z_flag = 1)
-        $display("Test 1: Branch is taken | Opcode=%b, Z_flag=1", Opcode);
+        // Caso 1: No es una instrucción de branch, CondEx debe ser 1.
+        $display("\nTest 1: No branch");
         PCSrcE = 1;
-        BranchE = 1;
-        Opcode = 6'b001100;
-        FlagsE = 4'b0100; // Z_flag = 1
         RegWriteE = 1;
         MemWriteE = 1;
+        BranchE = 0;             // No branch
+        InstrSelE = 2'b00;       // Cualquier valor, no es relevante
+        ALUFlags = 4'b0000;      // Cualquier valor, no es relevante
         #10;
-        $display("BranchTakenE=%b, PCSrcM=%b, RegWriteM=%b, MemWriteM=%b", BranchTakenE, PCSrcM, RegWriteM, MemWriteM);
-        if (BranchTakenE == 1 && PCSrcM == 1 && RegWriteM == 1 && MemWriteM == 1) $display("Test 1 Passed");
-        else $display("Test 1 Failed");
+        $display("PCSrcE: %b, RegWriteE: %b, MemWriteE: %b,", PCSrcE, RegWriteE, MemWriteE);
+        $display("ALUFlags: %b, ALUFlags: [N=%b, Z=%b, C=%b, V=%b]", ALUFlags, ALUFlags[3], ALUFlags[2], ALUFlags[1], ALUFlags[0]);
+        $display("BranchTakenE: %b, PCSrcECU: %b, RegWriteECU: %b, MemWriteECU: %b", BranchTakenE, PCSrcECU, RegWriteECU, MemWriteECU);
+        assert(BranchTakenE == 0 && PCSrcECU == 1 && RegWriteECU == 1 && MemWriteECU == 1)
+        else $fatal("Test 1 fallo");
 
-        // Test 2: Branch is not taken (Opcode: 001100, BranchE = 1, Z_flag = 0)
-        $display("Test 2: Branch is not taken | Opcode=%b, Z_flag=0", Opcode);
-        FlagsE = 4'b0000; // Z_flag = 0
+        // Caso 2: Branch condicional con ALUFlags = EQ (Equal)
+        $display("\nTest 2: Branch EQ (Equal), ALUFlags = 4'b0100 (Z=1)");
+        BranchE = 1;
+        InstrSelE = 2'b00;       // EQ (Equal)
+        ALUFlags = 4'b0100;      // Z_flag = 1, el resto no importa
         #10;
-        $display("BranchTakenE=%b, PCSrcM=%b, RegWriteM=%b, MemWriteM=%b", BranchTakenE, PCSrcM, RegWriteM, MemWriteM);
-        if (BranchTakenE == 0 && PCSrcM == 0 && RegWriteM == 0 && MemWriteM == 0) $display("Test 2 Passed");
-        else $display("Test 2 Failed");
+        $display("PCSrcE: %b, RegWriteE: %b, MemWriteE: %b,", PCSrcE, RegWriteE, MemWriteE);
+        $display("ALUFlags: %b, ALUFlags: [N=%b, Z=%b, C=%b, V=%b]", ALUFlags, ALUFlags[3], ALUFlags[2], ALUFlags[1], ALUFlags[0]);
+        $display("BranchTakenE: %b, PCSrcECU: %b, RegWriteECU: %b, MemWriteECU: %b", BranchTakenE, PCSrcECU, RegWriteECU, MemWriteECU);
+        assert(BranchTakenE == 1 && PCSrcECU == 1 && RegWriteECU == 1 && MemWriteECU == 1)
+        else $fatal("Test 2 fallo");
 
-        // Test 3: GT condition (Opcode: 001110, BranchE = 1, Z_flag = 0, N_flag = 0, V_flag = 0)
-        $display("Test 3: GT Condition | Opcode=%b, Z_flag=0, N_flag=0, V_flag=0", Opcode);
-        Opcode = 6'b001110;
-        FlagsE = 4'b0000; // Z_flag = 0, N_flag = 0, V_flag = 0
+        // Caso 3: Branch EQ con Z_flag = 0, no debe tomar el branch
+        $display("\nTest 3: Branch EQ (Equal), ALUFlags = 4'b0000 (Z=0)");
+        ALUFlags = 4'b0000;      // Z_flag = 0
         #10;
-        $display("BranchTakenE=%b, PCSrcM=%b, RegWriteM=%b, MemWriteM=%b", BranchTakenE, PCSrcM, RegWriteM, MemWriteM);
-        if (BranchTakenE == 1 && PCSrcM == 1 && RegWriteM == 1 && MemWriteM == 1) $display("Test 3 Passed");
-        else $display("Test 3 Failed");
+        $display("PCSrcE: %b, RegWriteE: %b, MemWriteE: %b,", PCSrcE, RegWriteE, MemWriteE);
+        $display("ALUFlags: %b, ALUFlags: [N=%b, Z=%b, C=%b, V=%b]", ALUFlags, ALUFlags[3], ALUFlags[2], ALUFlags[1], ALUFlags[0]);
+        $display("BranchTakenE: %b, PCSrcECU: %b, RegWriteECU: %b, MemWriteECU: %b", BranchTakenE, PCSrcECU, RegWriteECU, MemWriteECU);
+        assert(BranchTakenE == 0 && PCSrcECU == 0 && RegWriteECU == 0 && MemWriteECU == 0)
+        else $fatal("Test 3 fallo");
 
-        // Test 4: Unconditional (Opcode: 001111, BranchE = 1)
-        $display("Test 4: Unconditional Branch | Opcode=%b", Opcode);
-        Opcode = 6'b001111;
+        // Caso 4: Branch GT (Signed greater than) con N_flag=0, V_flag=0, Z_flag=0 (positivo y mayor)
+        $display("\nTest 4: Branch GT (Greater than), ALUFlags = 4'b0000");
+        InstrSelE = 2'b10;       // GT (Greater than)
+        ALUFlags = 4'b0000;      // Z=0, N=0, V=0 (positivo y mayor)
         #10;
-        $display("BranchTakenE=%b, PCSrcM=%b, RegWriteM=%b, MemWriteM=%b", BranchTakenE, PCSrcM, RegWriteM, MemWriteM);
-        if (BranchTakenE == 1 && PCSrcM == 1 && RegWriteM == 1 && MemWriteM == 1) $display("Test 4 Passed");
-        else $display("Test 4 Failed");
+        $display("PCSrcE: %b, RegWriteE: %b, MemWriteE: %b,", PCSrcE, RegWriteE, MemWriteE);
+        $display("ALUFlags: %b, ALUFlags: [N=%b, Z=%b, C=%b, V=%b]", ALUFlags, ALUFlags[3], ALUFlags[2], ALUFlags[1], ALUFlags[0]);
+        $display("BranchTakenE: %b, PCSrcECU: %b, RegWriteECU: %b, MemWriteECU: %b", BranchTakenE, PCSrcECU, RegWriteECU, MemWriteECU);
+        assert(BranchTakenE == 1 && PCSrcECU == 1 && RegWriteECU == 1 && MemWriteECU == 1)
+        else $fatal("Test 4 fallo");
 
-        // Test 5: No branch, no condition met (Opcode: 000000, BranchE = 0)
-        $display("Test 5: No branch | Opcode=%b, BranchE=0", Opcode);
-        Opcode = 6'b000000;
-        BranchE = 0;
+        // Caso 5: Branch GT con N_flag=1, V_flag=0, Z_flag=0 (negativo, no mayor)
+        $display("\nTest 5: Branch GT (Greater than), ALUFlags = 4'b1000");
+        ALUFlags = 4'b1000;      // Z=0, N=1, V=0 (negativo, no mayor)
         #10;
-        $display("BranchTakenE=%b, PCSrcM=%b, RegWriteM=%b, MemWriteM=%b", BranchTakenE, PCSrcM, RegWriteM, MemWriteM);
-        if (BranchTakenE == 0 && PCSrcM == 0 && RegWriteM == 0 && MemWriteM == 0) $display("Test 5 Passed");
-        else $display("Test 5 Failed");
+        $display("PCSrcE: %b, RegWriteE: %b, MemWriteE: %b,", PCSrcE, RegWriteE, MemWriteE);
+        $display("ALUFlags: %b, ALUFlags: [N=%b, Z=%b, C=%b, V=%b]", ALUFlags, ALUFlags[3], ALUFlags[2], ALUFlags[1], ALUFlags[0]);
+        $display("BranchTakenE: %b, PCSrcECU: %b, RegWriteECU: %b, MemWriteECU: %b", BranchTakenE, PCSrcECU, RegWriteECU, MemWriteECU);
+        assert(BranchTakenE == 0 && PCSrcECU == 0 && RegWriteECU == 0 && MemWriteECU == 0)
+        else $fatal("Test 5 fallo");
 
-        $display("\nConditional Unit tests completed.");
+        // Caso 6: Branch incondicional (ALUFlags = b)
+        $display("\nTest 6: Branch incondicional, ALUFlags = 2'b11");
+        InstrSelE = 2'b11;       // Incondicional
+        ALUFlags = 4'b0000;      // Los ALUFlags no importan
+        #10;
+        $display("PCSrcE: %b, RegWriteE: %b, MemWriteE: %b,", PCSrcE, RegWriteE, MemWriteE);
+        $display("ALUFlags: %b, ALUFlags: [N=%b, Z=%b, C=%b, V=%b]", ALUFlags, ALUFlags[3], ALUFlags[2], ALUFlags[1], ALUFlags[0]);
+        $display("BranchTakenE: %b, PCSrcECU: %b, RegWriteECU: %b, MemWriteECU: %b", BranchTakenE, PCSrcECU, RegWriteECU, MemWriteECU);
+        assert(BranchTakenE == 1 && PCSrcECU == 1 && RegWriteECU == 1 && MemWriteECU == 1)
+        else $fatal("Test 6 fallo");
+
+        // Finalización
+        $display("\nTodas las pruebas completadas con exito.\n");
+        #100;
         $finish;
     end
 

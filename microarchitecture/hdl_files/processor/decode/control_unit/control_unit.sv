@@ -25,7 +25,6 @@ module control_unit # (parameter R = 5) (
 		output logic [2:0] ALUControl,      // Execute
 		output logic Branch,                // Execute
 		output logic ALUSrc,                // Execute
-		// output logic [1:0] FlagWrite,    // Execute   ELIMINAR DEL DATAPATH
 
 		output logic [1:0] RegSrc,          // Decode
 		output logic [1:0] ImmSrc           // Decode

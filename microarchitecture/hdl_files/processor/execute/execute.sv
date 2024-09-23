@@ -10,32 +10,36 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		// Data for ALUs
 		input  logic [N-1:0] RD1E,			// RD1D (from register_file) to mux SrcAE [y]
 		input  logic [N-1:0] RD2E,			// RD2D (from register_file) to mux WriteDataE [y]
-		input  logic [N-1:0] ExtImmE,		// ExtImmD (from extend) to mux_SrcBE [y]
+		input  logic [N-1:0] ExtImmEi,		// ExtImmD (from extend) to mux_SrcBE [y], to ExtImmo f [y]
 		input  logic [V-1:0] VRD1E,			// VRD1D (from vector_register_file) to mux SrcAVE [y]
 		input  logic [V-1:0] VRD2E,			// VRD2D (from vector_register_file) to mux SrcBVE [y]
 
+		// Data for forwarding
+		input  logic [R-1:0] WA3Ei,			// WA3D (from instructions's Rd) to WA3Eo f [y]
+
 		// Control signals
-		input  logic PCSrcE,				// to allround Fetch from CU, but through CdU [n]
-		input  logic RegWriteE,				// to allround Decode from CU, but through CdU [n]
-		input  logic RegWriteVE,			// to allround Decode from CU [n]
+		input  logic PCSrcE,				// to allround Fetch from CU, but through CdU [y]
+		input  logic RegWriteE,				// to allround Decode from CU, but through CdU [y]
+		input  logic RegWriteVEi,			// to allround Decode from CU. RegWriteVD to RegWriteVEo f [y]
 
-		input  logic MemtoRegE,				// to Writeback from CU [n]		
+		input  logic MemtoRegEi,			// to Writeback from CU. MemtoRegD to MemtoRegEo f [y]		
 		
-		input  logic MemWriteE,				// to Memory from CU, but through CdU [n], to mux_ALUResultVE [y]
-		input  logic MemSrcE,				// to Memory from CU [n]
-		input  logic MemDataE,				// to Memory from CU [n]
-		input  logic VecDataE,				// to Memory from CU [n]
+		input  logic MemWriteE,				// to Memory from CU, but through CdU [y]
+		input  logic MemSrcEi,				// to Memory from CU. MemSrcD to MemSrcEo f [y]
+		input  logic MemDataEi,				// to Memory from CU. MemDataD to MemDataEo f [y]
+		input  logic MemDataVEi,			// to Memory from CU. MemDataVD to MemDataVEo f [y]
+		input  logic VecDataEi,				// to Memory from CU. VecDataD to VecDataEo f [y]
 
+		input  logic [1:0] InstrSelE,		// to CdU [y]
 		input  logic [2:0] ALUControlE,		// to ALU [y], to ALU Vector [y]
-		input  logic BranchE,				// to CdU [n]
+		input  logic BranchE,				// to CdU [y]
 		input  logic ALUSrcE,				// to mux_SrcBE [y]
-		input  logic [1:0] FlagWriteE,		// to CdU [n]
 
 		/* inputs from forwarding */
 		input  logic [N-1:0] ResultW,		// ResultW (from Writeback) to mux SrcAE [y], to mux WriteDataE [y]
-		input  logic [V-1:0] ResultVW,		// ResultVW (from Writeback) to mux SrcVAE [y], to mux SrcVBE [y]
+		input  logic [V-1:0] ResultVW,		// ResultVW (from Writeback) to mux SrcVAE [y], to mux SrcBVE [y]
 		input  logic [N-1:0] ALUResultM,	// ALUResultM (from Memory) to mux SrcAE [y], to mux WriteDataE [y]
-		input  logic [V-1:0] ALUResultVM,	// ALUResultVM (from Memory) to mux SrcVAE [y], to mux SrcVBE [y]
+		input  logic [V-1:0] ALUResultVM,	// ALUResultVM (from Memory) to mux SrcVAE [y], to mux SrcBVE [y]
 
 		/* inputs from hazard unit */
 		input  logic ForwardAE,				// to mux_SrcAE [y]
@@ -47,21 +51,39 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic [N-1:0] WriteDataE,	// from mux_WriteDataE [y], to mux_SrcBE [y]
 		output logic [N-1:0] ALUResultE,	// from ALU [y]
 
-		output logic [V-1:0] ALUResultVE	// from mux_ALUResultVE [n]
+		output logic [V-1:0] WriteDataVE,	// from SrcBVE f [y]
+		output logic [V-1:0] ALUResultVE,	// from ALU Vector [y]
+
+		output logic [R-1:0] WA3Eo,			// from WA3Ei [y]
+		
+		/* outputs for forwarding */
+		output logic [N-1:0] ExtImmEo,		// from ExtImmEi [y]
+
+		/* control signal outputs */
+		output logic BranchTakenE,			// from CdU [y]
+		output logic PCSrcECU,				// from CdU [y]
+		output logic RegWriteECU,			// from CdU [y]
+		output logic MemWriteECU,			// from CdU	[y]
+
+		output logic RegWriteVEo,			// from RegWriteVEi [y]
+		output logic MemtoRegEo,			// from MemtoRegEi [y]
+
+		output logic MemSrcEo,				// from MemSrcEi [y]
+		output logic MemDataEo,				// from MemDataEi [y]
+		output logic MemDataVEo,			// from MemDataVEi [y]
+		output logic VecDataEo				// from VecDataEi [y]
 	);
+
 
 	/* wiring */
 	logic [N-1:0] SrcAE;					// from mux_SrcAE [y] to ALU [y]
 	logic [N-1:0] SrcBE;					// from mux_SrcBE [y] to ALU [y]
 
 	logic [V-1:0] SrcAVE;					// from mux_SrcAVE [y] to ALU Vector [y]
-	logic [V-1:0] SrcBVE;					// from mux_SrcBVE [y] to ALU Vector [y], to mux_ALUResultVE [y]
+	logic [V-1:0] SrcBVE;					// from mux_SrcBVE [y] to ALU Vector [y], to f WriteDataVE [y]
 
-	logic [3:0]	ALUFlags;					// from ALU [y] to CdU [n]
+	logic [3:0]	ALUFlags;					// from ALU [y] to CdU [y]
 
-	logic [V-1:0] ALURV;					// from ALU Vector [y] to mux_ALUResultVE [y]
-
-	
 
 	/* SrcAE (ALU's A Operand) Mux */
 	mux_4NtoN # (.N(N)) mux_SrcAE (.I0(RD1E),			
@@ -72,7 +94,6 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 								   .S(ForwardAE),
 								   .en(1'b1),
 								   .O(SrcAE));
-
 
 	
 	/* WriteDataE (ALU's posible operand and Memory's write data) Mux */
@@ -88,7 +109,7 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 	/* SrcBE (ALU's B Operand) Mux */
 	mux_2NtoN # (.N(N)) mux_SrcBE (.I0(WriteDataE),
-								   .I1(ExtImmE),
+								   .I1(ExtImmEi),
 								   .rst(rst),
 								   .S(ALUSrcE),
 								   .en(1'b1),
@@ -104,6 +125,7 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
 	/* ********************************** vector ***************************** */
+
 
 	/* SrcAVE (ALU Vector's A Operand) Mux */
 	mux_4NtoN # (.N(V)) mux_SrcAVE (.I0(VRD1E),
@@ -125,51 +147,70 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 									.S(ForwardBVE),
 									.en(1'b1),
 									.O(SrcBVE));
+
+	
+	/* WriteDataVE output for register_EM */
+	assign WriteDataVE = SrcBVE;
 	
 
 	/* Vector ALU */
-	alu_vector # (.N(V)) vALU (.A(SrcAVE),
-							   .B(SrcBVE),
-							   .ALUControl(ALUControlE),
-							   .result(ALURV)); // ALUFlags for vector wont be needed for now
+	alu_vector # (.N(N), .V(V)) vALU (.A(SrcAVE),
+									  .B(SrcBVE),
+									  .ALUControl(ALUControlE),
+									  .result(ALUResultVE)); // ALUFlags for vector wont be needed for now
 
 	
-	/* ALUResultVE (vALU's B Operand) Mux */
-	mux_2NtoN # (.N(V)) mux_ALUResultVE (.I0(ALURV),
-										 .I1(SrcBVE),
-										 .rst(rst),
-										 .S(MemWriteE),
-										 .en(1'b1),
-										 .O(ALUResultVE));
+	/* ********************************** forwarding data ***************************** */
+
+
+	/* WA3E forwarding output for register_EM */
+	assign WA3Eo = WA3Ei;
+
+	/* ExtImmE forwarding output for Fetch */
+	/* Used for sending the branch address in 'b' instruction */
+	assign ExtImmEo = ExtImmEi;
+
+
+	/* ********************************** conditional_unit ***************************** */
 	
 	
 	/* Conditional Unit checks flags and branches */
-	conditional_unit cond_unit (.clk(clk),
-							  	.rst(rst),
+	conditional_unit cond_unit (.PCSrcE(PCSrcE),
+								.RegWriteE(RegWriteE),
+								.MemWriteE(MemWriteE),
 
-								.PCSrcE(),
-								.RegWriteE(),
-								.MemWriteE(),
-								.BranchE(),
+								.BranchE(BranchE),
 
-								.FlagWriteE(),
-								.Opcode(),
-								.FlagsE(),
-								.ALUFlags(),
+								.InstrSelE(InstrSelE),
+								.ALUFlags(ALUFlags),
 
-								.ALUFlagsD(),
-								.BranchTakenE(),
-								.PCSrcECU(),
-								.RegWriteECU(),
-								.MemWriteECU());
+								/* outputs */
+								.BranchTakenE(BranchTakenE),
+								.PCSrcECU(PCSrcECU),
+								.RegWriteECU(RegWriteECU),
+								.MemWriteECU(MemWriteECU));
 
-	
-	/* Conditioned control signals */
-	
-	
-	/* ExtImm for Fetch stage (ALUResult was used in book's implementation) */
-	/* Used for sending the branch address in 'b' instruction */
 
+	/* ********************************** forwarding control signals ***************************** */
+
+
+	/* RegWriteVE forwarding output for register_EM */
+	assign RegWriteVEo = RegWriteVEi;
+
+	/* MemtoRegE forwarding output for register_EM */
+	assign MemtoRegEo = MemtoRegEi;
+
+	/* MemSrcE forwarding output for register_EM */
+	assign MemSrcEo = MemSrcEi;
+
+	/* MemDataE forwarding output for register_EM */
+	assign MemDataEo = MemDataEi;
+
+	/* MemDataVE forwarding output for register_EM */
+	assign MemDataVEo = MemDataVEi;
+
+	/* VecDataE forwarding output for register_EM */
+	assign VecDataEo = VecDataEi;
 	
 
 endmodule
