@@ -4,34 +4,35 @@ Date: 17/09/2024
 Test bench ran: 19/09/24
 */
 module data_aligner # (parameter N = 32, parameter V = 256) (
-	input  logic clk, reset,
-	input  logic memtoRegM, // CS para hacer Lectura desde Memoria, sirve para Escalar y Vectorial
-	input  logic memWriteM, // CS para hacer Escritura en la Memoria
-	input  logic memSrcM,   // CS para operaciones escalares (32) [0] o vectoriales (256) [1]
+	input  logic clk,
+	input  logic rst,
+	input  logic memtoRegM, 				// CS para hacer Lectura desde Memoria, sirve para Escalar y Vectorial
+	input  logic memWriteM, 				// CS para hacer Escritura en la Memoria
+	input  logic memSrcM,   				// CS para operaciones escalares (32) [0] o vectoriales (256) [1]
 	
-	input  logic [31:0] address,	   // {Ai} Direccion de donde se leera o donde se escribira
-	input  logic [15:0] scalarDataIn,  // {WD} Datos de 16 (!) bits para operaciones escalares
-	input  logic [255:0] vectorDataIn, // {VWD} Datos de 256 bits para operaciones vectoriales
+	input  logic [31:0] address,	   		// {Ai} Direccion de donde se leera o donde se escribira
+	input  logic [15:0] scalarDataIn,  		// {WD} Datos de 16 (!) bits para operaciones escalares
+	input  logic [255:0] vectorDataIn, 		// {VWD} Datos de 256 bits para operaciones vectoriales
 
-	output logic busy, // Indica si se esta procesando una operación (genera stalls en hazard unit)
+	output logic busy, 						// Indica si se esta procesando una operación (genera stalls en hazard unit)
 
-	output logic [31:0] scalarDataOut,  // {RDo} Datos escaclares (32 bits) leidos de memoria
-	output logic [255:0] vectorDataOut, // {VRD} Datos vectoriales (256 bits) leidos de memoria
+	output logic [N-1:0] scalarDataOut,		// {RDo} Datos escaclares (32 bits) leidos de memoria
+	output logic [V-1:0] vectorDataOut, 	// {VRD} Datos vectoriales (256 bits) leidos de memoria
 	
 	// ip_ram signals
-	input  logic [255:0] readData,	// {RDi} Datos leidos desde la memoria de 256 bits
+	input  logic [V-1:0] readData,			// {RDi} Datos leidos desde la memoria de 256 bits
 
-	output logic rden,				// Indica si se quiere leer de la memoria
-	output logic wren,				// Indica si se quiere escribir en la memoria 
-	output logic [13:0] ip_address, // {Ao} Direccion de memoria alineada a los 256 bits 
-	output logic [31:0] byteena,	// Habilita los bytes especificos en la memoria
-	output logic [255:0] writeData  // {WD} Datos de 256 bits por escribir en la memoria
+	output logic rden,						// Indica si se quiere leer de la memoria
+	output logic wren,						// Indica si se quiere escribir en la memoria 
+	output logic [13:0] ip_address, 		// {Ao} Direccion de memoria alineada a los 256 bits 
+	output logic [31:0] byteena,			// Habilita los bytes especificos en la memoria
+	output logic [V-1:0] writeData  		// {WD} Datos de 256 bits por escribir en la memoria
 );
 	
 	logic [1:0] count;
 	logic ready;
 	logic aligned;
-	logic [N-1:0] shamt; 	 // Cantidad de bytes que se deben desplazar para alinear
+	logic [N-1:0] shamt; 	 				// Cantidad de bytes que se deben desplazar para alinear
 	logic [N-1:0] prev_shamt;
 
 	logic [V-1:0] wr_data_part1, wr_data_part2, 
@@ -93,7 +94,7 @@ module data_aligner # (parameter N = 32, parameter V = 256) (
 
 	always_ff @ (posedge clk) 
 	begin
-		if (reset) begin
+		if (rst) begin
 			count <= 2'b0;
 		end
 		else 

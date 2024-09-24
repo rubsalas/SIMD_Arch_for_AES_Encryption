@@ -6,7 +6,7 @@ Approved
 module data_aligner_tb;
 
     logic clk;
-    logic reset;
+    logic rst;
     logic memtoRegM;
     logic memWriteM;
     logic memSrcM;
@@ -28,7 +28,7 @@ module data_aligner_tb;
     // Instancia del módulo data_aligner
     data_aligner uut (
         .clk(clk),
-        .reset(reset),
+        .rst(rst),
         .memtoRegM(memtoRegM),
         .memWriteM(memWriteM),
         .memSrcM(memSrcM),
@@ -53,7 +53,7 @@ module data_aligner_tb;
     initial begin
         // Inicialización
         clk = 0;
-        reset = 1;
+        rst = 1;
         memtoRegM = 0;
         memWriteM = 0;
         memSrcM = 0;
@@ -62,8 +62,8 @@ module data_aligner_tb;
         vectorDataIn = 256'b0;
         readData = 256'b0;
         
-        // Se desactiva el reset
-        #20 reset = 0;
+        // Se desactiva el rst
+        #20 rst = 0;
 
         // ------------- Test 1: Escritura escalar alineada --------------
         $display("Test 1: Escritura escalar alineada en direccion 0x00000000");

@@ -10,7 +10,7 @@ module data_memory_with_aligner_tb;
 
     // Señales
     logic clk;
-    logic reset;
+    logic rst;
     logic MemtoRegM;
     logic MemWriteM;
     logic MemSrcM;
@@ -32,7 +32,7 @@ module data_memory_with_aligner_tb;
     // Instancia del módulo data_aligner
     data_aligner uut (
         .clk(clk),
-        .reset(reset),
+        .rst(rst),
         .memtoRegM(MemtoRegM),
         .memWriteM(MemWriteM),
         .memSrcM(MemSrcM),
@@ -68,7 +68,7 @@ module data_memory_with_aligner_tb;
     initial begin
         // Inicialización
         clk = 0;
-        reset = 1;
+        rst = 1;
         MemtoRegM = 0;
         MemWriteM = 0;
         MemSrcM = 0;
@@ -77,8 +77,8 @@ module data_memory_with_aligner_tb;
         ALUResultVM = 256'b0;
         MemReadData = 256'b0;
         
-        // Se desactiva el reset
-        #20 reset = 0;
+        // Se desactiva el rst
+        #20 rst = 0;
         #20;
 
         // ------------- Test 1: Lectura vectorial alineada --------------
