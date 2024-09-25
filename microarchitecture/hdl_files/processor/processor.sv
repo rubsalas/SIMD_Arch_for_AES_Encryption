@@ -9,16 +9,16 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic		 en,
 
         input  logic [N-1:0] Instr,       	// InstrF (RD from instruction memory) to register_FD [y]
-        
-        input  logic [V-1:0] ReadData, 	    // MemReadData (RD from data_memory) to data_aligner [n]
+
+        input  logic [V-1:0] ReadData, 	    // MemReadData (RD from data_memory) to Memory stage (RDi from data_aligner) [y]
 
         output logic [N-1:0] PC,       	 	// PCF (Q from pc register) to instruction_memory [y]
 
-        output logic         RdenData,      // ScalarMemWrite from Data memory [n]
-        output logic         WrenData       // ScalarMemWrite from Data memory [n]
-        output logic [N-1:0] AddressData,	// to A from, data memory [n]
-        output logic [N-1:0] ByteenaData,	// to A from, data memory [n]
-        output logic [V-1:0] WriteData,  	// to WD (write_scalar_data) from data memory [n]
+        output logic         RdenData,      // from DA to rden_data (Data memory) [y]
+        output logic         WrenData       // from DA to wren_data (Data memory) [y]
+        output logic [N-1:0] AddressData,	// from DA to address_data (Data memory) [y]
+        output logic [N-1:0] ByteenaData,	// from DA to byteena_data (Data memory) [y]
+        output logic [V-1:0] WriteData,  	// to WD (write_scalar_data) from data memory [y]
     );
 
 
@@ -121,13 +121,48 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
     /* ***************************** Memory stage's wiring ***************************** */
     
-    logic [N-1:0] wALUResultM;      // [n] sdata to E [y]
-    logic [V-1:0] wALUResultVM;     // [n] vdata to E [y]
+    /* reg to M */
+    logic wPCSrcMi;                 // [y] cs from rEM to M [y]
+    logic wRegWriteMi;              // [y] cs from rEM to M [y]
+    logic wRegWriteVMi;             // [y] cs from rEM to M [y]
+
+    logic wMemtoRegMi;              // [y] cs from rEM to M [y]
+
+    logic wMemWriteM;               // [y] cs from rEM to M [y]
+    logic wMemSrcM;                 // [y] cs from rEM to M [y]
+    logic wMemDataM;                // [y] cs from rEM to M [y]
+    logic wMemDataVM;               // [y] cs from rEM to M [y]
+    logic wVecDataM;                // [y] cs from rEM to M [y]
+
+    logic [N-1:0] wALUResultMi;     // [y] sdata from rEM to M [y]
+    logic [N-1:0] wWriteDataM;      // [y] sdata from rEM to M [y]
+
+    logic [V-1:0] wALUResultVMi;    // [y] vdata from rEM to M [y]
+    logic [V-1:0] wWriteDataVM;     // [y] vdata from rEM to M [y]
+
+    logic [R-1:0] WA3Mi;            // [y] raddr from rEM to M [y]
+
+
+    /* M's outputs */
+    logic wPCSrcMo;                 // [y] cs from M to rMW [y], to HU [y]
+    logic wRegWriteMo;              // [y] cs from M to rMW [y], to HU [y]
+    logic wRegWriteVMo;             // [y] cs from M to rMW [y], to HU [y]
+    logic wMemtoRegMo;              // [y] cs from M to rMW [y]
+
+    logic [N-1:0] wALUResultM;      // [y] sdata to E [y], to rMW [y]
+    logic [V-1:0] wALUResultVM;     // [y] vdata to E [y], to rMW [y]
+
+    logic [N-1:0] wReadDataM;       // [y] sdata from M to rMW [y]
+    logic [V-1:0] wReadDataVM;      // [y] vdata from M to rMW [y]
+
+    logic [R-1:0] wWA3Mo;           // [y] raddr from M to rMW [y], to HU [y]
+
+    logic wBusyDA;                  // [y] cs to HU [y]
 
     
-    /* ***************************** Memory stage's wiring ***************************** */
+    /* ***************************** Writeback stage's wiring ***************************** */
 
-    /* Writeback stage's wiring */
+
     // Control signals
     logic wPCSrcW;                  // [n] cs to F [y]
     logic wRegWriteW;               // [n] cs to D [y]
@@ -153,6 +188,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     
     logic wStallM;                  // [y] cs to rEM [y]
 
+    logic wStallW;                  // [y] cs to rMW [y]
 
 
     /* Performance Counter Unit's wiring */
@@ -395,32 +431,110 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .WA3E(wWA3Eo),
         
         /* outputs */
-        .PCSrcM(),
-        .RegWriteM(),
-        .RegWriteVM(),
+        .PCSrcM(wPCSrcMi),
+        .RegWriteM(wRegWriteMi),
+        .RegWriteVM(wRegWriteVMi),
         
-        .MemtoRegM(),
+        .MemtoRegM(wMemtoRegMi),
         
-        .MemWriteM(),
-        .MemSrcM(),
-        .MemDataM(),
-        .MemDataVM(),
-        .VecDataM(),
+        .MemWriteM(wMemWriteM),
+        .MemSrcM(wMemSrcM),
+        .MemDataM(wMemDataM),
+        .MemDataVM(wMemDataVM),
+        .VecDataM(wVecDataM),
         
-        .ALUResultM(),
-        .WriteDataM(),
-        .ALUResultVM(),
-        .WriteDataVM(),
+        .ALUResultM(wALUResultMi),
+        .WriteDataM(wWriteDataM),
+
+        .ALUResultVM(wALUResultVMi),
+        .WriteDataVM(wWriteDataVM),
         
-        .WA3M()
+        .WA3M(WA3Mi)
     );
 
 
     /* Memory stage */
+    mem #(.N(N), .V(N), .R(R)) memory_stage (
+        .clk(clk),
+        .rst(rst),
+
+        .PCSrcMi(wPCSrcMi),
+        .RegWriteMi(wRegWriteMi),
+        .RegWriteVMi(wRegWriteVMi),
+
+        .MemtoRegMi(wMemtoRegMi),
+
+        .MemWriteM(wMemWriteM),
+        .MemSrcM(wMemSrcM),
+        .MemDataM(wMemDataM),
+        .MemDataVM(wMemDataVM),
+        .VecDataM(wVecDataM),
+
+        .ALUResultMi(wALUResultMi),
+        .WriteDataM(wWriteDataM),
+
+        .ALUResultVMi(wALUResultVMi),
+        .WriteDataVM(wWriteDataVM),
+
+        .WA3Mi(WA3Mi),
+
+        .MemReadData(ReadData),
+
+        /* outputs */
+        .PCSrcMo(wPCSrcMo),
+        .RegWriteMo(wRegWriteMo),
+        .RegWriteVMo(wRegWriteVMo),
+        .MemtoRegMo(wMemtoRegMo),
+
+        .ALUResultMo(wALUResultM),
+        .ALUResultVMo(wALUResultVM),
+
+        .ReadDataM(wReadDataM),
+        .ReadDataVM(wReadDataVM),
+
+        .WA3Mo(wWA3Mo),
+
+        .BusyDA(wBusyDA),
+
+        .MemRden(RdenData),
+        .MemWren(WrenData),
+        .MemAddress(AddressData),
+        .MemByteena(ByteenaData),
+        .MemWriteData(WriteData)
+    );
 
 
     /* Pipeline Register between Memory-Writeback */
+    register_MW #(.N(32), .V(256), .R(5)) reg_MW (
+        .clk(clk),
+        .rst(rst),
+        .en(wStallW),                   // StallW
+        
+        .PCSrcM(wPCSrcMo),
+        .RegWriteM(wRegWriteMo),
+        .RegWriteVM(wRegWriteVMo),
+        .MemtoRegM(wMemtoRegMo),
 
+        .ALUResultM(wALUResultM),
+        .ReadDataM(wReadDataM),
+        .ALUResultVM(wALUResultVM),
+        .ReadDataVM(wReadDataVM),
+        
+        .WA3M(wWA3Mo),
+        
+        /* outputs */
+        .PCSrcW(),
+        .RegWriteW(),
+        .RegWriteVW(),
+        .MemtoRegW(),
+        
+        .ALUResultW(),
+        .WriteDataW(),
+        .ALUResultVW(),
+        .WriteDataVW(),
+        
+        .WA3W()
+    );
 
     /* Writeback stage */
 
@@ -439,11 +553,11 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .RA2E(wRA2Eo),
         .WA3E(wWA3Eo),
 
-        .PCSrcM(),
-        .RegWriteM(),
-        .RegWriteVM(),
-        .WA3M(),
-        .BusyDA(),
+        .PCSrcM(wPCSrcMo),
+        .RegWriteM(wRegWriteMo),
+        .RegWriteVM(wRegWriteVMo),
+        .WA3M(wWA3Mo),
+        .BusyDA(wBusyDA),
 
         .PCSrcW(),
         .RegWriteW(),
@@ -464,7 +578,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         
         .StallM(wStallM),
         
-        .StallW()
+        .StallW(wStallW)
     );
 
 

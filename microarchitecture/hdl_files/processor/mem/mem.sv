@@ -12,10 +12,10 @@ module mem # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic RegWriteMi,			// to allround Decode from CU, RegWriteE to RegWriteMo f [y]
 		input  logic RegWriteVMi,			// to allround Decode from CU. RegWriteVE to RegWriteVMo f [y]
 
-		input  logic MemtoRegMi,			// to Writeback from CU. MemtoRegE to MemtoRegMo f [y], to DA [y]	
+		input  logic MemtoRegMi,			// to Writeback from CU. MemtoRegE to MemtoRegMo f [y], to DA [y]
+
 		input  logic MemWriteM,				// to DA [y]
 		input  logic MemSrcM,				// to DA [y]
-
 		input  logic MemDataM,				// to mux_SWData [y]
 		input  logic MemDataVM,				// to mux_VWData [y]
 		input  logic VecDataM,				// to mux_ReadDataVM [y]
