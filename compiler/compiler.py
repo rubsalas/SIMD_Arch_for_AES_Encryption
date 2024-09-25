@@ -114,28 +114,24 @@ def get_r_type(instruction: list) -> str:
     """
     mnemonic = instruction[0]
     opcode = isa[mnemonic]['opcode']
-    s1 = isa[mnemonic]['S1']
     funct = isa[mnemonic]['funct']
-    s0 = isa[mnemonic]['S0']
 
-    if (mnemonic == ADD or mnemonic == SUB or mnemonic == MULT or 
-        mnemonic ==  ADDF or mnemonic == SUBF or mnemonic == MULTF
-        or mnemonic == ADDV or mnemonic == SUBV or mnemonic == MULTV
-        or mnemonic == ADDVF or mnemonic == SUBVF or mnemonic == MULTVF
-        or mnemonic == GETV):
+    if (mnemonic == ADD or mnemonic == SUB or mnemonic == MULT or mnemonic == XOR
+        or mnemonic == ADDV or mnemonic == SUBV or mnemonic == MULTV or mnemonic == XORV
+        ):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
         rt = get_register(instruction[3])
-        shamt = '0000'
+        shamt = '00000000'
     
     if (mnemonic == SLL or mnemonic == SRL):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
-        rt = '0000'
-        shamt = to_bin(instruction[3], 4)
+        rt = '00000'
+        shamt = to_bin(instruction[3], 8)
 
-    return opcode  + s1 +  rd + rs + rt  + shamt  + funct  + s0
-    #return opcode + ',' + s1 + ',' + rd + ',' + rs + ',' + rt + ',' + shamt + ',' + funct + ',' + s0
+    return opcode  +  rd + rs + rt  + shamt  + funct  
+    #return opcode + ',' + rd + ',' + rs + ',' + rt + ',' + shamt + ',' + funct 
 
 
 def get_i_type(i: int, instruction: list, labels: dict) -> str:
@@ -144,19 +140,18 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
     """
     mnemonic = instruction[0]
     opcode = isa[mnemonic]['opcode']
-    s1 = isa[mnemonic]['S1']
-    s0 = isa[mnemonic]['S0']
 
-    if (mnemonic == ADDI or mnemonic == SUBI or mnemonic == MULTI or mnemonic == SDLV):
+
+    if (mnemonic == ADDI or mnemonic == SUBI or mnemonic == MULTI ):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
-        imm = to_bin(instruction[3], 11)
+        imm = to_bin(instruction[3], 16)
 
-    if (mnemonic == BEQ or mnemonic == BGT or mnemonic == BNQ):
+    if (mnemonic == BEQ or mnemonic == BGT):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
         imm = branch_imm(i, instruction[3], labels) 
-        #imm = to_bin(instruction[3], 11)
+        #imm = to_bin(instruction[3], 16 )
 
     #Load y store solo sirven sin inmediato de momento (arreglar)
 
@@ -164,10 +159,10 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
         mnemonic == STRV or mnemonic == LDRV):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
-        imm = to_bin(instruction[3], 11)
+        imm = to_bin(instruction[3], 16)
 
-    return opcode  + s1  + rd  + rs  + imm + s0
-    #return opcode + ',' + s1 + ',' + rd + ',' + rs + ',' + imm + ',' + s0
+    return opcode  + rd  + rs  + imm 
+    #return opcode + ',' + rd + ',' + rs + ',' + imm 
 
 
 def get_j_type(instruction: list, labels: dict) -> str:
@@ -176,19 +171,18 @@ def get_j_type(instruction: list, labels: dict) -> str:
     """
     mnemonic = instruction[0]
     opcode = isa[mnemonic]['opcode']
-    s1 = isa[mnemonic]['S1']
-    s0 = isa[mnemonic]['S0']
+
 
     if (mnemonic == B):
         addr = jump_imm(instruction[1], labels)
-        #addr = to_bin(instruction[1], 19)
+        #addr = to_bin(instruction[1], 26)
 
-    if (mnemonic == END or mnemonic == DNT):
+    if (mnemonic == END):
         #addr = jump_imm(instruction[1], labels)
         addr = '1' * ADDR_SIZE
 
-    #return opcode + ',' + s1 + ',' + addr + ',' + s0
-    return opcode + s1 + addr + s0
+    #return opcode +  ',' + addr 
+    return opcode + addr 
 
 #-----------------------------------------------------------------------
 # Methods to compute immediate binary values for different types of instructions
