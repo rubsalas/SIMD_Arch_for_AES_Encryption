@@ -6,7 +6,6 @@ Test bench ran: XX/09/24
 module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         input  logic		 clk,
 		input  logic		 rst,
-		input  logic		 en,
 
         input  logic [N-1:0] Instr,       	// InstrF (RD from instruction memory) to register_FD [y]
 

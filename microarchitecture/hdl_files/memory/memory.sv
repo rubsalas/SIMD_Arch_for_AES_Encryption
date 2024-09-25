@@ -17,7 +17,7 @@ module memory # (parameter N = 32, parameter V = 256) (
 		/* Instruction outputs */
 		output logic [N-1:0] instruction,	// InstrF (to InstF from register_FD) from RD
 		/* Data ouputs */
-		output logic [V-1:0] read_data,		// MemReadData (to RDi from data memory) from RD
+		output logic [V-1:0] read_data		// MemReadData (to RDi from data memory) from RD
 	);
 
 	// Specific addresses for ips
