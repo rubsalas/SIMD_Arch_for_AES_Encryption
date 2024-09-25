@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY alu
+set_global_assignment -name TOP_LEVEL_ENTITY processor
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 22.1STD.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:23:26  AUGUST 27, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.0 Lite Edition"
@@ -181,9 +181,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/processor.sv
 set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/decode/decode.sv
 set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/pipeline_registers/register_DE.sv
 set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/execute/execute.sv
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_FILE devices/muxes/test_benches/mux2NtoN_tb.sv -section_id mux2NtoN_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE devices/muxes/test_benches/mux4NtoN_tb.sv -section_id mux4NtoN_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE devices/muxes/test_benches/mux8NtoN_tb.sv -section_id mux8NtoN_tb
@@ -206,4 +203,11 @@ set_global_assignment -name EDA_TEST_BENCH_FILE hdl_files/processor/execute/cond
 set_global_assignment -name EDA_TEST_BENCH_FILE hdl_files/memory/data_memory/test_benches/data_memory_tb.sv -section_id data_memory_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE hdl_files/processor/mem/data_aligner/test_benches/data_aligner_tb.sv -section_id data_aligner_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE hdl_files/processor/mem/data_aligner/test_benches/data_memory_with_aligner_tb.sv -section_id data_memory_with_aligner_tb
+set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/pipeline_registers/register_EM.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/mem/mem.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/pipeline_registers/register_MW.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl_files/processor/writeback/writeback.sv
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

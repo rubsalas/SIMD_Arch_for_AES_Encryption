@@ -51,24 +51,24 @@ module register_EM # (parameter N = 32, parameter V = 256, parameter R = 5) (
 	always_ff @ (posedge clk) begin
 
 		if (rst) begin
-			PCSrcE <= 1'b0;
-			RegWriteE <= 1'b0;
-			RegWriteVE <= 1'b0;
+			PCSrcM <= 1'b0;
+			RegWriteM <= 1'b0;
+			RegWriteVM <= 1'b0;
 
-			MemtoRegE <= 1'b0;
+			MemtoRegM <= 1'b0;
 
-			MemWriteE <= 1'b0;
-			MemSrcE <= 1'b0;
-			MemDataE <= 1'b0;
-			MemDataVE <= 1'b0;
-			VecDataE <= 1'b0;
+			MemWriteM <= 1'b0;
+			MemSrcM <= 1'b0;
+			MemDataM <= 1'b0;
+			MemDataVM <= 1'b0;
+			VecDataM <= 1'b0;
 			
-			ALUResultE <= 32'b0;
-			WriteDataE <= 32'b0;
-			ALUResultVE <= 32'b0;
-			WriteDataVE <= 32'b0;
+			ALUResultM <= 32'b0;
+			WriteDataM <= 32'b0;
+			ALUResultVM <= 256'b0;
+			WriteDataVM <= 256'b0;
 
-			WA3E <= 32'b0;
+			WA3M <= 5'b0;
 		end
 
 		else if (en) begin

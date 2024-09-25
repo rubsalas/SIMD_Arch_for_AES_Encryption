@@ -15,10 +15,10 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         output logic [N-1:0] PC,       	 	// PCF (Q from pc register) to instruction_memory [y]
 
         output logic         RdenData,      // from DA to rden_data (Data memory) [y]
-        output logic         WrenData       // from DA to wren_data (Data memory) [y]
+        output logic         WrenData,      // from DA to wren_data (Data memory) [y]
         output logic [N-1:0] AddressData,	// from DA to address_data (Data memory) [y]
         output logic [N-1:0] ByteenaData,	// from DA to byteena_data (Data memory) [y]
-        output logic [V-1:0] WriteData,  	// to WD (write_scalar_data) from data memory [y]
+        output logic [V-1:0] WriteData  	// to WD (write_scalar_data) from data memory [y]
     );
 
 
@@ -43,7 +43,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     logic wMemDataVD;               // [y] cs f to rDE [y]
     logic wVecDataD;                // [y] cs f to rDE [y]
 
-    logic [1:0] wInstrSelD;         // [y] cs f to rDE [n]
+    logic [1:0] wInstrSelD;         // [y] cs f to rDE [y]
     logic [2:0] wALUControlD;       // [y] cs f to rDE [y]
     logic wBranchD;                 // [y] cs f to rDE [y]
     logic wALUSrcD;                 // [y] cs f to rDE [y]
@@ -142,7 +142,6 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
     logic [R-1:0] WA3Mi;            // [y] raddr from rEM to M [y]
 
-
     /* M's outputs */
     logic wPCSrcMo;                 // [y] cs from M to rMW [y], to HU [y]
     logic wRegWriteMo;              // [y] cs from M to rMW [y], to HU [y]
@@ -162,18 +161,32 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     
     /* ***************************** Writeback stage's wiring ***************************** */
 
+    /* regs to W */
+    logic wPCSrcWi;                 // [y] cs from rMW to W [y]
+    logic wRegWriteWi;              // [y] cs from rMW to W [y]
+    logic wRegWriteVWi;             // [y] cs from rMW to W [y]
+    logic wMemtoRegW;               // [y] cs from rMW to W [y]
 
-    // Control signals
-    logic wPCSrcW;                  // [n] cs to F [y]
-    logic wRegWriteW;               // [n] cs to D [y]
-    logic wRegWriteVW;              // [n] cs to D [y]
+    logic [N-1:0] wALUResultW;      // [y] sdata from rMW to W [y]
+    logic [V-1:0] wALUResultVW;     // [y] vdata from rMW to W [y]
+
+    logic [N-1:0] wReadDataW;       // [y] sdata from rMW to W [y]
+    logic [V-1:0] wReadDataVW;      // [y] vdata from rMW to W [y]
+
+    logic [R-1:0] WA3Wi;            // [y] raddr from rMW to W [y]
+
+    /* W's outputs */
+    logic wPCSrcW;                  // [y] cs to F [y], to HU [y]
+    logic wRegWriteW;               // [y] cs to D [y], to HU [y]
+    logic wRegWriteVW;              // [y] cs to D [y], to HU [y]
     // Data
-    logic [N-1:0] wResultW;         // [n] sdata to F [y], to E [y]
-    logic [V-1:0] wResultVW;        // [n] vdata to F [y], to E [y]
-    logic [R-1:0] wWA3W;            // [n] raddr to D [y]
+    logic [N-1:0] wResultW;         // [y] sdata to F [y], to E [y]
+    logic [V-1:0] wResultVW;        // [y] vdata to F [y], to E [y]
+    logic [R-1:0] wWA3W;            // [n] raddr to D [y], to HU [n]
 
 
-    /* Hazard Unit's wiring */
+    /* ***************************** Hazard Unit's wiring ***************************** */
+
     logic wStallF;                  // [y] cs to F [y]
     
     logic wStallD;                  // [y] cs to rFD [y]
@@ -406,7 +419,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
     /* Pipeline Register between Execute-Memory */
-    register_EM #(.N(32), .V(256), .R(5)) reg_EM (
+    register_EM #(.N(N), .V(V), .R(R)) reg_EM (
         .clk(clk),
         .rst(rst),
         .en(wStallM),       // StallM
@@ -505,7 +518,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
     /* Pipeline Register between Memory-Writeback */
-    register_MW #(.N(32), .V(256), .R(5)) reg_MW (
+    register_MW #(.N(N), .V(V), .R(R)) reg_MW (
         .clk(clk),
         .rst(rst),
         .en(wStallW),                   // StallW
@@ -523,25 +536,50 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .WA3M(wWA3Mo),
         
         /* outputs */
-        .PCSrcW(),
-        .RegWriteW(),
-        .RegWriteVW(),
-        .MemtoRegW(),
+        .PCSrcW(wPCSrcWi),
+        .RegWriteW(wRegWriteWi),
+        .RegWriteVW(wRegWriteVWi),
+        .MemtoRegW(wMemtoRegW),
         
-        .ALUResultW(),
-        .WriteDataW(),
-        .ALUResultVW(),
-        .WriteDataVW(),
+        .ALUResultW(wALUResultW),
+        .ReadDataW(wReadDataW),
+        .ALUResultVW(wALUResultVW),
+        .ReadDataVW(wReadDataVW),
         
-        .WA3W()
+        .WA3W(WA3Wi)
     );
 
-    /* Writeback stage */
 
+    /* Writeback stage */
+    writeback #(.N(N), .V(V), .R(R)) writeback_stage (
+        .rst(rst),
+
+        .PCSrcWi(wPCSrcWi),
+        .RegWriteWi(wRegWriteWi),
+        .RegWriteVWi(wRegWriteVWi),
+        .MemtoRegW(wMemtoRegW),
+
+        .ALUResultW(wALUResultW),
+        .ReadDataW(wReadDataW),
+        .ALUResultVM(wALUResultVW),
+        .ReadDataVM(wReadDataVW),
+
+        .WA3Mi(WA3Wi),
+
+        /* outputs */
+        .PCSrcWo(wPCSrcW),
+        .RegWriteWo(wRegWriteW),
+        .RegWriteVWo(wRegWriteVW),
+
+        .ResultW(wResultW),
+        .ResultVW(wResultVW),
+
+        .WA3Wo(wWA3W)
+    );
 
 
     /* Hazard Unit */
-    hazard_unit eden_unit (
+    hazard_unit # (.R(R)) eden_unit (
         .PCSrcD(wPCSrcD),
         .RA1D(wRA1D),
         .RA2D(wRA2D),
@@ -559,10 +597,10 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .WA3M(wWA3Mo),
         .BusyDA(wBusyDA),
 
-        .PCSrcW(),
-        .RegWriteW(),
-        .RegWriteVW(),
-        .WA3W(),
+        .PCSrcW(wPCSrcW),
+        .RegWriteW(wRegWriteW),
+        .RegWriteVW(wRegWriteVW),
+        .WA3W(wWA3W),
 
         .StallF(wStallF),
 

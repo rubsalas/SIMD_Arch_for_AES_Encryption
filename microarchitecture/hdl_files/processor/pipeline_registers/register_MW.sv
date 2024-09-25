@@ -27,9 +27,9 @@ module register_MW # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic MemtoRegW,
 		/* data outputs */
 		output logic [N-1:0] ALUResultW,
-		output logic [N-1:0] WriteDataW,
+		output logic [N-1:0] ReadDataW,
 		output logic [V-1:0] ALUResultVW,
-		output logic [V-1:0] WriteDataVW,
+		output logic [V-1:0] ReadDataVW,
 
 		output logic [R-1:0] WA3W
 	);
@@ -43,11 +43,11 @@ module register_MW # (parameter N = 32, parameter V = 256, parameter R = 5) (
 			MemtoRegW <= 1'b0;
 
 			ALUResultW <= 32'b0;
-			WriteDataW <= 32'b0;
-			ALUResultVW <= 32'b0;
-			WriteDataVW <= 32'b0;
+			ReadDataW <= 32'b0;
+			ALUResultVW <= 256'b0;
+			ReadDataVW <= 256'b0;
 
-			WA3W <= 32'b0;
+			WA3W <= 5'b0;
 			
 		end
 
@@ -58,9 +58,9 @@ module register_MW # (parameter N = 32, parameter V = 256, parameter R = 5) (
 			MemtoRegW <= MemtoRegM;
 
 			ALUResultW <= ALUResultM;
-			WriteDataW <= WriteDataM;
+			ReadDataW <= ReadDataM;
 			ALUResultVW <= ALUResultVM;
-			WriteDataVW <= WriteDataVM;
+			ReadDataVW <= ReadDataVM;
 
 			WA3W <= WA3M;
 		end

@@ -31,8 +31,8 @@ module register_DE # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 		input  logic [N-1:0] RD1D,
 		input  logic [N-1:0] RD2D,
-		input  logic [255:0] VRD1D,
-		input  logic [255:0] VRD2D,
+		input  logic [V-1:0] VRD1D,
+		input  logic [V-1:0] VRD2D,
 
 		input  logic [R-1:0] WA3D,
 		input  logic [N-1:0] ExtImmD,
