@@ -4,7 +4,6 @@ Date: 22/09/24
 Test bench ran: XX/09/24
 */
 module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
-		input  logic clk,
 		input  logic rst,
 		/* inputs from register */
 		// Data for ALUs

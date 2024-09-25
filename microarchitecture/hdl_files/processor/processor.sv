@@ -9,14 +9,16 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic		 en,
 
         input  logic [N-1:0] Instr,       	// InstrF (RD from instruction memory) to register_FD [y]
-        input  logic [N-1:0] ReadData, 	    // MemReadData (RD from data_memory) to data_aligner [n]
+        
+        input  logic [V-1:0] ReadData, 	    // MemReadData (RD from data_memory) to data_aligner [n]
 
         output logic [N-1:0] PC,       	 	// PCF (Q from pc register) to instruction_memory [y]
-        output logic [N-1:0] AddressData,	// to A from, data memory [n]
-        output logic [N-1:0] ByteenaData,	// to A from, data memory [n]
-        output logic [N-1:0] WriteData,  	// to WD (write_scalar_data) from data memory [n]
+
         output logic         RdenData,      // ScalarMemWrite from Data memory [n]
         output logic         WrenData       // ScalarMemWrite from Data memory [n]
+        output logic [N-1:0] AddressData,	// to A from, data memory [n]
+        output logic [N-1:0] ByteenaData,	// to A from, data memory [n]
+        output logic [V-1:0] WriteData,  	// to WD (write_scalar_data) from data memory [n]
     );
 
 
@@ -298,7 +300,6 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
     /* Execute stage */
     execute #(.N(N), .V(V), .R(R)) execute_stage (
-        .clk(clk),
         .rst(rst),
 
         .RD1E(wRD1E),
@@ -467,7 +468,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     );
 
 
-	/* Performance Counter Unit */
+	/* Performance Monitor Unit */
 	 
 	 
 endmodule

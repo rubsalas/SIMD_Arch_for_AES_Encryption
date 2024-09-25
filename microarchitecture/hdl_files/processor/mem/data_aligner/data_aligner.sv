@@ -6,21 +6,22 @@ Test bench ran: 19/09/24
 module data_aligner # (parameter N = 32, parameter V = 256) (
 	input  logic clk,
 	input  logic rst,
+
 	input  logic memtoRegM, 				// CS para hacer Lectura desde Memoria, sirve para Escalar y Vectorial
 	input  logic memWriteM, 				// CS para hacer Escritura en la Memoria
 	input  logic memSrcM,   				// CS para operaciones escalares (32) [0] o vectoriales (256) [1]
 	
-	input  logic [31:0] address,	   		// {Ai} Direccion de donde se leera o donde se escribira
-	input  logic [15:0] scalarDataIn,  		// {WD} Datos de 16 (!) bits para operaciones escalares
-	input  logic [255:0] vectorDataIn, 		// {VWD} Datos de 256 bits para operaciones vectoriales
+	input  logic [N-1:0] address,	   		// {Ai} Direccion de donde se leera o donde se escribira
+	input  logic [N-1:0] scalarDataIn,  	// {WD} Datos de 32 bits para operaciones escalares
+	input  logic [V-1:0] vectorDataIn, 		// {VWD} Datos de 256 bits para operaciones vectoriales
+
+	// ip_ram signals
+	input  logic [V-1:0] readData,			// {RDi} Datos leidos desde la memoria de 256 bits
 
 	output logic busy, 						// Indica si se esta procesando una operación (genera stalls en hazard unit)
 
 	output logic [N-1:0] scalarDataOut,		// {RDo} Datos escaclares (32 bits) leidos de memoria
 	output logic [V-1:0] vectorDataOut, 	// {VRD} Datos vectoriales (256 bits) leidos de memoria
-	
-	// ip_ram signals
-	input  logic [V-1:0] readData,			// {RDi} Datos leidos desde la memoria de 256 bits
 
 	output logic rden,						// Indica si se quiere leer de la memoria
 	output logic wren,						// Indica si se quiere escribir en la memoria 
@@ -138,11 +139,11 @@ module data_aligner # (parameter N = 32, parameter V = 256) (
 		else
 		/*
 		 * Escritura escalar:
-		 * Si la operación es escalar, los 16 bits de scalarDataIn se empaquetan dentro de 256 bits
+		 * Si la operación es escalar, los 32 bits de scalarDataIn se empaquetan dentro de 256 bits
 		 * y se alinean adecuadamente para la escritura.
 		 */
 		begin
-			writeData = { 240'd0, scalarDataIn } << shamt*8;
+			writeData = { 224'd0, scalarDataIn } << shamt*8;
 			byteena = 32'd3 << shamt;
 		end
 	end
