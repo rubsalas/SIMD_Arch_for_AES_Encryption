@@ -74,7 +74,7 @@ module main_decoder(
 			6'b100000: begin
 				RegW     = 1'b0;
                 RegWV    = 1'b1;
-                MemtoReg = 1'b1;
+                MemtoReg = 1'b0;
                 MemW     = 1'b0;
                 MemSrc   = 1'bx;
                 MemData  = 1'bx;
