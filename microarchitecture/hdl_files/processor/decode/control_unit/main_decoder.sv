@@ -234,6 +234,7 @@ module main_decoder(
                     MemW     = 1'b0;
                     MemSrc   = 1'bx;
                     MemData  = 1'bx;
+                    MemDataV = 1'bx;
                     VecData  = 1'bx;
                     Branch   = 1'b1;
                     ALUOp    = 1'b1;
@@ -276,6 +277,22 @@ module main_decoder(
                     ALUSrc   = 1'bx;
                     RegSrc   = 2'bxx; // 2'b0x;
                     ImmSrc   = 2'b01;
+                end
+                /* unimplemented */
+                else begin
+                    RegW     = 1'bx;
+                    RegWV    = 1'bx;
+                    MemtoReg = 1'bx;
+                    MemW     = 1'bx;
+                    MemSrc   = 1'bx;
+                    MemData  = 1'bx;
+                    MemDataV = 1'bx;
+                    VecData  = 1'bx;
+                    Branch   = 1'bx;
+                    ALUOp    = 1'bx;
+                    ALUSrc   = 1'bx;
+                    RegSrc   = 2'bxx; // 2'b0x;
+                    ImmSrc   = 2'bxx;
                 end
             end
 

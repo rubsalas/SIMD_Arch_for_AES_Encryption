@@ -24,7 +24,7 @@ module mem # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic [N-1:0] WriteDataM,	// WriteDataE (from Execute) to mux_SWData [y]
 
 		input  logic [V-1:0] ALUResultVMi,	// ALUResultVE (from Execute) to mux_SWData (31:0) [y], to mux_VWData [y], to ALUResultVMo [y]
-		input  logic [N-1:0] WriteDataVM,	// WriteDataVE (from Execute) to mux_VWData [y]
+		input  logic [V-1:0] WriteDataVM,	// WriteDataVE (from Execute) to mux_VWData [y]
 
 		// Data for forwarding
 		input  logic [R-1:0] WA3Mi,			// WA3E (from instructions's Rd) to WA3Eo f [y]
@@ -40,7 +40,7 @@ module mem # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		output logic MemtoRegMo,			// from MemtoRegMi [y]
 
 		output logic [N-1:0] ALUResultMo,	// from ALUResultMi [y]
-		output logic [N-1:0] ALUResultVMo,	// from ALUResultVMi [y]
+		output logic [V-1:0] ALUResultVMo,	// from ALUResultVMi [y]
 
 		output logic [N-1:0] ReadDataM,		// from DA [y], to vector_extend [y]
 		output logic [V-1:0] ReadDataVM,	// from mux_ReadDataVM [y]
@@ -115,7 +115,7 @@ module mem # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
 	/* vector_extend */
-	assign REData = { 224'd0, ReadDataM };
+	assign REData = { 224'b0, ReadDataM };
 
 
 	/* ReadDataVM for Register_MW */

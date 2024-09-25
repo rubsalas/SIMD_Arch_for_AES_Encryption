@@ -15,7 +15,7 @@ module writeback # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic [N-1:0] ReadDataW,		// ReadDataM (from Memory) to mux_ResultW [y]
 
 		input  logic [V-1:0] ALUResultVW,	// ALUResultVM (from Memory) to mux_ResultVW [y]
-		input  logic [N-1:0] ReadDataVW,	// ReadDataVM (from Memory) to mux_ResultVW [y]
+		input  logic [V-1:0] ReadDataVW,	// ReadDataVM (from Memory) to mux_ResultVW [y]
 
 		input  logic [R-1:0] WA3Wi,			// WA3M (from instructions's Rd) to WA3Mo f [y]
 

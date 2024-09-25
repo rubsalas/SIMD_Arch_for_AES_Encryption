@@ -16,7 +16,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
         output logic         RdenData,      // from DA to rden_data (Data memory) [y]
         output logic         WrenData,      // from DA to wren_data (Data memory) [y]
-        output logic [N-1:0] AddressData,	// from DA to address_data (Data memory) [y]
+        output logic [13:0] AddressData,	// from DA to address_data (Data memory) [y]
         output logic [N-1:0] ByteenaData,	// from DA to byteena_data (Data memory) [y]
         output logic [V-1:0] WriteData  	// to WD (write_scalar_data) from data memory [y]
     );
@@ -95,8 +95,8 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     /* E's outputs */
     logic [N-1:0] wWriteDataE;      // [y] sdata to rEM [y]
     logic [N-1:0] wALUResultE;      // [y] sdata to rDE [y]
-    logic [N-1:0] wWriteDataVE;     // [y] vdata to rEM [y]
-    logic [N-1:0] wALUResultVE;     // [y] vdata to rDE [y]
+    logic [V-1:0] wWriteDataVE;     // [y] vdata to rEM [y]
+    logic [V-1:0] wALUResultVE;     // [y] vdata to rDE [y]
 
     logic [R-1:0] wWA3Eo;           // [y] raddr to rEM [y], to HU [y]
 
@@ -467,7 +467,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
     /* Memory stage */
-    mem #(.N(N), .V(N), .R(R)) memory_stage (
+    mem #(.N(N), .V(V), .R(R)) memory_stage (
         .clk(clk),
         .rst(rst),
 
@@ -551,7 +551,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
     /* Writeback stage */
-    writeback #(.N(N), .V(V), .R(R)) writeback_stage (
+    writeback # (.N(N), .V(V), .R(R)) writeback_stage (
         .rst(rst),
 
         .PCSrcWi(wPCSrcWi),
@@ -561,10 +561,11 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
         .ALUResultW(wALUResultW),
         .ReadDataW(wReadDataW),
-        .ALUResultVM(wALUResultVW),
-        .ReadDataVM(wReadDataVW),
 
-        .WA3Mi(WA3Wi),
+        .ALUResultVW(wALUResultVW),
+        .ReadDataVW(wReadDataVW),
+
+        .WA3Wi(WA3Wi),
 
         /* outputs */
         .PCSrcWo(wPCSrcW),

@@ -48,41 +48,62 @@ module hazard_unit # (parameter R = 5) (
 
         // Detectar forwarding desde la etapa M a la E para ForwardAE y ForwardBE
         if (RegWriteM && (WA3M != 5'b000)) begin
-            if (WA3M == RA1E)
+            if (WA3M == RA1E) begin
                 ForwardAE = 2'b10;  // Forward desde M
-            if (WA3M == RA2E)
+                ForwardBE = 2'b00;
+            end else if (WA3M == RA2E) begin
+                ForwardAE = 2'b00;
                 ForwardBE = 2'b10;  // Forward desde M
+            end else begin
+                ForwardAE = 2'b00;
+                ForwardBE = 2'b00;
+            end
         end
-
         // Detectar forwarding desde la etapa W a la E para ForwardAE y ForwardBE
         else if (RegWriteW && (WA3W != 5'b000)) begin
-            if (WA3W == RA1E)
+            if (WA3W == RA1E) begin
                 ForwardAE = 2'b01;  // Forward desde W
-            else if (WA3W == RA2E)
+                ForwardBE = 2'b00;
+            end else if (WA3W == RA2E) begin
+                ForwardAE = 2'b00;
                 ForwardBE = 2'b01;  // Forward desde W
+            end else begin
+                ForwardAE = 2'b00;
+                ForwardBE = 2'b00;
+            end
         end
-
         else begin
             ForwardAE = 2'b00;
             ForwardBE = 2'b00;
         end
 
+
 		// Detectar forwarding desde la etapa M a la E para ForwardAVE y ForwardBVE (Registros vectoriales)
          if (RegWriteVM && (WA3M != 5'b000)) begin
-            if (WA3M == RA1E)
+            if (WA3M == RA1E) begin
                 ForwardAVE = 2'b10;  // Forward desde MV
-            else if (WA3M == RA2E)
+                ForwardBVE = 2'b00;
+            end else if (WA3M == RA2E) begin
+                ForwardAVE = 2'b00; 
                 ForwardBVE = 2'b10;  // Forward desde MV
+            end else begin
+                ForwardAVE = 2'b00;
+                ForwardBVE = 2'b00;
+            end
         end
-
 		// Detectar forwarding desde la etapa W a la E para ForwardAVE y ForwardBVE (Registros virtuales)
         else if (RegWriteVW && (WA3W != 5'b000)) begin
-            if (WA3W == RA1E)
+            if (WA3W == RA1E) begin
                 ForwardAVE = 2'b01;  // Forward desde la etapa W
-            else if (WA3W == RA2E)
+                ForwardBVE = 2'b00;
+            end else if (WA3W == RA2E) begin
+                ForwardAVE = 2'b00;
                 ForwardBVE = 2'b01;  // Forward desde la etapa W
+            end else begin
+                ForwardAVE = 2'b00;
+                ForwardBVE = 2'b00;
+            end
         end
-
         else begin
             ForwardAVE = 2'b00;
             ForwardBVE = 2'b00;
@@ -124,8 +145,6 @@ module hazard_unit # (parameter R = 5) (
     assign StallM = BusyDA;
     assign StallW = BusyDA;
     
-
-
     assign FlushD = (BranchTakenE || PCSrcE) || (PCSrcM || PCSrcW);
     assign FlushE = (BranchTakenE || PCSrcE) || (PCSrcM || PCSrcW) || (MemtoRegE && ((RA1D == WA3E) || (RA2D == WA3E))); 
 

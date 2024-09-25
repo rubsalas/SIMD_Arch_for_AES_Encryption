@@ -8,7 +8,7 @@ module memory # (parameter N = 32, parameter V = 256) (
 		/* Instruction inputs */
 		input  logic [N-1:0] pc_address,	// PCF (Q from pc register) to A
 		/* Data inputs */
-		input  logic [N-1:0] address_data,	// MemAddress (Ao from data_aligner) to A
+		input  logic [13:0] address_data,	// MemAddress (Ao from data_aligner) to A
 		input  logic [31:0] byteena_data,	// Control Signal: Byteena from data_aligner
 		input  logic [V-1:0] write_data,	// MemWriteData (WD from data_aligner) to WD
 		input  logic rden_data,				// Control Signal: Rden from data_aligner 

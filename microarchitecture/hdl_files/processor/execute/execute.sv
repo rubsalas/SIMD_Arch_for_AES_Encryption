@@ -41,10 +41,10 @@ module execute # (parameter N = 32, parameter V = 256, parameter R = 5) (
 		input  logic [V-1:0] ALUResultVM,	// ALUResultVM (from Memory) to mux SrcVAE [y], to mux SrcBVE [y]
 
 		/* inputs from hazard unit */
-		input  logic ForwardAE,				// to mux_SrcAE [y]
-		input  logic ForwardBE,				// to mux_WriteDataE [y]
-		input  logic ForwardAVE,			// to mux_SrcAVE [y]
-		input  logic ForwardBVE,			// to mux_SrcBVE [y]
+		input  logic [1:0] ForwardAE,		// to mux_SrcAE [y]
+		input  logic [1:0] ForwardBE,		// to mux_WriteDataE [y]
+		input  logic [1:0] ForwardAVE,		// to mux_SrcAVE [y]
+		input  logic [1:0] ForwardBVE,		// to mux_SrcBVE [y]
 
 		/* inputs for hazard unit */
 		input  logic [R-1:0] RA1Ei,			// RA1D (from register_file) to RA1Eo (to HU) [y]
