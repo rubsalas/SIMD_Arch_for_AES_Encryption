@@ -122,7 +122,7 @@ module alu_decoder(
                 end
 
                 /* Branches */
-                6'b000100: begin
+                6'b00x100: begin
                     ALUControl = 3'b001; // Branches use substraction for flag generation
                 end
 

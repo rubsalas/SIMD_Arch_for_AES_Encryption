@@ -6,27 +6,32 @@ Date: 20/03/24
 module control_unit_tb;
 
     // Testbench signals
-    reg [5:0] Opcode;
-    reg [2:0] Func;
-    reg [4:0] Rd;
+    logic [5:0] Opcode;
+    logic [2:0] Func;
+    logic [4:0] Rd;
 
-    wire PCSrc;
-    wire RegWrite;
-    wire RegWriteV;
-    wire MemtoReg;
-    wire MemWrite;
-    wire MemSrc;
-    wire MemData;
-    wire MemDataV;
-    wire VecData;
-    wire [1:0] InstrSel;
-    wire [2:0] ALUControl;
-    wire Branch;
-    wire ALUSrc;
-    wire [1:0] RegSrc;
-    wire [1:0] ImmSrc;
+    logic PCSrc;
 
-    wire ALUOp;
+    logic RegWrite;
+    logic RegWriteV;
+
+    logic MemtoReg;
+
+    logic MemWrite;
+    logic MemSrc;
+    logic MemData;
+    logic MemDataV;
+    logic VecData;
+
+    logic [1:0] InstrSel;
+    logic [2:0] ALUControl;
+    logic Branch;
+    logic ALUSrc;
+    
+    logic [1:0] RegSrc;
+    logic [1:0] ImmSrc;
+
+    logic ALUOp;
 
     // Instantiate the control_unit module
     control_unit uut (

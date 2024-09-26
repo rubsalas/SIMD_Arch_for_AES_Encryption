@@ -44,7 +44,7 @@ module hazard_unit # (parameter R = 5) (
         output logic StallW
 	);
 
-    always begin
+    always_comb begin
 
         // Detectar forwarding desde la etapa M a la E para ForwardAE y ForwardBE
         if (RegWriteM && (WA3M != 5'b000)) begin

@@ -66,7 +66,7 @@ module AES_encryptor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 	/* Data Memory */
 	memory #(.N(N), .V(V)) data_memory (
-		.clk(clk),
+		.clk(eclk),
 
 		// Entrada de instruccion
 		.pc_address(PCF),        		// Dirección del PC hacia la memoria de instrucciones

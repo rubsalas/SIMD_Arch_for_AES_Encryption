@@ -8,8 +8,8 @@ module alu_vector # (parameter N = 32, parameter V = 256) (
         input logic [V-1:0]  B,
         input logic [2:0]    ALUControl,
 
-        output logic [V-1:0] result,         
-        output logic [31:0]  flags
+        output logic [V-1:0] result
+        // output logic [31:0]  flags
 	);
 
 	logic [N-1:0] A00,A01,A02,A03,A04,A05,A06,A07;
@@ -18,6 +18,8 @@ module alu_vector # (parameter N = 32, parameter V = 256) (
 	logic [N-1:0] result00,result01,result02,result03,result04,result05,result06,result07;
 				  
 	logic [3:0] flags00,flags01,flags02,flags03,flags04,flags05,flags06,flags07;
+
+	logic [31:0]  flags;
 
 	assign A00 = A[31:0];
 	assign A01 = A[63:32];
