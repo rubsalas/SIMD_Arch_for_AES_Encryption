@@ -114,7 +114,7 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 	mux_2NtoN # (.N(R)) mux_ra1d (.I0(inst_rs),
 								  .I1(reg15_address),
 								  .rst(rst),
-								  .S(RegSrcD[0]),
+								  .S(RegSrcD[1]),
 								  .en(1'b1),
 								  .O(RA1D));			
 
@@ -125,7 +125,7 @@ module decode # (parameter N = 32, parameter V = 256, parameter R = 5) (
 	mux_2NtoN # (.N(R)) mux_ra2d (.I0(inst_rt),
 								  .I1(inst_rd),
 								  .rst(rst),
-								  .S(RegSrcD[1]),
+								  .S(RegSrcD[0]),
 								  .en(1'b1),
 								  .O(RA2D));
 

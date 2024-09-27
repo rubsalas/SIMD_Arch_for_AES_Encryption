@@ -87,6 +87,7 @@ module AES_encryptor_tb;
 	logic ALUOp;
 
 	// Execute
+	logic RegWriteECU;
 	logic [2:0] ALUControlE;
 
 	logic [1:0] ForwardAE;
@@ -94,6 +95,7 @@ module AES_encryptor_tb;
 	logic [N-1:0] SrcAE;
 	logic [N-1:0] SrcBE;
 
+	logic [N-1:0] ALUResultE;
 	logic [3:0]	ALUFlags;
 
 	logic [1:0] ForwardAVE;
@@ -101,15 +103,31 @@ module AES_encryptor_tb;
 	logic [V-1:0] SrcAVE;
 	logic [V-1:0] SrcBVE;
 
+	logic [V-1:0] ALUResultVE;
+
 	logic [N-1:0] ExtImmEo;
 
 	// Memory
+	logic RegWriteMo;
 
 
 	// Writeback
+	logic RegWriteWo;
+	logic [R-1:0] WA3Wo;
 
 
 	// Hazard Unit
+	logic StallF;
+    
+    logic StallD;
+    logic FlushD;
+    
+    logic StallE;
+    logic FlushE;
+
+    logic StallM;
+
+    logic StallW;
 
 
 	/* AES_encryptor instance */
@@ -188,12 +206,14 @@ module AES_encryptor_tb;
 
 		InstrSelD = uut.asip.decode_stage.cont_unit.InstrSel;
 		BranchD = uut.asip.decode_stage.cont_unit.Branch;
-		ALUSrcED = uut.asip.decode_stage.cont_unit.ALUSrc;
+		ALUSrcD = uut.asip.decode_stage.cont_unit.ALUSrc;
 
 		ALUOp = uut.asip.decode_stage.cont_unit.main_deco.ALUOp;
 
 
 		// Execute
+		RegWriteECU = uut.asip.execute_stage.RegWriteECU;
+
 		ALUControlE = uut.asip.execute_stage.ALUControlE;
 
 		ForwardAE = uut.asip.execute_stage.ForwardAE;
@@ -201,6 +221,7 @@ module AES_encryptor_tb;
 		SrcAE = uut.asip.execute_stage.SrcAE;
 		SrcBE = uut.asip.execute_stage.SrcBE;
 
+		ALUResultE = uut.asip.execute_stage.ALUResultE;
 		ALUFlags = uut.asip.execute_stage.ALUFlags;
 		
 		ForwardAVE = uut.asip.execute_stage.ForwardAVE;
@@ -208,11 +229,29 @@ module AES_encryptor_tb;
 		SrcAVE = uut.asip.execute_stage.SrcAVE;
 		SrcBVE = uut.asip.execute_stage.SrcBVE;
 
+		ALUResultVE = uut.asip.execute_stage.ALUResultVE;
+
 		ExtImmEo = uut.asip.execute_stage.ExtImmEo;
 
 		// Memory
+		RegWriteMo = uut.asip.memory_stage.RegWriteMo;
 
 		//Writeback
+		RegWriteWo = uut.asip.writeback_stage.RegWriteWo;
+		WA3Wo = uut.asip.writeback_stage.WA3Wo;
+
+		// Hazard Unit
+		StallF = uut.asip.eden_unit.StallF;
+    
+		StallD = uut.asip.eden_unit.StallD;
+		FlushD = uut.asip.eden_unit.FlushD;
+		
+		StallE = uut.asip.eden_unit.StallE;
+		FlushE = uut.asip.eden_unit.FlushE;
+
+		StallM = uut.asip.eden_unit.StallM;
+		
+		StallW = uut.asip.eden_unit.StallW;
 
 	end
 

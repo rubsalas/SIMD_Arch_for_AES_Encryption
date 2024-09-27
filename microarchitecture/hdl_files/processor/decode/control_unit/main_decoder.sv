@@ -48,7 +48,7 @@ module main_decoder(
                     Branch   = 1'b0;
                     ALUOp    = 1'b1;
                     ALUSrc   = 1'b1;
-                    RegSrc   = 2'b0x; // 2'b0x;
+                    RegSrc   = 2'b00; // 2'b0x;
                     ImmSrc   = 2'b11;
                 end
 
@@ -66,7 +66,7 @@ module main_decoder(
                     ALUOp    = 1'b1;
                     ALUSrc   = 1'b0;
                     RegSrc   = 2'b00; // 2'b0x;
-                    ImmSrc   = 2'bxx;
+                    ImmSrc   = 2'b00; // 2'bxx
                 end
 			end
 			
@@ -100,7 +100,7 @@ module main_decoder(
                 Branch   = 1'b0;
                 ALUOp    = 1'b1;
                 ALUSrc   = 1'b1;
-                RegSrc   = 2'b0x; // 2'b0x;
+                RegSrc   = 2'b00; // 2'b0x;
                 ImmSrc   = 2'b00;
 			end
 

@@ -35,7 +35,7 @@ module control_unit # (parameter R = 5) (
     assign InstrSel = Opcode[1:0];
 
     /* PC Logic */
-    pc_logic #(.R(R)) pc_l  (.Rd(Rd),
+    pc_logic #(.R(R)) pc_l (.Rd(Rd),
                             .Branch(Branch),
                             .RegW(RegWrite),
                             .PCS(PCSrc));

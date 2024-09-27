@@ -421,7 +421,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     register_EM #(.N(N), .V(V), .R(R)) reg_EM (
         .clk(clk),
         .rst(rst),
-        .en(wStallM),       // StallM
+        .en(!wStallM),       /* neg enable */ // StallM
         
         .PCSrcE(wPCSrcECU),
         .RegWriteE(wRegWriteECU),
@@ -520,7 +520,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
     register_MW #(.N(N), .V(V), .R(R)) reg_MW (
         .clk(clk),
         .rst(rst),
-        .en(wStallW),                   // StallW
+        .en(!wStallW),       /* neg enable */    // StallW
         
         .PCSrcM(wPCSrcMo),
         .RegWriteM(wRegWriteMo),

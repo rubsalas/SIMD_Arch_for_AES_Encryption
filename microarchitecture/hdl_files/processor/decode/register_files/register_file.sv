@@ -42,7 +42,19 @@ module register_file # (parameter N = 32) (
 			reg_array[15] <= 32'h0;      // pc       
 		end
 		else begin
-			/* As this is only scalar values, checks A1 value */
+			/* If writing on register A3 is allowed */
+			if(WE3) begin
+				reg_array[A3[3:0]] = WD3; 
+			end  
+		end
+
+		reg_array[15] = R15; /* Writes PCPlus8 on reg 15 always */
+		
+	end
+
+	always_comb begin
+		
+		/* As this is only scalar values, checks A1 value */
 			if (A1[4] == 1'b0) begin
 				RD1 = (A1 == 0) ? 32'b0 : reg_array[A1[3:0]]; // if reg == $zero -> return 0
 			end
@@ -58,14 +70,6 @@ module register_file # (parameter N = 32) (
 				RD2 = 32'b11111111111111111111111111111111;
 			end
 
-			/* If writing on register A3 is allowed */
-			if(WE3) begin
-				reg_array[A3] = WD3; 
-			end  
-		end
-
-		reg_array[15] = R15; /* Writes PCPlus8 on reg 15 always */
-		
 	end
 
 	
