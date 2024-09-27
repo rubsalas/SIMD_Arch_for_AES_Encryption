@@ -144,7 +144,7 @@ module data_aligner # (parameter N = 32, parameter V = 256) (
 		 */
 		begin
 			writeData = { 224'd0, scalarDataIn } << shamt*8;
-			byteena = 32'd3 << shamt;
+			byteena = 32'b1111 << shamt;	// Cantidad de bytes por escribir en el write escalar
 		end
 	end
 

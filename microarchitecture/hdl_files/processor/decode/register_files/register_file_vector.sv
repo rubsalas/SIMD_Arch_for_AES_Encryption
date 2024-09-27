@@ -26,32 +26,34 @@ module register_file_vector # (parameter N = 256) (
 			reg_array_vector[1] <= 256'h0;
 			reg_array_vector[2] <= 256'h0;
 			reg_array_vector[3] <= 256'h0;
-			reg_array_vector[4] <= 256'h0;
-			reg_array_vector[5] <= 256'h0;
-			reg_array_vector[6] <= 256'h0;
-			reg_array_vector[7] <= 256'h0;
+			reg_array_vector[4] <= 256'h0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005;
+			reg_array_vector[5] <= 256'h0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003;
+			reg_array_vector[6] <= 256'h0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002;
+			reg_array_vector[7] <= 256'h0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001;
 		end
 		else begin
-			/* As this is only vector values, checks VA1 value */
-			if (VA1[4] == 1'b1) begin
-				VRD1 = reg_array_vector[VA1[2:0]];
-			end
-			else begin
-				VRD1 = 256'b11111111111111111111111111111111;
-			end
-
-			/* As this is only vector values, checks VA1 value */
-			if (VA2[4] == 1'b1) begin
-				VRD2 = reg_array_vector[VA2[2:0]];
-			end
-			else begin
-				VRD2 = 256'b11111111111111111111111111111111;
-			end
-
 			/* If writing on register VA3 is allowed */
 			if(VWE3) begin
 				reg_array_vector[VA3[2:0]] <= VWD3;
 			end
+		end
+	end
+
+	always_comb begin
+		/* As this is only vector values, checks VA1 value */
+		if (VA1[4] == 1'b1) begin
+			VRD1 = reg_array_vector[VA1[2:0]];
+		end
+		else begin
+			VRD1 = 256'b11111111111111111111111111111111;
+		end
+
+		/* As this is only vector values, checks VA1 value */
+		if (VA2[4] == 1'b1) begin
+			VRD2 = reg_array_vector[VA2[2:0]];
+		end
+		else begin
+			VRD2 = 256'b11111111111111111111111111111111;
 		end
 	end
 

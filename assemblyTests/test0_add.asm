@@ -1,5 +1,6 @@
 ;
-;Assembly Test 0 - add instruction
+; Assembly Test 0 - add instruction
+; Success
 ;
 
 ; addi 2 a $e0

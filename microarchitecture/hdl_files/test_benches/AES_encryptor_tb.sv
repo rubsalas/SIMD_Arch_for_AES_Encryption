@@ -98,6 +98,8 @@ module AES_encryptor_tb;
 	logic [N-1:0] ALUResultE;
 	logic [3:0]	ALUFlags;
 
+	logic [N-1:0] ExtImmEo;
+
 	logic [1:0] ForwardAVE;
 	logic [1:0] ForwardBVE;
 	logic [V-1:0] SrcAVE;
@@ -105,10 +107,35 @@ module AES_encryptor_tb;
 
 	logic [V-1:0] ALUResultVE;
 
-	logic [N-1:0] ExtImmEo;
 
 	// Memory
 	logic RegWriteMo;
+
+	logic MemDataM;
+	logic MemDataVM;
+
+	logic [N-1:0] SWData; 	// internal
+	logic [V-1:0] VWData;	// internal
+
+	logic MemWriteM;
+	logic MemSrcM;
+	logic MemtoRegMi;
+
+	logic [N-1:0] ALUResultMi;
+
+	logic MemRden;
+	logic MemWren;
+	logic [13:0] MemAddress;
+	logic [31:0] MemByteena;
+	logic [V-1:0] MemWriteData;
+
+	logic BusyDA;
+	logic [V-1:0] MemReadData;
+
+	logic [N-1:0] ReadDataM;
+	logic VecDataM;
+	logic [V-1:0] ReadDataVM;
+
 
 
 	// Writeback
@@ -224,6 +251,8 @@ module AES_encryptor_tb;
 		ALUResultE = uut.asip.execute_stage.ALUResultE;
 		ALUFlags = uut.asip.execute_stage.ALUFlags;
 		
+		ExtImmEo = uut.asip.execute_stage.ExtImmEo;
+
 		ForwardAVE = uut.asip.execute_stage.ForwardAVE;
 		ForwardBVE = uut.asip.execute_stage.ForwardBVE;
 		SrcAVE = uut.asip.execute_stage.SrcAVE;
@@ -231,10 +260,33 @@ module AES_encryptor_tb;
 
 		ALUResultVE = uut.asip.execute_stage.ALUResultVE;
 
-		ExtImmEo = uut.asip.execute_stage.ExtImmEo;
-
 		// Memory
 		RegWriteMo = uut.asip.memory_stage.RegWriteMo;
+	
+		MemDataM = uut.asip.memory_stage.MemDataM;
+		MemDataVM = uut.asip.memory_stage.MemDataVM;
+
+		SWData = uut.asip.memory_stage.SWData;
+		VWData = uut.asip.memory_stage.VWData;
+
+		MemWriteM = uut.asip.memory_stage.MemWriteM;
+		MemSrcM = uut.asip.memory_stage.MemSrcM;
+		MemtoRegMi = uut.asip.memory_stage.MemtoRegMi;
+
+		ALUResultMi = uut.asip.memory_stage.ALUResultMi;
+
+		MemRden = uut.asip.memory_stage.MemRden;
+		MemWren = uut.asip.memory_stage.MemWren;
+		MemAddress = uut.asip.memory_stage.MemAddress;
+		MemByteena = uut.asip.memory_stage.MemByteena;
+		MemWriteData = uut.asip.memory_stage.MemWriteData;
+
+		BusyDA = uut.asip.memory_stage.BusyDA;
+		MemReadData = uut.asip.memory_stage.MemReadData;
+
+		ReadDataM = uut.asip.memory_stage.ReadDataM;
+		VecDataM = uut.asip.memory_stage.VecDataM;
+		ReadDataVM = uut.asip.memory_stage.ReadDataVM;
 
 		//Writeback
 		RegWriteWo = uut.asip.writeback_stage.RegWriteWo;
@@ -250,7 +302,7 @@ module AES_encryptor_tb;
 		FlushE = uut.asip.eden_unit.FlushE;
 
 		StallM = uut.asip.eden_unit.StallM;
-		
+
 		StallW = uut.asip.eden_unit.StallW;
 
 	end
@@ -266,7 +318,7 @@ module AES_encryptor_tb;
 		dbg = 1;
 		stp = 1;
 
-		#100;
+		#60;
 
 		rst = 0;
 		pwr = 0;
@@ -279,7 +331,7 @@ module AES_encryptor_tb;
 
 		// #100;
 
-		#400;
+		#500;
 		$finish; 
 
 	end
