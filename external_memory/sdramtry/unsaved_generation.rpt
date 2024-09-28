@@ -1,0 +1,42 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate C:\Users\kejor\OneDrive\Documentos\Prueba\SIMD_Arch_for_AES_Encryption\microarchitecture\unsaved.qsys --block-symbol-file --output-directory=C:\Users\kejor\OneDrive\Documentos\Prueba\SIMD_Arch_for_AES_Encryption\microarchitecture\sdramtry --family="Cyclone V" --part=5CSEMA5F31C6
+Progress: Loading microarchitecture/unsaved.qsys
+Progress: Reading input file
+Progress: Adding clk_0 [clock_source 20.1]
+Progress: Parameterizing module clk_0
+Progress: Adding sdram [altera_avalon_new_sdram_controller 20.1]
+Progress: Parameterizing module sdram
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: unsaved.sdram: SDRAM Controller will only be supported in Quartus Prime Standard Edition in the future release.
+Warning: unsaved.sdram: sdram.wire must be exported, or connected to a matching conduit.
+Warning: unsaved.sdram: sdram.s1 must be connected to an Avalon-MM master
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate C:\Users\kejor\OneDrive\Documentos\Prueba\SIMD_Arch_for_AES_Encryption\microarchitecture\unsaved.qsys --synthesis=VERILOG --output-directory=C:\Users\kejor\OneDrive\Documentos\Prueba\SIMD_Arch_for_AES_Encryption\microarchitecture\sdramtry\synthesis --family="Cyclone V" --part=5CSEMA5F31C6
+Progress: Loading microarchitecture/unsaved.qsys
+Progress: Reading input file
+Progress: Adding clk_0 [clock_source 20.1]
+Progress: Parameterizing module clk_0
+Progress: Adding sdram [altera_avalon_new_sdram_controller 20.1]
+Progress: Parameterizing module sdram
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: unsaved.sdram: SDRAM Controller will only be supported in Quartus Prime Standard Edition in the future release.
+Warning: unsaved.sdram: sdram.wire must be exported, or connected to a matching conduit.
+Warning: unsaved.sdram: sdram.s1 must be connected to an Avalon-MM master
+Info: unsaved: Generating unsaved "unsaved" for QUARTUS_SYNTH
+Info: sdram: Starting RTL generation for module 'unsaved_sdram'
+Info: sdram:   Generation command is [exec C:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller -- C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/generate_rtl.pl --name=unsaved_sdram --dir=C:/Users/kejor/AppData/Local/Temp/alt9993_7107352866580584986.dir/0002_sdram_gen/ --quartus_dir=C:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/kejor/AppData/Local/Temp/alt9993_7107352866580584986.dir/0002_sdram_gen//unsaved_sdram_component_configuration.pl  --do_build_sim=0  ]
+Info: sdram: Done RTL generation for module 'unsaved_sdram'
+Info: sdram: "unsaved" instantiated altera_avalon_new_sdram_controller "sdram"
+Info: rst_controller: "unsaved" instantiated altera_reset_controller "rst_controller"
+Info: unsaved: Done "unsaved" with 3 modules, 5 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis
