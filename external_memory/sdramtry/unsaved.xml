@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy
+ date="2024.09.26.19:39:52"
+ outputDirectory="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/">
+ <perimeter>
+  <parameter
+     name="AUTO_GENERATION_ID"
+     type="Integer"
+     defaultValue="0"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_UNIQUE_ID"
+     type="String"
+     defaultValue=""
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_FAMILY"
+     type="String"
+     defaultValue="Cyclone V"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE"
+     type="String"
+     defaultValue="5CSEMA5F31C6"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_SPEEDGRADE"
+     type="String"
+     defaultValue="6"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_CLOCK_RATE"
+     type="Long"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_CLOCK_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_CLK_RESET_DOMAIN"
+     type="Integer"
+     defaultValue="-1"
+     onHdl="0"
+     affectsHdl="1" />
+  <interface name="clk" kind="clock" start="0">
+   <property name="clockRate" value="50000000" />
+   <property name="externallyDriven" value="false" />
+   <property name="ptfSchematicName" value="" />
+   <port name="clk_clk" direction="input" role="clk" width="1" />
+  </interface>
+  <interface name="reset" kind="reset" start="0">
+   <property name="associatedClock" value="" />
+   <property name="synchronousEdges" value="NONE" />
+   <port name="reset_reset_n" direction="input" role="reset_n" width="1" />
+  </interface>
+ </perimeter>
+ <entity
+   path=""
+   parameterizationKey="unsaved:1.0:AUTO_CLK_CLOCK_DOMAIN=-1,AUTO_CLK_CLOCK_RATE=-1,AUTO_CLK_RESET_DOMAIN=-1,AUTO_DEVICE=5CSEMA5F31C6,AUTO_DEVICE_FAMILY=Cyclone V,AUTO_DEVICE_SPEEDGRADE=6,AUTO_GENERATION_ID=1727401189,AUTO_UNIQUE_ID=(clock_source:20.1:clockFrequency=50000000,clockFrequencyKnown=true,inputClockFrequency=0,resetSynchronousEdges=NONE)(altera_avalon_new_sdram_controller:20.1:TAC=5.5,TMRD=3,TRCD=20.0,TRFC=70.0,TRP=20.0,TWR=14.0,addressWidth=25,bankWidth=2,casLatency=3,clockRate=50000000,columnWidth=10,componentName=unsaved_sdram,dataWidth=32,generateSimulationModel=false,initNOPDelay=0.0,initRefreshCommands=2,masteredTristateBridgeSlave=0,model=single_Micron_MT48LC4M32B2_7_chip,numberOfBanks=4,numberOfChipSelects=1,pinsSharedViaTriState=false,powerUpDelay=100.0,refreshPeriod=15.625,registerDataIn=true,rowWidth=13,size=134217728)(clock:20.1:)(reset:20.1:)"
+   instancePathKey="unsaved"
+   kind="unsaved"
+   version="1.0"
+   name="unsaved">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="-1" />
+  <parameter name="AUTO_GENERATION_ID" value="1727401189" />
+  <parameter name="AUTO_DEVICE" value="5CSEMA5F31C6" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
+  <parameter name="AUTO_CLK_RESET_DOMAIN" value="-1" />
+  <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="-1" />
+  <parameter name="AUTO_UNIQUE_ID" value="" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="6" />
+  <generatedFiles>
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/unsaved.v"
+       type="VERILOG" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/unsaved_sdram.v"
+       type="VERILOG"
+       attributes="" />
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/altera_reset_controller.v"
+       type="VERILOG"
+       attributes="" />
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/altera_reset_synchronizer.v"
+       type="VERILOG"
+       attributes="" />
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/altera_reset_controller.sdc"
+       type="SDC"
+       attributes="" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/unsaved.qsys" />
+  </sourceFiles>
+  <childSourceFiles>
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/altera_avalon_new_sdram_controller_hw.tcl" />
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/merlin/altera_reset_controller/altera_reset_controller_hw.tcl" />
+  </childSourceFiles>
+  <messages>
+   <message level="Debug" culprit="unsaved">queue size: 0 starting:unsaved "unsaved"</message>
+   <message level="Progress" culprit="min"></message>
+   <message level="Progress" culprit="max"></message>
+   <message level="Progress" culprit="current"></message>
+   <message level="Debug">Transform: CustomInstructionTransform</message>
+   <message level="Debug">No custom instruction connections, skipping transform </message>
+   <message level="Debug" culprit="merlin_custom_instruction_transform"><![CDATA[After transform: <b>2</b> modules, <b>2</b> connections]]></message>
+   <message level="Debug">Transform: MMTransform</message>
+   <message level="Debug">Transform: InterruptMapperTransform</message>
+   <message level="Debug">Transform: InterruptSyncTransform</message>
+   <message level="Debug">Transform: InterruptFanoutTransform</message>
+   <message level="Debug">Transform: AvalonStreamingTransform</message>
+   <message level="Debug">Transform: ResetAdaptation</message>
+   <message level="Progress" culprit="min"></message>
+   <message level="Progress" culprit="max"></message>
+   <message level="Progress" culprit="current"></message>
+   <message level="Debug" culprit="reset_adaptation_transform"><![CDATA[After transform: <b>3</b> modules, <b>4</b> connections]]></message>
+   <message level="Debug" culprit="unsaved"><![CDATA["<b>unsaved</b>" reuses <b>altera_avalon_new_sdram_controller</b> "<b>submodules/unsaved_sdram</b>"]]></message>
+   <message level="Debug" culprit="unsaved"><![CDATA["<b>unsaved</b>" reuses <b>altera_reset_controller</b> "<b>submodules/altera_reset_controller</b>"]]></message>
+   <message level="Debug" culprit="unsaved">queue size: 1 starting:altera_avalon_new_sdram_controller "submodules/unsaved_sdram"</message>
+   <message level="Info" culprit="sdram">Starting RTL generation for module 'unsaved_sdram'</message>
+   <message level="Info" culprit="sdram">  Generation command is [exec C:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller -- C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/generate_rtl.pl --name=unsaved_sdram --dir=C:/Users/kejor/AppData/Local/Temp/alt9993_7107352866580584986.dir/0002_sdram_gen/ --quartus_dir=C:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/kejor/AppData/Local/Temp/alt9993_7107352866580584986.dir/0002_sdram_gen//unsaved_sdram_component_configuration.pl  --do_build_sim=0  ]</message>
+   <message level="Info" culprit="sdram">Done RTL generation for module 'unsaved_sdram'</message>
+   <message level="Info" culprit="sdram"><![CDATA["<b>unsaved</b>" instantiated <b>altera_avalon_new_sdram_controller</b> "<b>sdram</b>"]]></message>
+   <message level="Debug" culprit="unsaved">queue size: 0 starting:altera_reset_controller "submodules/altera_reset_controller"</message>
+   <message level="Info" culprit="rst_controller"><![CDATA["<b>unsaved</b>" instantiated <b>altera_reset_controller</b> "<b>rst_controller</b>"]]></message>
+  </messages>
+ </entity>
+ <entity
+   path="submodules/"
+   parameterizationKey="altera_avalon_new_sdram_controller:20.1:TAC=5.5,TMRD=3,TRCD=20.0,TRFC=70.0,TRP=20.0,TWR=14.0,addressWidth=25,bankWidth=2,casLatency=3,clockRate=50000000,columnWidth=10,componentName=unsaved_sdram,dataWidth=32,generateSimulationModel=false,initNOPDelay=0.0,initRefreshCommands=2,masteredTristateBridgeSlave=0,model=single_Micron_MT48LC4M32B2_7_chip,numberOfBanks=4,numberOfChipSelects=1,pinsSharedViaTriState=false,powerUpDelay=100.0,refreshPeriod=15.625,registerDataIn=true,rowWidth=13,size=134217728"
+   instancePathKey="unsaved:.:sdram"
+   kind="altera_avalon_new_sdram_controller"
+   version="20.1"
+   name="unsaved_sdram">
+  <parameter name="registerDataIn" value="true" />
+  <parameter name="casLatency" value="3" />
+  <parameter name="refreshPeriod" value="15.625" />
+  <parameter name="masteredTristateBridgeSlave" value="0" />
+  <parameter name="TMRD" value="3" />
+  <parameter name="pinsSharedViaTriState" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="TRP" value="20.0" />
+  <parameter name="numberOfChipSelects" value="1" />
+  <parameter name="columnWidth" value="10" />
+  <parameter name="componentName" value="unsaved_sdram" />
+  <parameter name="TRFC" value="70.0" />
+  <parameter name="generateSimulationModel" value="false" />
+  <parameter name="dataWidth" value="32" />
+  <parameter name="rowWidth" value="13" />
+  <parameter name="bankWidth" value="2" />
+  <parameter name="powerUpDelay" value="100.0" />
+  <parameter name="TWR" value="14.0" />
+  <parameter name="size" value="134217728" />
+  <parameter name="TAC" value="5.5" />
+  <parameter name="initRefreshCommands" value="2" />
+  <parameter name="TRCD" value="20.0" />
+  <parameter name="initNOPDelay" value="0.0" />
+  <parameter name="addressWidth" value="25" />
+  <parameter name="numberOfBanks" value="4" />
+  <generatedFiles>
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/unsaved_sdram.v"
+       type="VERILOG"
+       attributes="" />
+  </generatedFiles>
+  <childGeneratedFiles/>
+  <sourceFiles>
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/altera_avalon_new_sdram_controller_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="unsaved" as="sdram" />
+  <messages>
+   <message level="Debug" culprit="unsaved">queue size: 1 starting:altera_avalon_new_sdram_controller "submodules/unsaved_sdram"</message>
+   <message level="Info" culprit="sdram">Starting RTL generation for module 'unsaved_sdram'</message>
+   <message level="Info" culprit="sdram">  Generation command is [exec C:/intelfpga_lite/20.1/quartus/bin64/perl/bin/perl.exe -I C:/intelfpga_lite/20.1/quartus/bin64/perl/lib -I C:/intelfpga_lite/20.1/quartus/sopc_builder/bin/europa -I C:/intelfpga_lite/20.1/quartus/sopc_builder/bin -I C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/common -I C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller -- C:/intelfpga_lite/20.1/quartus/../ip/altera/sopc_builder_ip/altera_avalon_new_sdram_controller/generate_rtl.pl --name=unsaved_sdram --dir=C:/Users/kejor/AppData/Local/Temp/alt9993_7107352866580584986.dir/0002_sdram_gen/ --quartus_dir=C:/intelfpga_lite/20.1/quartus --verilog --config=C:/Users/kejor/AppData/Local/Temp/alt9993_7107352866580584986.dir/0002_sdram_gen//unsaved_sdram_component_configuration.pl  --do_build_sim=0  ]</message>
+   <message level="Info" culprit="sdram">Done RTL generation for module 'unsaved_sdram'</message>
+   <message level="Info" culprit="sdram"><![CDATA["<b>unsaved</b>" instantiated <b>altera_avalon_new_sdram_controller</b> "<b>sdram</b>"]]></message>
+  </messages>
+ </entity>
+ <entity
+   path="submodules/"
+   parameterizationKey="altera_reset_controller:20.1:ADAPT_RESET_REQUEST=0,MIN_RST_ASSERTION_TIME=3,NUM_RESET_INPUTS=1,OUTPUT_RESET_SYNC_EDGES=deassert,RESET_REQUEST_PRESENT=0,RESET_REQ_EARLY_DSRT_TIME=1,RESET_REQ_WAIT_TIME=1,SYNC_DEPTH=2,USE_RESET_REQUEST_IN0=0,USE_RESET_REQUEST_IN1=0,USE_RESET_REQUEST_IN10=0,USE_RESET_REQUEST_IN11=0,USE_RESET_REQUEST_IN12=0,USE_RESET_REQUEST_IN13=0,USE_RESET_REQUEST_IN14=0,USE_RESET_REQUEST_IN15=0,USE_RESET_REQUEST_IN2=0,USE_RESET_REQUEST_IN3=0,USE_RESET_REQUEST_IN4=0,USE_RESET_REQUEST_IN5=0,USE_RESET_REQUEST_IN6=0,USE_RESET_REQUEST_IN7=0,USE_RESET_REQUEST_IN8=0,USE_RESET_REQUEST_IN9=0,USE_RESET_REQUEST_INPUT=0"
+   instancePathKey="unsaved:.:rst_controller"
+   kind="altera_reset_controller"
+   version="20.1"
+   name="altera_reset_controller">
+  <generatedFiles>
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/altera_reset_controller.v"
+       type="VERILOG"
+       attributes="" />
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/altera_reset_synchronizer.v"
+       type="VERILOG"
+       attributes="" />
+   <file
+       path="C:/Users/kejor/OneDrive/Documentos/Prueba/SIMD_Arch_for_AES_Encryption/microarchitecture/sdramtry/synthesis/submodules/altera_reset_controller.sdc"
+       type="SDC"
+       attributes="" />
+  </generatedFiles>
+  <childGeneratedFiles/>
+  <sourceFiles>
+   <file
+       path="C:/intelfpga_lite/20.1/ip/altera/merlin/altera_reset_controller/altera_reset_controller_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="unsaved" as="rst_controller" />
+  <messages>
+   <message level="Debug" culprit="unsaved">queue size: 0 starting:altera_reset_controller "submodules/altera_reset_controller"</message>
+   <message level="Info" culprit="rst_controller"><![CDATA["<b>unsaved</b>" instantiated <b>altera_reset_controller</b> "<b>rst_controller</b>"]]></message>
+  </messages>
+ </entity>
+</deploy>
