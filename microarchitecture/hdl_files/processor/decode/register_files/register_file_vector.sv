@@ -2,7 +2,6 @@
 Register File Vector module
 Date: 30/08/24
 Test bench ran: 30/08/24
-IMPLEMENTAR ESCRITURA Y LECTURA SERIAL DE 32 BITS A 256
 */
 module register_file_vector # (parameter N = 256) (
 		input  logic         clk,
@@ -22,10 +21,10 @@ module register_file_vector # (parameter N = 256) (
 	always @ (posedge clk or posedge rst) begin
 
 		if(rst) begin
-			reg_array_vector[0] <= 256'h0;
-			reg_array_vector[1] <= 256'h0;
-			reg_array_vector[2] <= 256'h0;
-			reg_array_vector[3] <= 256'h0;
+			reg_array_vector[0] <= 256'h0;	/* v0: 10000 */
+			reg_array_vector[1] <= 256'h0;	/* v1: 10001 */
+			reg_array_vector[2] <= 256'h3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333;
+			reg_array_vector[3] <= 256'haaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa;
 			reg_array_vector[4] <= 256'h0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005;
 			reg_array_vector[5] <= 256'h0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003;
 			reg_array_vector[6] <= 256'h0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002;

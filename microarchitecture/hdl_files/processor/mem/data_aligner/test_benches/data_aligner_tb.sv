@@ -11,7 +11,7 @@ module data_aligner_tb;
     logic memWriteM;
     logic memSrcM;
     logic [31:0] address;
-    logic [15:0] scalarDataIn; 
+    logic [31:0] scalarDataIn; 
     logic [255:0] vectorDataIn;
     logic [255:0] readData;
     
@@ -68,28 +68,28 @@ module data_aligner_tb;
         // ------------- Test 1: Escritura escalar alineada --------------
         $display("Test 1: Escritura escalar alineada en direccion 0x00000000");
         address = 32'h00000000;  // Alineado a 256 bits
-        scalarDataIn = 16'h1234;
+        scalarDataIn = 32'h12345678;
         memWriteM = 1;
         memSrcM = 0;  // Operación escalar
         #20;
         $display("writeData: %h, byteena: %h", writeData, byteena);
-        assert(writeData == 256'h00000000000000000000000000000000000000000000000000000000_00001234) 
+        assert(writeData == 256'h00000000000000000000000000000000000000000000000000000000_12345678) 
         else $fatal("Test 1 fallo");
-        assert(byteena == 32'h00000003) 
+        assert(byteena == 32'h0000000f) 
         else $fatal("Test 1 byteena fallo");
         memWriteM = 0;
 
         // ------------- Test 2: Escritura escalar no alineada --------------
         $display("Test 2: Escritura escalar no alineada en direccion 0x00000010");
         address = 32'h00000010;  // No alineado
-        scalarDataIn = 16'h5678;
+        scalarDataIn = 32'h5678;
         memWriteM = 1;
         memSrcM = 0;  // Operación escalar
         #20;
         $display("writeData: %h, byteena: %h", writeData, byteena);
         assert(writeData == 256'h0000000000000000000000000000567800000000000000000000000000000000) 
         else $fatal("Test 2 fallo");
-        assert(byteena == 32'h00030000) 
+        assert(byteena == 32'h000f0000) 
         else $fatal("Test 2 byteena fallo");
         memWriteM = 0;
 

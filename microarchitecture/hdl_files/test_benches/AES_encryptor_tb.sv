@@ -46,7 +46,7 @@ module AES_encryptor_tb;
 	logic [V-1:0] VRD2D;
 	logic [R-1:0] WA3D;
 
-	// -> Registers
+	// -> Scalar Registers
 	logic [N-1:0] e0_reg;
 	logic [N-1:0] e1_reg;
 	logic [N-1:0] e2_reg;
@@ -55,6 +55,16 @@ module AES_encryptor_tb;
 	logic [N-1:0] e5_reg;
 	logic [N-1:0] e6_reg;
 	logic [N-1:0] pc_reg;
+
+	// -> Vector Registers
+	logic [V-1:0] v0_reg;
+	logic [V-1:0] v1_reg;
+	logic [V-1:0] v2_reg;
+	logic [V-1:0] v3_reg;
+	logic [V-1:0] v4_reg;
+	logic [V-1:0] v5_reg;
+	logic [V-1:0] v6_reg;
+	logic [V-1:0] v7_reg;
 
 	// -> RegFile data
 
@@ -197,7 +207,7 @@ module AES_encryptor_tb;
 		VRD2D = uut.asip.decode_stage.VRD2D;
 		WA3D = uut.asip.decode_stage.WA3D;
 
-		// -> Registers
+		// -> Scalar Registers
 		e0_reg = uut.asip.decode_stage.reg_file_s.reg_array[8];
 		e1_reg = uut.asip.decode_stage.reg_file_s.reg_array[9];
 		e2_reg = uut.asip.decode_stage.reg_file_s.reg_array[10];
@@ -206,6 +216,16 @@ module AES_encryptor_tb;
 		e5_reg = uut.asip.decode_stage.reg_file_s.reg_array[13];
 		e6_reg = uut.asip.decode_stage.reg_file_s.reg_array[14];
 		pc_reg = uut.asip.decode_stage.reg_file_s.reg_array[15];
+
+		// -> Vectotr Registers
+		v0_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[0];
+		v1_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[1];
+		v2_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[2];
+		v3_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[3];
+		v4_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[4];
+		v5_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[5];
+		v6_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[6];
+		v7_reg = uut.asip.decode_stage.reg_file_v.reg_array_vector[7];
 
 		// -> RegFile data
 
@@ -331,7 +351,7 @@ module AES_encryptor_tb;
 
 		// #100;
 
-		#500;
+		#700;
 		$finish; 
 
 	end

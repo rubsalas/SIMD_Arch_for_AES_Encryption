@@ -15,7 +15,7 @@ module data_memory_with_aligner_tb;
     logic MemWriteM;
     logic MemSrcM;
     logic [31:0] ALUResultM;
-    logic [15:0] SWData; 
+    logic [31:0] SWData; 
     logic [255:0] ALUResultVM;
     logic [255:0] MemReadData;
     
@@ -217,7 +217,7 @@ module data_memory_with_aligner_tb;
         /* Assert Test */
         assert(MemWriteData == 256'h000000000000000000000000000000000000000000000000000000000000AAAA) 
         else $fatal("Test 5 fallo");
-        assert(Byteena == 32'h00000003) 
+        assert(Byteena == 32'h0000000f) 
         else $fatal("Test 5 byteena fallo");
         MemWriteM = 0;
         MemtoRegM = 0;
@@ -258,7 +258,7 @@ module data_memory_with_aligner_tb;
         /* Assert Test */
         assert(MemWriteData == 256'h00000000000000000000000000000000000000000000000000000000DEDE0000) 
         else $fatal("Test 6 fallo");
-        assert(Byteena == 32'h0000000C) 
+        assert(Byteena == 32'h0000003C) 
         else $fatal("Test 6 byteena fallo");
         MemWriteM = 0;
         MemtoRegM = 0;
