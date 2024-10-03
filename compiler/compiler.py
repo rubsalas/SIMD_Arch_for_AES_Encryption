@@ -50,7 +50,7 @@ def clean_instructions(file) -> list:
     """
     instructions = []
     for line in file:
-        line = line.split('#')[0] #remove comments
+        line = line.split(';')[0] #remove comments
         line = line.strip()
         if line:
             line = re.split(r'[,\s]+', line) #remove white space or ','
@@ -150,8 +150,8 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
     if (mnemonic == BEQ or mnemonic == BGT):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
-        imm = branch_imm(i, instruction[3], labels) 
-        #imm = to_bin(instruction[3], 16 )
+        #imm = branch_imm(i, instruction[3], labels) 
+        imm = to_bin(instruction[3], 16 )
 
     #Load y store solo sirven sin inmediato de momento (arreglar)
 
@@ -174,8 +174,8 @@ def get_j_type(instruction: list, labels: dict) -> str:
 
 
     if (mnemonic == B):
-        addr = jump_imm(instruction[1], labels)
-        #addr = to_bin(instruction[1], 26)
+        #addr = jump_imm(instruction[1], labels)
+        addr = to_bin(instruction[1], 26)
 
     if (mnemonic == END):
         #addr = jump_imm(instruction[1], labels)

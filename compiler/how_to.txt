@@ -1,0 +1,12 @@
+1. Usar el mnemonico en todas las instrucciones, se puede ver en el archivo de constants
+
+2. Todos los valores inmediatos y de address tienen que estar en decimal, el compilador las pasa a binario
+
+3. Los comentarios son ';' (lo cambie al final para que no tenga que hacer mucho cambio)
+
+4. Todo lo que no sean instrucciones del ensamblador tienen que estar comentadas
+
+5. Si hay algun error de label revisar en el codigo o me dice mejor yo lo puedo ver, modificarlo y subirlo
+
+6. Las vectoriales aun no estan probadas, si las prueba y hay errores me avisa plis
+
