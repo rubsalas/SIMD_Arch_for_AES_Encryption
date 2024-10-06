@@ -579,7 +579,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 
     /* Hazard Unit */
-    hazard_unit # (.R(R)) eden_unit (
+    hazard_unit_v3 # (.R(R)) eden_unit (
         .PCSrcD(wPCSrcD),
         .RA1D(wRA1D),
         .RA2D(wRA2D),
@@ -602,6 +602,7 @@ module processor # (parameter N = 32, parameter V = 256, parameter R = 5) (
         .RegWriteVW(wRegWriteVW),
         .WA3W(wWA3W),
 
+        /* outputs */
         .StallF(wStallF),
 
         .StallD(wStallD),

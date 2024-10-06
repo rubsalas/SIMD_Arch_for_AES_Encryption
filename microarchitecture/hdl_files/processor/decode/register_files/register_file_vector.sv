@@ -18,17 +18,17 @@ module register_file_vector # (parameter N = 256) (
 
 	logic [N-1:0] reg_array_vector [7:0];
 
-	always @ (posedge clk or posedge rst) begin
+	always @ (negedge clk) begin
 
 		if(rst) begin
 			reg_array_vector[0] <= 256'h0;	/* v0: 10000 */
 			reg_array_vector[1] <= 256'h0;	/* v1: 10001 */
-			reg_array_vector[2] <= 256'h3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333;
-			reg_array_vector[3] <= 256'haaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa;
-			reg_array_vector[4] <= 256'h0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005;
-			reg_array_vector[5] <= 256'h0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003;
-			reg_array_vector[6] <= 256'h0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002;
-			reg_array_vector[7] <= 256'h0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001;
+			reg_array_vector[2] <= 256'h0; // 256'h3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333_3333;
+			reg_array_vector[3] <= 256'h0; // 256'haaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa_aaaa;
+			reg_array_vector[4] <= 256'h0; // 256'h0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005_0005;
+			reg_array_vector[5] <= 256'h0; // 256'h0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003_0003;
+			reg_array_vector[6] <= 256'h0; // 256'h0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002_0002;
+			reg_array_vector[7] <= 256'h0; // 256'h0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001_0001;
 		end
 		else begin
 			/* If writing on register VA3 is allowed */
