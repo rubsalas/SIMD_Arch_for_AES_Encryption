@@ -14,8 +14,8 @@ module instruction_memory # (parameter N = 32) (
 
     // Tarea para cargar la memoria desde un archivo .mif
     task cargar_memoria();
-        // $readmemb("../../memory/instruction_memory/32bits_instructions.txt", memoria);
-        $readmemb("../../hdl_files/memory/instruction_memory/32bits_instructions.txt", memoria);
+        // $readmemb("../../memory/instruction_memory/32bits_instructions.txt", memoria);               // Quartus
+        $readmemb("../../hdl_files/memory/instruction_memory/32bits_instructions.txt", memoria);        // Modelsim
     endtask
 
     // Llama a la tarea para cargar la memoria al inicio

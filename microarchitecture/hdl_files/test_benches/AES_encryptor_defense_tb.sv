@@ -2,7 +2,7 @@
 AES_encryptor (Top Module) test bench
 Date: 25/09/24
 */
-module AES_encryptor_tb;
+module AES_encryptor_defense_tb;
 
 	timeunit 1ps;
 	timeprecision 1ps;
@@ -13,10 +13,10 @@ module AES_encryptor_tb;
 
 	logic clk;
 	logic eclk;
-	logic pclk;
+	// logic pclk;
 	logic rst;
 	logic pwr;
-	logic enable;
+	// logic enable;
 	logic dbg;
 	logic stp;
 
@@ -27,7 +27,7 @@ module AES_encryptor_tb;
 
 
 	// Fetch
-	logic PCSrcW;
+	// logic PCSrcW;
 	logic BranchTakenE;
 	logic [N-1:0] NPC;
 	logic [N-1:0] PCF;
@@ -38,7 +38,7 @@ module AES_encryptor_tb;
 	logic [N-1:0] InstrD;
 
 	// -> Register File
-	logic [1:0] RegSrc;
+	// logic [1:0] RegSrc;
 	logic [R-1:0] RA1D;
 	logic [R-1:0] RA2D;
 	logic [N-1:0] RD1D;
@@ -70,47 +70,38 @@ module AES_encryptor_tb;
 	// -> RegFile data
 
 	// -> Extend
-	logic [1:0] ImmSrcD;
-	logic [N-1:0] ExtImmD;
+	// logic [1:0] ImmSrcD;
+	// logic [N-1:0] ExtImmD;
 
 	// -> Control Unit
 	logic [5:0] Opcode;
 	logic [2:0] Func;
 	logic [4:0] Rd;
 
-	logic PCSrcD;
+	// logic PCSrcD;
 
-	logic RegWriteD;
-	logic RegWriteVD;
+	// logic RegWriteD;
+	// logic RegWriteVD;
 
-	logic MemtoRegD;
+	// logic MemtoRegD;
 
-	logic MemWriteD;
-	logic MemSrcD;
-	logic MemDataD;
-	logic MemDataVD;
-	logic VecDataD;
+	// logic MemWriteD;
+	// logic MemSrcD;
+	// logic MemDataD;
+	// logic MemDataVD;
+	// logic VecDataD;
 
-	logic [1:0] InstrSelD;
-	logic BranchD;
-	logic ALUSrcD;
+	// logic [1:0] InstrSelD;
+	// logic BranchD;
+	// logic ALUSrcD;
 	
-	logic ALUOp;
+	// logic ALUOp;
 
 	/* Execute */
-	logic RegWriteECU;
-	logic MemWriteECU;
+	// logic RegWriteECU;
 
-	logic RegWriteVEo;
-	logic MemtoRegEo;
-
-	logic MemSrcEo;
-	logic MemDataEo;
-	logic MemDataVEo;
-    logic VecDataEo;
-
-	logic [R-1:0] RA1Eo;
-	logic [R-1:0] RA2Eo;
+	// logic [R-1:0] RA1Eo;
+	// logic [R-1:0] RA2Eo;
 
 	logic [2:0] ALUControlE;
 
@@ -122,7 +113,7 @@ module AES_encryptor_tb;
 	logic [N-1:0] ALUResultE;
 	logic [3:0]	ALUFlags;
 
-	logic [N-1:0] ExtImmEo;
+	// logic [N-1:0] ExtImmEo;
 
 	logic [1:0] ForwardAVE;
 	logic [1:0] ForwardBVE;
@@ -135,10 +126,10 @@ module AES_encryptor_tb;
 
 
 	/* Memory */
-	logic RegWriteMo;
+	// logic RegWriteMo;
 
-	logic MemDataM;
-	logic MemDataVM;
+	// logic MemDataM;
+	// logic MemDataVM;
 
 	logic [N-1:0] SWData; 	// internal
 	logic [V-1:0] VWData;	// internal
@@ -149,17 +140,17 @@ module AES_encryptor_tb;
 
 	logic [N-1:0] ALUResultMi;
 
-	logic MemRden;
-	logic MemWren;
-	logic [13:0] MemAddress;
-	logic [31:0] MemByteena;
-	logic [V-1:0] MemWriteData;
+	// logic MemRden;
+	// logic MemWren;
+	// logic [13:0] MemAddress;
+	// logic [31:0] MemByteena;
+	// logic [V-1:0] MemWriteData;
 
 	logic BusyDA;
-	logic [V-1:0] MemReadData;
+	// logic [V-1:0] MemReadData;
 
 	logic [N-1:0] ReadDataM;
-	logic VecDataM;
+	// logic VecDataM;
 	logic [V-1:0] ReadDataVM;
 
 	logic [R-1:0] WA3Mo;
@@ -170,24 +161,22 @@ module AES_encryptor_tb;
 	logic MemtoRegW;
 	logic [N-1:0] ALUResultW;
 	logic [N-1:0] ReadDataW;
-	logic [N-1:0] ResultW;
 
 	logic [V-1:0] ALUResultVW;
 	logic [V-1:0] ReadDataVW;
-	logic [V-1:0] ResultVW;
 
 	logic [R-1:0] WA3Wo;
 
 
 	/* Hazard Unit */
 
-	logic AnyRegWriteM;
-	logic Match_1E_M;
-    logic Match_2E_M;
+	// logic AnyRegWriteM;
+	// logic Match_1E_M;
+    // logic Match_2E_M;
 
-    logic AnyRegWriteW;
-    logic Match_1E_W;
-    logic Match_2E_W;
+    // logic AnyRegWriteW;
+    // logic Match_1E_W;
+    // logic Match_2E_W;
 
 	logic StallF;
     
@@ -218,11 +207,11 @@ module AES_encryptor_tb;
 
 		// AES_encryptor
 		eclk = uut.eclk;
-		pclk = uut.pclk;
-		enable = uut.enable;
+		// pclk = uut.pclk;
+		// enable = uut.enable;
 		
 		// Fetch
-		PCSrcW = uut.asip.fetch_stage.PCSrcW;
+		// PCSrcW = uut.asip.fetch_stage.PCSrcW;
 		BranchTakenE = uut.asip.fetch_stage.BranchTakenE; 
 		NPC = uut.asip.fetch_stage.NPC;
 		PCF = uut.asip.fetch_stage.PCF;
@@ -234,7 +223,7 @@ module AES_encryptor_tb;
 		InstrD = uut.asip.decode_stage.InstrD;
 
 		// -> Register File
-		RegSrc = uut.asip.decode_stage.cont_unit.RegSrc;
+		// RegSrc = uut.asip.decode_stage.cont_unit.RegSrc;
 		RA1D = uut.asip.decode_stage.RA1D;
 		RA2D = uut.asip.decode_stage.RA2D;
 		RD1D = uut.asip.decode_stage.RD1D;
@@ -266,48 +255,39 @@ module AES_encryptor_tb;
 		// -> RegFile data
 
 		// -> Extend
-		ImmSrcD = uut.asip.decode_stage.ImmSrcD;
-		ExtImmD = uut.asip.decode_stage.ExtImmD;
+		// ImmSrcD = uut.asip.decode_stage.ImmSrcD;
+		// ExtImmD = uut.asip.decode_stage.ExtImmD;
 
 		// -> Control Unit
 		Opcode = uut.asip.decode_stage.cont_unit.Opcode;
 		Func = uut.asip.decode_stage.cont_unit.Func;
 		Rd = uut.asip.decode_stage.cont_unit.Rd;
 		
-		PCSrcD = uut.asip.decode_stage.cont_unit.PCSrc;
+		// PCSrcD = uut.asip.decode_stage.cont_unit.PCSrc;
 
-		RegWriteD = uut.asip.decode_stage.cont_unit.RegWrite;
-		RegWriteVD = uut.asip.decode_stage.cont_unit.RegWriteV;
+		// RegWriteD = uut.asip.decode_stage.cont_unit.RegWrite;
+		// RegWriteVD = uut.asip.decode_stage.cont_unit.RegWriteV;
 		
-		MemtoRegD = uut.asip.decode_stage.cont_unit.MemtoReg;
+		// MemtoRegD = uut.asip.decode_stage.cont_unit.MemtoReg;
 
-		MemWriteD = uut.asip.decode_stage.cont_unit.MemWrite;
-		MemSrcD = uut.asip.decode_stage.cont_unit.MemSrc;
-		MemDataD = uut.asip.decode_stage.cont_unit.MemData;
-		MemDataVD = uut.asip.decode_stage.cont_unit.MemDataV;
-		VecDataD = uut.asip.decode_stage.cont_unit.VecData;
+		// MemWriteD = uut.asip.decode_stage.cont_unit.MemWrite;
+		// MemSrcD = uut.asip.decode_stage.cont_unit.MemSrc;
+		// MemDataD = uut.asip.decode_stage.cont_unit.MemData;
+		// MemDataVD = uut.asip.decode_stage.cont_unit.MemDataV;
+		// VecDataD = uut.asip.decode_stage.cont_unit.VecData;
 
-		InstrSelD = uut.asip.decode_stage.cont_unit.InstrSel;
-		BranchD = uut.asip.decode_stage.cont_unit.Branch;
-		ALUSrcD = uut.asip.decode_stage.cont_unit.ALUSrc;
+		// InstrSelD = uut.asip.decode_stage.cont_unit.InstrSel;
+		// BranchD = uut.asip.decode_stage.cont_unit.Branch;
+		// ALUSrcD = uut.asip.decode_stage.cont_unit.ALUSrc;
 
-		ALUOp = uut.asip.decode_stage.cont_unit.main_deco.ALUOp;
+		// ALUOp = uut.asip.decode_stage.cont_unit.main_deco.ALUOp;
 
 
 		/* Execute */
-		RegWriteECU = uut.asip.execute_stage.RegWriteECU;
-		MemWriteECU = uut.asip.execute_stage.MemWriteECU;
-		
-		RegWriteVEo = uut.asip.execute_stage.RegWriteVEo;
-		MemtoRegEo= uut.asip.execute_stage.MemtoRegEo;
+		// RegWriteECU = uut.asip.execute_stage.RegWriteECU;
 
-		MemSrcEo = uut.asip.execute_stage.MemSrcEo;
-		MemDataEo = uut.asip.execute_stage.MemDataEo;
-		MemDataVEo = uut.asip.execute_stage.MemDataVEo;
-		VecDataEo = uut.asip.execute_stage.VecDataEo;
-
-		RA1Eo = uut.asip.execute_stage.RA1Eo;
-		RA2Eo = uut.asip.execute_stage.RA2Eo;
+		// RA1Eo = uut.asip.execute_stage.RA1Eo;
+		// RA2Eo = uut.asip.execute_stage.RA2Eo;
 
 		ALUControlE = uut.asip.execute_stage.ALUControlE;
 
@@ -319,7 +299,7 @@ module AES_encryptor_tb;
 		ALUResultE = uut.asip.execute_stage.ALUResultE;
 		ALUFlags = uut.asip.execute_stage.ALUFlags;
 		
-		ExtImmEo = uut.asip.execute_stage.ExtImmEo;
+		// ExtImmEo = uut.asip.execute_stage.ExtImmEo;
 
 		ForwardAVE = uut.asip.execute_stage.ForwardAVE;
 		ForwardBVE = uut.asip.execute_stage.ForwardBVE;
@@ -331,10 +311,10 @@ module AES_encryptor_tb;
 		WA3Eo = uut.asip.execute_stage.WA3Eo;
 
 		/* Memory */
-		RegWriteMo = uut.asip.memory_stage.RegWriteMo;
+		// RegWriteMo = uut.asip.memory_stage.RegWriteMo;
 	
-		MemDataM = uut.asip.memory_stage.MemDataM;
-		MemDataVM = uut.asip.memory_stage.MemDataVM;
+		// MemDataM = uut.asip.memory_stage.MemDataM;
+		// MemDataVM = uut.asip.memory_stage.MemDataVM;
 
 		SWData = uut.asip.memory_stage.SWData;
 		VWData = uut.asip.memory_stage.VWData;
@@ -345,17 +325,17 @@ module AES_encryptor_tb;
 
 		ALUResultMi = uut.asip.memory_stage.ALUResultMi;
 
-		MemRden = uut.asip.memory_stage.MemRden;
-		MemWren = uut.asip.memory_stage.MemWren;
-		MemAddress = uut.asip.memory_stage.MemAddress;
-		MemByteena = uut.asip.memory_stage.MemByteena;
-		MemWriteData = uut.asip.memory_stage.MemWriteData;
+		// MemRden = uut.asip.memory_stage.MemRden;
+		// MemWren = uut.asip.memory_stage.MemWren;
+		// MemAddress = uut.asip.memory_stage.MemAddress;
+		// MemByteena = uut.asip.memory_stage.MemByteena;
+		// MemWriteData = uut.asip.memory_stage.MemWriteData;
 
 		BusyDA = uut.asip.memory_stage.BusyDA;
-		MemReadData = uut.asip.memory_stage.MemReadData;
+		// MemReadData = uut.asip.memory_stage.MemReadData;
 
 		ReadDataM = uut.asip.memory_stage.ReadDataM;
-		VecDataM = uut.asip.memory_stage.VecDataM;
+		// VecDataM = uut.asip.memory_stage.VecDataM;
 		ReadDataVM = uut.asip.memory_stage.ReadDataVM;
 
 		WA3Mo = uut.asip.memory_stage.WA3Mo;
@@ -366,22 +346,20 @@ module AES_encryptor_tb;
 		MemtoRegW = uut.asip.writeback_stage.MemtoRegW;
 		ALUResultW = uut.asip.writeback_stage.ALUResultW;
 		ReadDataW = uut.asip.writeback_stage.ReadDataW;
-		ResultW = uut.asip.writeback_stage.ResultW;
 
 		ALUResultVW = uut.asip.writeback_stage.ALUResultVW;
 		ReadDataVW = uut.asip.writeback_stage.ReadDataVW;
-		ResultVW = uut.asip.writeback_stage.ResultVW;
 
 		WA3Wo = uut.asip.writeback_stage.WA3Wo;
 
 		/* Hazard Unit */
-		AnyRegWriteM = uut.asip.eden_unit.AnyRegWriteM;
-		Match_1E_M = uut.asip.eden_unit.Match_1E_M;
-		Match_2E_M = uut.asip.eden_unit.Match_2E_M;
+		// AnyRegWriteM = uut.asip.eden_unit.AnyRegWriteM;
+		// Match_1E_M = uut.asip.eden_unit.Match_1E_M;
+		// Match_2E_M = uut.asip.eden_unit.Match_2E_M;
 		
-		AnyRegWriteW = uut.asip.eden_unit.AnyRegWriteW;
-		Match_1E_W = uut.asip.eden_unit.Match_1E_W;
-		Match_2E_W = uut.asip.eden_unit.Match_2E_W;
+		// AnyRegWriteW = uut.asip.eden_unit.AnyRegWriteW;
+		// Match_1E_W = uut.asip.eden_unit.Match_1E_W;
+		// Match_2E_W = uut.asip.eden_unit.Match_2E_W;
 
 		StallF = uut.asip.eden_unit.StallF;
     

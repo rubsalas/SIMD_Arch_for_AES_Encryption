@@ -24,7 +24,7 @@
 
 
 
-; str del registro $e0 de la posicion de memoria en $e0 + 4 
+; strv del registro $v2 de la posicion de memoria en $zero + 16 
     strv $v2, 16($zero) ; Guarda el valor de $v2 en la posicion 0x00016
 
 
@@ -53,7 +53,7 @@
 
 
 ; ldrv al registro $v1 de la posicion de memoria en $e1 + 16
-    ldr $v1, 0($e6) ; $v1 = M{R[$e1] + 16}   ; iut
+    ldr $e1, 0($e6) ; $v1 = M{R[$e1] + 16}   ; iut
 
 
 
@@ -79,7 +79,7 @@
 ;
 ; 111001 10000 00000 0000 0000 0000 0000;
 ;
-; 111001 10001 01110 0000 0000 0000 0000;
+; 111001 01001 01110 0000 0000 0000 0000;
 ;
 
 

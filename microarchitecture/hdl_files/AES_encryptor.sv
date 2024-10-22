@@ -19,6 +19,7 @@ module AES_encryptor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 	/* wires */
 	logic enable;
 	logic eclk;
+	//logic pclk;
 	// from processor
 	logic [N-1:0] PCF;				// [y] from processor to memory [y]
 	logic RdenData;					// [y] from processor to memory [y]
@@ -29,7 +30,7 @@ module AES_encryptor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 	// from memory
 	logic [N-1:0] instruction;		// [y] from memory to processor [y]
-	logic [V-1:0] ReadData;			// [n] from memory to processor [n]
+	logic [V-1:0] ReadData;			// [y] from memory to processor [y]
 
 
 	/* Inicio del Procesador al presionar un switch */
@@ -41,6 +42,15 @@ module AES_encryptor # (parameter N = 32, parameter V = 256, parameter R = 5) (
 
 	/* Inicio del clock al activar pwr */
 	assign eclk = clk & enable;
+
+
+	/* clk's Mux for stepping || had problems, not finished implemeting*/
+	// mux_2NtoN # (.N(1)) mux_clk (.I0(eclk),
+	// 							 .I1(stp),
+	// 							 .rst(rst),
+	// 							 .S(dbg),
+	// 							 .en(1'b1),
+	// 							 .O(pclk));
 
 
 	/* ASIP Processor */

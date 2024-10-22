@@ -21,7 +21,8 @@ module register_file # (parameter N = 32) (
 
 	logic [N-1:0] reg_array [15:0];
 
-	always @ (posedge clk or posedge rst) begin
+	// Writing on falling edge
+	always @ (negedge clk) begin
 
 		if(rst) begin  
 			reg_array[0]  <= 32'h00000;  // zero
@@ -72,6 +73,5 @@ module register_file # (parameter N = 32) (
 
 	end
 
-	
 
 endmodule
